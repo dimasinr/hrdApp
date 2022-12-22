@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Col } from 'react-bootstrap'
 import { TextField, Box } from '@mui/material'
 import Navbars from '../../../Components/Navbars'
 // import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 // import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers'
 // import { ArrowBackIos } from '@mui/icons-material';
-import { Skeleton } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+// import { Skeleton } from '@mui/material';
+// import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
 
 const columns = [
@@ -25,42 +25,36 @@ const list_pengajuan = [
     {'id':2, 'employee_name' : 'dimas', 'jatah_cuti':12, 'sisa_cuti':10, 'tanggal_cuti': '2022-12-23', 'start_date':'2022-12-23', 'end_date': '2022-12-28', 'notes': ''},
 ]
 
-const LoadingSkeleton = () => (
-    <Box
-      sx={{
-        height: 'max-content',
-      }}
-    >
-      {[...Array(1)].map((_, index) => (
-        <Skeleton variant="rectangular" sx={{ my: 4, mx: 1 }} key={index} />
-      ))}
-    </Box>
-  );
+// const LoadingSkeleton = () => (
+//     <Box
+//       sx={{
+//         height: 'max-content',
+//       }}
+//     >
+//       {[...Array(1)].map((_, index) => (
+//         <Skeleton variant="rectangular" sx={{ my: 4, mx: 1 }} key={index} />
+//       ))}
+//     </Box>
+//   );
 
 function PerizinanHrd() {
 
-    const navigate = useNavigate()
-    const [name, setName] = useState('dimas')
-    const [bagian, setBagian] = useState('IT')
-    const [jenis, setJenis] = useState('ditangguhkan');
-    const [reason, setReason] = useState('kuliah');
-    const [start_date, setStartDate] = useState(new Date());
-    const [end_date, setEndDate] = useState(new Date());
-    const [back_date, setBackDate] = useState(new Date());
+    // const navigate = useNavigate()
+    // const [name, setName] = useState('dimas')
+    // const [bagian, setBagian] = useState('IT')
+    // const [jenis, setJenis] = useState('ditangguhkan');
+    // const [reason, setReason] = useState('kuliah');
+    // const [start_date, setStartDate] = useState(new Date());
+    // const [end_date, setEndDate] = useState(new Date());
+    // const [back_date, setBackDate] = useState(new Date());
 
-    const handleChange = (event) => {
-        setJenis(event.target.value);
-    };
+    // const handleChange = (event) => {
+    //     setJenis(event.target.value);
+    // };
 
-    const tanggal_awal = start_date.toISOString().slice(0,10)
-    const tanggal_akhir = end_date.toISOString().slice(0,10)
-    const masuk_kembali = back_date.toISOString().slice(0,10)
-
-    const submitPetition = () => {
-        alert('success')
-        console.log(name, "-", bagian, "-", jenis, "-", tanggal_awal, "-", tanggal_akhir, '-', masuk_kembali)
-    }
-
+    // const tanggal_awal = start_date.toISOString().slice(0,10)
+    // const tanggal_akhir = end_date.toISOString().slice(0,10)
+    // const masuk_kembali = back_date.toISOString().slice(0,10)
 
   return (
     <React.Fragment>
