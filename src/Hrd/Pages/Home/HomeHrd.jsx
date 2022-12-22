@@ -68,9 +68,9 @@ function HomeHrd() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     React.useEffect(() => getListPengajuan(), [perizinan, start_dates, end_dates, employees])
   
-    const handleRowClick = (params) => {
-      navigate(`/perizinan/${params.row.id}`)
-    };
+    // const handleRowClick = (params) => {
+    //   navigate(`/perizinan/${params.row.id}`)
+    // };
 
     const handleChange = (event) => {
       setPerizinan(event.target.value);
@@ -171,7 +171,7 @@ function HomeHrd() {
                                         pageSize={7}
                                         rowsPerPageOptions={[7]}
                                         getRowId={(row) => row.id}
-                                        onRowClick={handleRowClick}
+                                        // onRowClick={handleRowClick}
                                         components={{
                                             LoadingOverlay: LoadingSkeleton,
                                           }}
