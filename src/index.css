@@ -1,0 +1,60 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+#image__background{
+  align-items: center;
+  background-image: url('./Components/images/background.jpg');
+  /* background-color: rgb(125, 137, 190); */
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 120vh;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.bg_colors{
+  background-color: rgb(125, 137, 190);
+  min-height: 100vh;
+}
+
+.shadow-card{
+  box-shadow: -1px 5px 6px -1px rgba(190, 190, 190, 0.38);
+  -webkit-box-shadow: -1px 5px 6px -1px rgba(172, 172, 172, 0.38);
+  -moz-box-shadow: -1px 5px 6px -1px rgba(182, 182, 182, 0.38);
+}
+.shadow-card:hover{
+  box-shadow: -1px 5px 6px -1px rgba(83, 83, 83, 0.38);
+  -webkit-box-shadow: -1px 5px 6px -1px rgba(62, 62, 62, 0.38);
+  -moz-box-shadow: -1px 5px 6px -1px rgba(74, 74, 74, 0.38);
+}
+
+.center_div{
+  height: 92vh; 
+  background-color: rgb(125, 137, 190);
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+}
+
+.unlink{
+  text-decoration: none;
+  /* color: rgb(20, 19, 19); */
+}
+
+.btn_fresh{
+  border: none;
+  background-color: transparent;
+}
