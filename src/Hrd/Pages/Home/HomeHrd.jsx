@@ -12,7 +12,7 @@ import runOneSignal from '../../../oneSignal/oneSignal'
 
 const columns = [
       { field: 'id', headerName: 'Id', width: 70 },
-      { field: 'employee_name', headerName: 'Bagian', width: 130 },
+      { field: 'employee_name', headerName: 'Nama', width: 130 },
       { field: 'division', headerName: 'Bagian', width: 130 },
       { field: 'permission_type', headerName: 'Jenis Ijin', width: 130 },
       { field: 'reason', headerName: 'Alasan', width: 130 },
