@@ -38,7 +38,6 @@ function NotesHrd() {
     const location = useLocation()
     const navigate = useNavigate()
     const ids = location.pathname.split('/')[1]
-    console.log(ids)
     const [perizinan, setPerizinan] = React.useState('')
     const [start_dates, setStartDates] = React.useState('')
     const [end_dates, setEndDates] = React.useState('')
