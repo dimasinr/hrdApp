@@ -8,6 +8,8 @@ import { DataGrid } from '@mui/x-data-grid';
 import { Box, Skeleton, TextField } from '@mui/material';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {Slide, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
+// import Swal from 'sweetalert2'
 
 const columns = [
       { field: 'id', headerName: 'Id', width: 70 },
@@ -33,6 +35,10 @@ const columns = [
     </Box>
   );
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 function NotesHrd() {
 
     const location = useLocation()
@@ -44,6 +50,18 @@ function NotesHrd() {
     const [employees, setEmployess] = React.useState('')
     const [list_pengajuan, setListPengajuan] = React.useState([])
     const [loading, setLoading] = React.useState(true)
+    const [open, setOpen] = React.useState(false);
+
+    const [employeName, setEmployeName] = React.useState('')
+    const [jatah_cuti, setJatahCuti] = React.useState('')
+    const [sisa_cuti, setSisaCuti] = React.useState('')
+    const [tanggal, setTanggal] = React.useState(new Date())
+    const [notes_employee, setNotesEmployee] = React.useState('')
+
+    const handleClickOpen = () => {
+      setOpen(!open);
+    };
+
     
     const getListPengajuan = () => {
       axios.get(`${BASE_URL}/notes/list/?sisa_cuti=${perizinan}&tanggal_cuti=${start_dates}&jatah_cuti=${end_dates}&employee_name=${employees}`,{
@@ -65,12 +83,55 @@ function NotesHrd() {
       navigate(`/detail-perizinan/${params.row.id}`)
     };
 
-
   const convDate = (newdate) => {
     let event = new Date(newdate);
     let dated = JSON.stringify(event);
     setStartDates(dated.slice(1, 11))
   }
+
+  const convDated = (xdate) => {
+    let event = new Date(xdate);
+    let dated = JSON.stringify(event);
+    setTanggal(dated.slice(1, 11))
+  }
+
+//   const addNewTreatment = async e => {
+//     try{
+//         const formData = new FormData();
+//         formData.append("employee_name", employeName);
+//         formData.append("jatah_cuti", jatah_cuti);
+//         formData.append("sisa_cuti", sisa_cuti);
+//         formData.append("tanggal_cuti", tanggal);
+//         formData.append("catatan", notes_employee);
+//        await axios({
+//             method: 'post',
+//             url:`${BASE_URL}/notes/employee-cuti/`,
+//             data: formData,
+//             headers: {
+//                 "Authorization" : `Token ${USER_TOKEN}`
+//               }
+//         })
+//         Swal.fire({
+//             icon: 'success',
+//             title: `Data Berhasil dibuat`,
+//             showConfirmButton: false,
+//             timer: 1500
+//           })
+//         navigate(-1)
+//     }catch(error){
+//         if( error.response &&
+//             error.response.status >= 400 &&
+//             error.response.status <= 500
+//             ){
+//                 Swal.fire({
+//                     icon: 'error',
+//               title: 'Oops...',
+//               text: `${error.response.data.detail}`
+//             })
+//         }
+//     }
+// };
+
 
   return (
     <React.Fragment>
@@ -86,7 +147,7 @@ function NotesHrd() {
                                     <div className="d-flex justify-content-between">
                                       <button onClick={() => navigate('/home')} className={ids === 'home' ? 'btn btn-secondary' : 'btn btn-primary'}>List Pengajuan Karyawan</button>
                                       <button className={ids !== 'home' ? 'btn btn-secondary' : 'btn btn-primary'}>Notes HRD</button>
-                                      <button className={ids !== 'home' ? 'btn btn-secondary' : 'btn btn-primary'}>Tambah</button>
+                                      <button onClick={handleClickOpen} className='btn btn-primary'>Tambah</button>
                                     </div>
                                 </Col>
 
@@ -134,6 +195,50 @@ function NotesHrd() {
                             </div>
                         </div>
                     </Col>
+                    <Dialog
+                    open={open}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    onClose={handleClickOpen}
+                    aria-describedby="alert-dialog-slide-description"
+                  >
+                    <DialogTitle>{"Tambah Data Notes"}</DialogTitle>
+                    <DialogContent>
+                      <DialogContentText id="alert-dialog-slide-description">
+                        <Box sx={{ mt:2 }}>
+                          <TextField value={employeName} onChange={e => setEmployeName(e.target.value)} sx={{ mr:1 }} label='Nama Employee' />
+                          <TextField value={jatah_cuti} onChange={e => setJatahCuti(e.target.value)} label='Jatah Cuti' />
+                        </Box>
+                        <Box sx={{ mt:2 }}>
+                          <TextField value={sisa_cuti} onChange={e => setSisaCuti(e.target.value)} sx={{ mr:1 }} label='Sisa Cuti' />
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <MobileDatePicker
+                              label="Tanggal Terakhir Mengambil Cuti"
+                              value={tanggal}
+                              onChange={(valuese) => {
+                                  convDated(valuese);
+                              }}
+                              renderInput={(params) => <TextField variant='outlined' label='Terakhir Mengambil Cuti' {...params} />}
+                              />
+                          </LocalizationProvider>
+                        </Box>
+                        <TextField 
+                        fullWidth
+                        value={notes_employee}
+                        onChange={e => setNotesEmployee(e.target.value)}
+                        id="notees"
+                        multiline
+                        rows={4} 
+                        sx={{ mt:2 }} 
+                        label='notes'
+                         />
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleClickOpen}>Tutup</Button>
+                      <Button onClick={handleClickOpen}>Tambah</Button>
+                    </DialogActions>
+                  </Dialog>
                 </div>
             </main>
         </div>

@@ -21,6 +21,8 @@ function LoginHrd() {
     setCredentials(prev=>({...prev, [e.target.id]:e.target.value}))
   }
 
+  console.log(process.env.API_URL)
+
   const LoginUser = async (e) =>{
      e.preventDefault()
         dispatch({type:"LOGIN_START"})

@@ -24,7 +24,6 @@ const columns = [
       { field: 'suspended_end', headerName: 'Akhir Ditangguhkan', width: 130 },
       { field: 'reason_rejected', headerName: 'Alasan ditolak', width: 130 },
   ];
-  console.log(columns)
   
   const LoadingSkeleton = () => (
     <Box
