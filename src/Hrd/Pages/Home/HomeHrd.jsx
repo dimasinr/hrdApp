@@ -20,9 +20,9 @@ const columns = [
       { field: 'end_date', headerName: 'Tanggal Akhir', width: 130 },
       { field: 'return_date', headerName: 'Masuk Kembali', width: 130 },
       { field: 'permission_pil', headerName: 'Izin Atasan', width: 130 },
-      { field: 'suspended_start', headerName: 'Awal Ditangguhkan', width: 130 },
-      { field: 'suspended_end', headerName: 'Akhir Ditangguhkan', width: 130 },
-      { field: 'reason_rejected', headerName: 'Alasan ditolak', width: 130 },
+      // { field: 'suspended_start', headerName: 'Awal Ditangguhkan', width: 130 },
+      // { field: 'suspended_end', headerName: 'Akhir Ditangguhkan', width: 130 },
+      // { field: 'reason_rejected', headerName: 'Alasan ditolak', width: 130 },
   ];
   
   const LoadingSkeleton = () => (
@@ -67,9 +67,9 @@ function HomeHrd() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     React.useEffect(() => getListPengajuan(), [perizinan, start_dates, end_dates, employees])
   
-    // const handleRowClick = (params) => {
-    //   navigate(`/perizinan/${params.row.id}`)
-    // };
+    const handleRowClick = (params) => {
+      navigate(`/perizinan/detail/${params.row.id}`)
+    };
 
     const handleChange = (event) => {
       setPerizinan(event.target.value);
@@ -108,7 +108,7 @@ function HomeHrd() {
                                 <Col md={3}>
                                     <div className="d-flex justify-content-between">
                                       <button className={ids === 'home' ? 'btn btn-secondary' : 'btn btn-primary'}>List Pengajuan Karyawan</button>
-                                      <button onClick={() => navigate('/notes')} className={ids !== 'home' ? 'btn btn-secondary' : 'btn btn-primary'}>Notes HRD</button>
+                                      {/* <button onClick={() => navigate('/notes')} className={ids !== 'home' ? 'btn btn-secondary' : 'btn btn-primary'}>Notes HRD</button> */}
                                     </div>
                                 </Col>
 
@@ -170,7 +170,7 @@ function HomeHrd() {
                                         pageSize={7}
                                         rowsPerPageOptions={[7]}
                                         getRowId={(row) => row.id}
-                                        // onRowClick={handleRowClick}
+                                        onRowClick={handleRowClick}
                                         components={{
                                             LoadingOverlay: LoadingSkeleton,
                                           }}

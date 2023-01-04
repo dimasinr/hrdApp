@@ -12,16 +12,15 @@ import {Slide, Button, Dialog, DialogActions, DialogContent, DialogContentText, 
 // import Swal from 'sweetalert2'
 
 const columns = [
-      { field: 'id', headerName: 'Id', width: 70 },
-      { field: 'employee_name', headerName: 'Nama Karyawan', width: 230 },
-      { field: 'jatah_cuti', headerName: 'Jatah Cuti', width: 230 },
+      { field: 'pk', headerName: 'Id', width: 70 },
+      { field: 'first_name', headerName: 'First Name', width: 230 },
+      { field: 'last_name', headerName: 'Last Name', width: 230 },
       { field: 'sisa_cuti', headerName: 'Sisa Cuti', width: 230 },
       { field: 'tanggal_cuti', headerName: 'Terakhir Mengambil Cuti', width: 290 },
     //   { field: 'start_date', headerName: 'Mulai Cuti', width: 230 },
     //   { field: 'end_date', headerName: 'Akhir Cuti', width: 230 },
       { field: 'notes', headerName: 'Notes', width: 230 },
   ];
-  console.log(columns)
   
   const LoadingSkeleton = () => (
     <Box
@@ -64,7 +63,7 @@ function NotesHrd() {
 
     
     const getListPengajuan = () => {
-      axios.get(`${BASE_URL}/notes/list/?sisa_cuti=${perizinan}&tanggal_cuti=${start_dates}&jatah_cuti=${end_dates}&employee_name=${employees}`,{
+      axios.get(`${BASE_URL}/users/employee/?sisa_cuti=${perizinan}&tanggal_cuti=${start_dates}&jatah_cuti=${end_dates}&employee_name=${employees}`,{
         headers: {
           "Authorization" : 'Token ' + USER_TOKEN
         }
@@ -79,6 +78,34 @@ function NotesHrd() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     React.useEffect(() => getListPengajuan(), [perizinan, start_dates, end_dates, employees])
   
+  //   function merge(array1, array2, prop) {
+  //     return array2.map(function (item2) {
+  //         var item1 = array1.find(function (item1) {
+  //             return item1[prop] === item2[prop];
+  //         });
+  //         return Object.assign({}, item1, item2);
+  //     });
+  // }
+  
+  // const ca = merge(dataCharts, list_pengajuan, 'index');
+
+     // const getListPengajuan = () => {
+    //   axios.get(`${BASE_URL}/notes/list/?sisa_cuti=${perizinan}&tanggal_cuti=${start_dates}&jatah_cuti=${end_dates}&employee_name=${employees}`,{
+    //     headers: {
+    //       "Authorization" : 'Token ' + USER_TOKEN
+    //     }
+    //   })
+    //   .then((response) => {
+    //     const res = response.data
+    //     setListPengajuan(res)
+    //     setLoading(false)
+    //     console.log(res)
+    //   })
+    // }
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // React.useEffect(() => getListPengajuan(), [perizinan, start_dates, end_dates, employees])
+  
+
     const handleRowClick = (params) => {
       navigate(`/detail-perizinan/${params.row.id}`)
     };
@@ -183,7 +210,7 @@ function NotesHrd() {
                                         columns={columns}
                                         pageSize={7}
                                         rowsPerPageOptions={[7]}
-                                        getRowId={(row) => row.id}
+                                        getRowId={(row) => row.pk}
                                         onRowClick={handleRowClick}
                                         components={{
                                             LoadingOverlay: LoadingSkeleton,
