@@ -27,6 +27,7 @@ function DetailPerizinan() {
     const [emp_id, setEmpId] = useState('');
     const [sisaCut, setSisaCut] = useState('');
     const [username, setUsername] = useState('');
+    const [jumlah_hari, setJumlHari] = useState('');
 
     const [permission_pil, setPermissionPil] = useState('');
     const [reason_rejected, setReasonRejected] = useState(null);
@@ -70,6 +71,7 @@ function DetailPerizinan() {
         setPermissionPil(res.permission_pil)
         setPermissionPi(res.permission_pil)
         setReason(res.reason)
+        setJumlHari(res.jumlah_hari)
         setLoading(false)
         setEmpId(res.employee_id)
         console.log(res)
@@ -79,7 +81,7 @@ function DetailPerizinan() {
     React.useEffect(() => getListPengajuan(), [id])
 
     const getEmployees = () => {
-        axios.get(`${BASE_URL}/users/employee/${emp_id}/`,{
+        axios.get(`${BASE_URL}/users/employees/${emp_id}/`,{
           headers: {
             "Authorization" : 'Token ' + USER_TOKEN
           }
@@ -155,7 +157,7 @@ function DetailPerizinan() {
             formData.append("username", username);
             const res = await axios({
                 method: 'put',
-                url:`${BASE_URL}/users/employee/${emp_id}/`,
+                url:`${BASE_URL}/users/employees/${emp_id}/`,
                 data: formData,
                 headers: {
                     "Authorization" : `Token ${USER_TOKEN}`
@@ -248,6 +250,12 @@ function DetailPerizinan() {
                                     />
                                 </LocalizationProvider>
                                 </Box>
+
+                                <Box sx={{ mt:1 }}>
+                                    {/* <TextField value={jumlah_hari && jumlah_hari.jumlah_hari} disabled fullWidth type="number" label='Jumlah Hari Kerja' variant='filled' /> */}
+                                    <TextField value={jumlah_hari} onChange={e => setJumlHari(e.target.value)} disabled fullWidth type="text" label='Jumlah Hari Kerja' variant='filled' />
+                                </Box>
+
                                 <Box sx={{ mt:2, mb:2 }}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <MobileDatePicker
@@ -260,6 +268,7 @@ function DetailPerizinan() {
                                     renderInput={(params) => <TextField variant='filled' disabled fullWidth {...params} />}
                                     />
                                 </LocalizationProvider>
+                                
                                 </Box>
                                 <span className='mt-2'>Persetujuan Atasan</span>
                                 <Box sx={{ mt:2, display: 'flex' }}>
