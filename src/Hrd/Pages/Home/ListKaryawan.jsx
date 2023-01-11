@@ -60,7 +60,7 @@ function NotesHrd() {
 
 
      const getListPengajuan = () => {
-      axios.get(`${BASE_URL}/users/employee-lists/?first_name=${searchFist}&roles=${searchRoles}`,{
+      axios.get(`${BASE_URL}/users/employees/?first_name=${searchFist}&roles=${searchRoles}`,{
         headers: {
           "Authorization" : 'Token ' + USER_TOKEN
         }

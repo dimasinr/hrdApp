@@ -105,7 +105,7 @@ function HomeHrd() {
                             <div className="card shadow_card" style={{ border:'none', borderRadius:'12px' }}>
                                 <div className="card-body">
                                     {/* <div className="card-title mb-3"><h5>Hallo, Selamat Datang {NAMES}</h5></div> */}
-                                    {ROLES === 'hrd' ? 
+                                    {ROLES === 'hrd' || ROLES === 'superuser' ? 
                                     <React.Fragment>
                                       {/* <Col md={3}>
                                         <div className="d-flex justify-content-between">
