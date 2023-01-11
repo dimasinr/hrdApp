@@ -18,6 +18,8 @@ function DetailPerizinan() {
     const location = useLocation()
     const navigate = useNavigate()
     const id = location.pathname.split('/')[3]
+    const [employee_names, setEmployeeName] = useState('');
+    const [division, setDivision] = useState('');
     const [jenis, setJenis] = useState('');
     const [reason, setReason] = useState('');
     const [start_date, setStartDate] = useState(new Date());
@@ -29,8 +31,10 @@ function DetailPerizinan() {
     const [username, setUsername] = useState('');
     const [jumlah_hari, setJumlHari] = useState('');
 
+    const [email, setEmail] = useState('')
     const [permission_pil, setPermissionPil] = useState('');
     const [reason_rejected, setReasonRejected] = useState(null);
+    const [conditional_reason, setConditionalReason] = useState(null);
     const [suspended_start, setSuspendedStart] = useState(new Date().toISOString().slice(0,10));
     const [suspended_end, setSuspendedEnd] = useState(new Date().toISOString().slice(0,10));
 
@@ -48,10 +52,8 @@ function DetailPerizinan() {
 
     const handleChange = (event) => {
         setPermissionPil(event.target.value);
-        setReasonRejected(null)
     };
 
-    const [pengajuan, setPengajuan] = React.useState([])
     const [loading, setLoading] = React.useState(true)
     
     const getListPengajuan = () => {
@@ -62,9 +64,11 @@ function DetailPerizinan() {
       })
       .then((response) => {
         const res = response.data
-        setPengajuan(res)
+        setEmployeeName(res.employee_name)
+        setDivision(res.division)
         setJenis(res.permission_type)
         setStartDate(res.start_date)
+        setConditionalReason(res.conditional_reasons)
         setEndDate(res.end_date)
         setReturnDate(res.return_date)
         setReasonRejected(res.reason_rejected)
@@ -91,20 +95,19 @@ function DetailPerizinan() {
           setLoading(false)
           setSisaCut(res.sisa_cuti)
           setUsername(res.username)
+          setEmail(res.email)
           console.log(res)
         })
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
       React.useEffect(() => getEmployees(), [emp_id])
-    
-      console.log(sisaCut)
 
     function TotalCu(x,y){
         return x-y
     }
 
-    console.log(TotalCu(sisaCut, 1))
-    const cutiAkhir = TotalCu(sisaCut, 1)
+    const cutiAkhir = TotalCu(sisaCut, jumlah_hari)
+    console.log(TotalCu(sisaCut, jumlah_hari))
 
     const perizinanAdm = async e => {
         try{
@@ -118,6 +121,7 @@ function DetailPerizinan() {
             }else if(permission_pil === 'disetujui'){
                 perizinanSisaCuti()
             }
+            formData.append("jumlah_hari", jumlah_hari);
             const res = await axios({
                 method: 'put',
                 url:`${BASE_URL}/petitions/employee/${id}/`,
@@ -153,11 +157,54 @@ function DetailPerizinan() {
     const perizinanSisaCuti = async e => {
         try{
             const formData = new FormData();
-            formData.append("sisa_cuti", cutiAkhir);
+            if(jenis !== 'lembur' & permission_pil === 'disetujui' ){
+                formData.append("sisa_cuti", cutiAkhir);
+            }
             formData.append("username", username);
+            formData.append("email", email);
             const res = await axios({
                 method: 'put',
                 url:`${BASE_URL}/users/employees/${emp_id}/`,
+                data: formData,
+                headers: {
+                    "Authorization" : `Token ${USER_TOKEN}`
+                  }
+            })
+            if(jenis !== 'lembur' & permission_pil === 'disetujui' ){
+                CalendarInput()
+            }
+            console.log(res)
+        }catch(error){
+            if( error.response &&
+                error.response.status >= 400 &&
+                error.response.status <= 500
+                ){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Failed',
+                        showConfirmButton: false,
+                        timer: 1500
+                      })
+                    console.log(error)
+            }
+        }
+      };
+
+      const starts = new Date(start_date).toISOString()
+      const ends = new Date(end_date).toISOString()
+
+      const CalendarInput = async e => {
+        try{
+            const formData = new FormData();
+            formData.append("title", employee_names);
+            formData.append("division", division);
+            formData.append("permission_type", jenis);
+            formData.append("reason", reason);
+            formData.append("start", starts);
+            formData.append("end", ends);
+            const res = await axios({
+                method: 'post',
+                url:`${BASE_URL}/petitions/employee-calendar/`,
                 data: formData,
                 headers: {
                     "Authorization" : `Token ${USER_TOKEN}`
@@ -180,6 +227,18 @@ function DetailPerizinan() {
         }
       };
 
+      const handleCli = () => {
+        if (ROLES === 'hrd' & cutiAkhir > '1') {
+            perizinanAdm()
+        }else{
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                showConfirmButton: false,
+                timer: 1500
+              })
+        }
+      }
 
   return (
     <React.Fragment>
@@ -203,8 +262,8 @@ function DetailPerizinan() {
                                 <span>.</span>
                                 </div>
                                 <Box sx={{ mt:2, display:'flex' }}>
-                                    <TextField fullWidth disabled sx={{ mr:2 }} value={pengajuan.employee_name} type="text" label='Nama' variant='filled' />
-                                    <TextField fullWidth disabled value={pengajuan.division} type="text" label='Bagian' variant='filled' />
+                                    <TextField fullWidth disabled sx={{ mr:2 }} onChange={e => setEmployeeName(e.target.value)} value={employee_names} type="text" label='Nama' variant='filled' />
+                                    <TextField fullWidth disabled value={division} onChange={e => setDivision(e.target.value)} type="text" label='Bagian' variant='filled' />
                                 </Box>
                                 <Box sx={{ mt:2, display: 'flex' }}>
                                     <span>Jenis Cuti/Izin</span> : &nbsp;
@@ -252,8 +311,13 @@ function DetailPerizinan() {
                                 </Box>
 
                                 <Box sx={{ mt:1 }}>
-                                    {/* <TextField value={jumlah_hari && jumlah_hari.jumlah_hari} disabled fullWidth type="number" label='Jumlah Hari Kerja' variant='filled' /> */}
-                                    <TextField value={jumlah_hari} onChange={e => setJumlHari(e.target.value)} disabled fullWidth type="text" label='Jumlah Hari Kerja' variant='filled' />
+                                {
+                                        permission_pi === 'disetujui'?
+                                        <TextField value={jumlah_hari} onChange={e => setJumlHari(e.target.value)} disabled fullWidth type="number" label='Jumlah Hari Kerja' variant='filled' />
+                                        : 
+                                        <TextField value={jumlah_hari} onChange={e => setJumlHari(e.target.value)} fullWidth type="number" label='Jumlah Hari Kerja' variant='standard' />
+                                        //  <TextField value={jumlah_hari && jumlah_hari.jumlah_hari} disabled fullWidth type="number" label='Jumlah Hari Kerja' variant='filled' />
+                                    }
                                 </Box>
 
                                 <Box sx={{ mt:2, mb:2 }}>
@@ -289,8 +353,12 @@ function DetailPerizinan() {
                                     :
                                     <Col md={8}>
                                             <FormControlLabel value="disetujui" control={<Radio />} label="Disetujui" />
-                                            <FormControlLabel value="ditangguhkan" control={<Radio />} label="Ditangguhkan menjadi Tanggal" />
-                                            <FormControlLabel value="ditolak" control={<Radio />} label="Ditolak" />
+                                            <FormControlLabel disabled value="ditangguhkan" control={<Radio />} label="Ditangguhkan menjadi Tanggal" />
+                                            {permission_pi === 'ditolak' || permission_pi === 'bersyarat'  ? 
+                                            <FormControlLabel value="bersyarat" control={<Radio />} label="Disetujui Dengan Bersyarat" />
+                                            : null    
+                                            }
+                                            <FormControlLabel disabled value="ditolak" control={<Radio />} label="Ditolak" />
                                         </Col>
                                         
                                         }
@@ -298,7 +366,11 @@ function DetailPerizinan() {
                                     </FormControl>
                                 </Box>
                                 {permission_pil === 'ditolak' ?
-                                <TextField value={reason_rejected} onChange={e => setReasonRejected(e.target.value)} fullWidth variant='standard' label='Alasan' />
+                                <TextField value={reason_rejected} disabled onChange={e => setReasonRejected(e.target.value)} fullWidth variant='filled' label='Alasan' />
+                                : null
+                                }
+                                {permission_pil === 'bersyarat' ?
+                                <TextField value={conditional_reason} onChange={e => setConditionalReason(e.target.value)} fullWidth variant='standard' label='Alasan Disetujui' />
                                 : null
                                 }
                                 {permission_pil === 'ditangguhkan' ? 
@@ -328,12 +400,13 @@ function DetailPerizinan() {
                                  : null
                                 }
 
-                                <div className="d-flex justify-content-end mt-4 mb-4">
+                                <div className="d-flex justify-content-between mt-4 mb-4">
+                                    <small className="text-secondary">Sisa Cuti Karyawan Ini : {sisaCut && sisaCut}</small>
                                     {
                                         permission_pi === 'disetujui'?
                                         null
                                         : 
-                                        <button onClick={ROLES === 'hrd' ? perizinanAdm : null} className='btn btn-primary'>Submit</button>
+                                        <button onClick={handleCli} className='btn btn-primary'>Submit</button>
                                     }
                                 </div>
                             </div>

@@ -1,9 +1,8 @@
 import React,{useState, useContext} from 'react'
-import { Col } from 'react-bootstrap'
+import { Col, Form } from 'react-bootstrap'
 import { TextField, Box } from '@mui/material'
-import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-import { BASE_URL } from '../../../fetch/fetch'
+import { BASE_URL, API_KEY } from '../../../fetch/fetch'
 import axios from 'axios'
 import { AuthContext } from '../../../Context/AuthContext'
 
@@ -27,7 +26,12 @@ function LoginHrd() {
      e.preventDefault()
         dispatch({type:"LOGIN_START"})
         try{
-            const res = await axios.post(`${BASE_URL}/api-auth/`, credentials)
+            const res = await axios.post(`${BASE_URL}/api-auth/`, credentials,
+            {
+              headers:{
+                'Authorization' : 'Token ' + API_KEY
+              }
+            })
             dispatch({ type: "LOGIN_SUCCESS", payload: res.data.data });
             console.log(res.data.data)
             localStorage.setItem("user_token", res.data.data.token)
@@ -45,22 +49,21 @@ function LoginHrd() {
   return (
     <div style={{ height:'100vh', backgroundColor:'rgb(21, 36, 105)', display:'flex', justifyContent:'center', alignItems:'center' }}>
        <Col md={4}>
-        <div className="card shadow-card" style={{ border:'none', borderRadius:'12px' }}>
-          <div className="card-body">
-            <div className="card-title"><h5>Login HRD</h5></div>
-            <Box sx={{ mt:1, mb:2 }}>
-              <TextField fullWidth type='text' onChange={handleChange} id='username' variant='standard' label='Username' />
-              <TextField fullWidth type='password' onChange={handleChange} id='password' variant='standard' label='Password' />
-            </Box>
-            <div className="d-flex justify-content-between mb-3">
-              <Link to='/' style={{ textDecoration:'none' }}>
-                <small>Lupa Password</small>
-              </Link>
-              <button className='btn btn-primary' onClick={LoginUser}>Login</button>
-              {error && error}
+       <Form onSubmit={LoginUser}>
+          <div className="card shadow-card" style={{ border:'none', borderRadius:'12px' }}>
+            <div className="card-body">
+              <div className="card-title"><h5>Login HRD</h5></div>
+              <Box sx={{ mt:1, mb:2 }}>
+                <TextField fullWidth type='text' onChange={handleChange} id='username' variant='standard' label='Username' />
+                <TextField fullWidth type='password' onChange={handleChange} id='password' variant='standard' label='Password' />
+              </Box>
+              <div className="d-flex justify-content-end mb-3">
+                <button className='btn btn-primary' onClick={LoginUser}>Login</button>
+                {error && error}
+              </div>
             </div>
           </div>
-        </div>
+       </Form>
        </Col>
     </div>  )
 }

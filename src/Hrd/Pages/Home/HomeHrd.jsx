@@ -1,14 +1,14 @@
 import React from 'react'
 import { Col } from 'react-bootstrap'
-import { useNavigate, useLocation } from 'react-router-dom'
-import Navbars from '../../../Components/Navbars'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { BASE_URL, USER_TOKEN } from '../../../fetch/fetch'
+import { BASE_URL, USER_TOKEN, ROLES } from '../../../fetch/fetch'
 import { DataGrid } from '@mui/x-data-grid';
 import { Box, Skeleton, FormControl, InputLabel, Select, MenuItem, TextField } from '@mui/material';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import runOneSignal from '../../../oneSignal/oneSignal'
+import SideBar from '../../Components/SideBar'
 
 const columns = [
       { field: 'id', headerName: 'Id', width: 70 },
@@ -20,9 +20,6 @@ const columns = [
       { field: 'end_date', headerName: 'Tanggal Akhir', width: 130 },
       { field: 'return_date', headerName: 'Masuk Kembali', width: 130 },
       { field: 'permission_pil', headerName: 'Izin Atasan', width: 130 },
-      // { field: 'suspended_start', headerName: 'Awal Ditangguhkan', width: 130 },
-      // { field: 'suspended_end', headerName: 'Akhir Ditangguhkan', width: 130 },
-      // { field: 'reason_rejected', headerName: 'Alasan ditolak', width: 130 },
   ];
   
   const LoadingSkeleton = () => (
@@ -39,10 +36,7 @@ const columns = [
 
 function HomeHrd() {
 
-    const location = useLocation()
     const navigate = useNavigate()
-    const ids = location.pathname.split('/')[1]
-    console.log(ids)
     const [open, setOpen] = React.useState(false)
     const [perizinan, setPerizinan] = React.useState('')
     const [start_dates, setStartDates] = React.useState('')
@@ -95,94 +89,106 @@ function HomeHrd() {
     runOneSignal();
   },[])
 
+  if(ROLES === 'employee' || ROLES === 'atasan' ){
+    localStorage.clear()
+    navigate('/')
+  }
+
   return (
     <React.Fragment>
-        <Navbars />
-        <div id="image__background">
-            <main className="p-3 ">
-                <div className='d-flex justify-content-center'>
-                    <Col md={12} sm={12}>
-                        <div className="card shadow_card" style={{ border:'none', borderRadius:'12px' }}>
-                            <div className="card-body">
-                                <div className="card-title mb-3"><h5>Hallo, Selamat Datang</h5></div>
-                                <Col md={3}>
-                                    <div className="d-flex justify-content-between">
-                                      <button className={ids === 'home' ? 'btn btn-secondary' : 'btn btn-primary'}>List Pengajuan Karyawan</button>
-                                      {/* <button onClick={() => navigate('/notes')} className={ids !== 'home' ? 'btn btn-secondary' : 'btn btn-primary'}>Notes HRD</button> */}
-                                    </div>
-                                </Col>
+        <div className="d-flex">
+        <SideBar />
+         <div  id="image__background">
+         <main className="container" style={{ marginTop:'75px'}}>
+                <div className='mt-4'>
+                <Col md={12} sm={12}>
+                            <div className="card shadow_card" style={{ border:'none', borderRadius:'12px' }}>
+                                <div className="card-body">
+                                    {/* <div className="card-title mb-3"><h5>Hallo, Selamat Datang {NAMES}</h5></div> */}
+                                    {ROLES === 'hrd' ? 
+                                    <React.Fragment>
+                                      {/* <Col md={3}>
+                                        <div className="d-flex justify-content-between">
+                                          <button className={ids === 'home' ? 'btn btn-secondary' : 'btn btn-primary'}>List Pengajuan Karyawan</button>
+                                          <button onClick={() => navigate('/notes')} className={ids !== 'home' ? 'btn btn-secondary' : 'btn btn-primary'}>Notes HRD</button>
+                                        </div>
+                                    </Col> */}
 
                                     <Col md={12} className='mb-2 text-secondary d-flex justify-content-between'>
-                                      <Col md={9} className="mt-2">
-                                        <FormControl sx={{ mr: 1, mt:1, minWidth: 120 }}>
-                                          <InputLabel id="demo-controlled-open-select-label">Perizinan</InputLabel>
-                                          <Select
-                                            labelId="demo-controlled-open-select-label"
-                                            id="demo-controlled-open-select"
-                                            open={open}
-                                            onClose={handled}
-                                            onOpen={handled}
-                                            value={perizinan}
-                                            label="Age"
-                                            onChange={handleChange}
-                                          >
-                                            <MenuItem value={'ijin'}>Ijin</MenuItem>
-                                            <MenuItem value={'sakit'}>Sakit</MenuItem>
-                                            <MenuItem value={'cuti'}>Cuti</MenuItem>
-                                            <MenuItem value={'lembur'}>Lembur</MenuItem>
-                                            <MenuItem value={''}>All</MenuItem>
-                                          </Select>
-                                        </FormControl>
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <MobileDatePicker
-                                            label="Tanggal Awal"
-                                            value={new Date(start_dates)}
-                                            onChange={(newValue) => {
-                                                convDate(newValue);
-                                            }}
-                                            renderInput={(params) => <TextField variant='outlined' sx={{ mr:1, mt:1 }} {...params} />}
+                                          <Col md={9} className="mt-2">
+                                            <FormControl sx={{ mr: 1, mt:1, minWidth: 120 }}>
+                                              <InputLabel id="demo-controlled-open-select-label">Perizinan</InputLabel>
+                                              <Select
+                                                labelId="demo-controlled-open-select-label"
+                                                id="demo-controlled-open-select"
+                                                open={open}
+                                                onClose={handled}
+                                                onOpen={handled}
+                                                value={perizinan}
+                                                label="Age"
+                                                onChange={handleChange}
+                                              >
+                                                <MenuItem value={'ijin'}>Ijin</MenuItem>
+                                                <MenuItem value={'sakit'}>Sakit</MenuItem>
+                                                <MenuItem value={'cuti'}>Cuti</MenuItem>
+                                                <MenuItem value={'lembur'}>Lembur</MenuItem>
+                                                <MenuItem value={''}>All</MenuItem>
+                                              </Select>
+                                            </FormControl>
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <MobileDatePicker
+                                                label="Tanggal Awal"
+                                                value={new Date(start_dates)}
+                                                onChange={(newValue) => {
+                                                    convDate(newValue);
+                                                }}
+                                                renderInput={(params) => <TextField variant='outlined' sx={{ mr:1, mt:1 }} {...params} />}
+                                                />
+                                                <MobileDatePicker
+                                                label="Tanggal Berakhir"
+                                                value={new Date(end_dates)}
+                                                onChange={(newValue) => {
+                                                    convDates(newValue);
+                                                }}
+                                                renderInput={(params) => <TextField variant='outlined' sx={{ mt:1 }} {...params} />}
+                                                />
+                                            </LocalizationProvider>
+                                          </Col>
+                                          <Col md={2}>
+                                            <TextField placeholder='Cari Nama Karyawan' sx={{ mt:3 }} value={employees} onChange={e => setEmployess(e.target.value)} />
+                                          </Col>
+
+
+
+                                        </Col>
+
+                                        <Col md={12}>
+                                          <div style={{ height: 400, width: '100%' }}>
+                                            <DataGrid
+                                            rows={list_pengajuan}
+                                            columns={columns}
+                                            pageSize={7}
+                                            rowsPerPageOptions={[7]}
+                                            getRowId={(row) => row.id}
+                                            onRowClick={handleRowClick}
+                                            components={{
+                                                LoadingOverlay: LoadingSkeleton,
+                                              }}
+                                              loading={loading}
                                             />
-                                            <MobileDatePicker
-                                            label="Tanggal Berakhir"
-                                            value={new Date(end_dates)}
-                                            onChange={(newValue) => {
-                                                convDates(newValue);
-                                            }}
-                                            renderInput={(params) => <TextField variant='outlined' sx={{ mt:1 }} {...params} />}
-                                            />
-                                        </LocalizationProvider>
-                                      </Col>
-                                      <Col md={2}>
-                                        <TextField placeholder='Cari Nama Karyawan' sx={{ mt:3 }} value={employees} onChange={e => setEmployess(e.target.value)} />
-                                      </Col>
+                                            </div>
+                                        </Col>
+                                    </React.Fragment>
+                                    :
+                                    <div className="d-flex justify-content-center">Anda Login Sebagai {ROLES}. Anda tidak dapat mengakses fitur di menu HR</div>
+                                    }
 
-
-
-                                    </Col>
-
-
-                                    {list_pengajuan.employee_name}
-                                    <Col md={12}>
-                                       <div style={{ height: 400, width: '100%' }}>
-                                        <DataGrid
-                                        rows={list_pengajuan}
-                                        columns={columns}
-                                        pageSize={7}
-                                        rowsPerPageOptions={[7]}
-                                        getRowId={(row) => row.id}
-                                        onRowClick={handleRowClick}
-                                        components={{
-                                            LoadingOverlay: LoadingSkeleton,
-                                          }}
-                                          loading={loading}
-                                        />
-                                        </div>
-                                    </Col>
+                                </div>
                             </div>
-                        </div>
-                    </Col>
+                        </Col>
                 </div>
             </main>
+         </div>
         </div>
     </React.Fragment>
   )

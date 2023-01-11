@@ -14,8 +14,8 @@ code {
 
 #image__background{
   align-items: center;
-  background-image: url('./Components/images/background.jpg');
-  /* background-color: rgb(125, 137, 190); */
+  /* background-image: url('./Components/images/background.jpg'); */
+  background-color: #F3F6F9;
   background-repeat: no-repeat;
   background-size: cover;
   min-height: 120vh;
