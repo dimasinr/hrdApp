@@ -132,10 +132,10 @@ const loadRegister =() =>{
   addNewEmployee()
 }
 
-const [showPas, setShowPas] = useState('password')
+const [showPas, setShowPas] = useState(false)
 
 const handlePas = () => {
-  setShowPas('text')
+  setShowPas(!showPas)
 }
 
   return (
@@ -196,8 +196,8 @@ const handlePas = () => {
                            <TextField value={named} fullWidth sx={{ mr:1 }} label='Nama Karyawan' />
                         </Box>
                         <Box sx={{ mt:2, display:'flex' }}>
-                           <TextField value={password} fullWidth type={showPas} onChange={e => setPassword(e.target.value)} sx={{ mr:1 }} label='Password' />
-                           <TextField value={password2} fullWidth type={showPas} onChange={e => setPassword2(e.target.value)} sx={{ mr:1 }} label='Password Confirm' />
+                           <TextField value={password} fullWidth type={showPas === false ? 'password' : 'text'} onChange={e => setPassword(e.target.value)} sx={{ mr:1 }} label='Password' />
+                           <TextField value={password2} fullWidth type={showPas === false ? 'password' : 'text'} onChange={e => setPassword2(e.target.value)} sx={{ mr:1 }} label='Password Confirm' />
                         </Box>
                         <div className="d-flex justify-content-end">
                           <button className='btn text-primary' onClick={handlePas}>
