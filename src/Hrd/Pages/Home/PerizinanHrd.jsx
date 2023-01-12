@@ -206,20 +206,24 @@ function PerizinanHrd() {
                                                     />
                                                 </LocalizationProvider>
                                                 {/* <TextField value={date_note} onChange={e => setDates(e.target.value)} label='Tanggal Catatan' sx={{ mt:3, mr:1 }}  /> */}
-                                                <TextField 
-                                                value={notes} 
-                                                onChange={e => setNotes(e.target.value)} 
-                                                label='Catatan' 
-                                                sx={{ mt:3, mr:1, ml:1 }}  
-                                                // multiline
-                                                // rows={4} 
-                                                />
+                                               
                                             </Box>
                                             <Box sx={{ mt:3 }}>
                                               <button onClick={editNotes} className='btn text-primary'>Ubah Notes <Edit /></button>
                                               <button onClick={delNotes} className='btn text-danger'><Delete /></button>
                                             </Box>
                                           </div>
+                                          <Box sx={{ maxWidth:460 }}>
+                                          <TextField 
+                                                value={notes} 
+                                                onChange={e => setNotes(e.target.value)} 
+                                                label='Catatan' 
+                                                sx={{ mt:3, mr:1 }}  
+                                                multiline
+                                                fullWidth
+                                                rows={4} 
+                                                />
+                                          </Box>
                                           <Box sx={{ mt:3 }}>
                                           <span className='mt-4'><h5>List Catatan Karyawan ini</h5></span>
                                           <div style={{ height: 400, width: '100%' }}>

@@ -132,6 +132,12 @@ const loadRegister =() =>{
   addNewEmployee()
 }
 
+const [showPas, setShowPas] = useState('password')
+
+const handlePas = () => {
+  setShowPas('text')
+}
+
   return (
     <React.Fragment>
         <div className="d-flex">
@@ -190,9 +196,14 @@ const loadRegister =() =>{
                            <TextField value={named} fullWidth sx={{ mr:1 }} label='Nama Karyawan' />
                         </Box>
                         <Box sx={{ mt:2, display:'flex' }}>
-                           <TextField value={password} fullWidth type='password' onChange={e => setPassword(e.target.value)} sx={{ mr:1 }} label='Password' />
-                           <TextField value={password2} fullWidth type='password' onChange={e => setPassword2(e.target.value)} sx={{ mr:1 }} label='Password Confirm' />
+                           <TextField value={password} fullWidth type={showPas} onChange={e => setPassword(e.target.value)} sx={{ mr:1 }} label='Password' />
+                           <TextField value={password2} fullWidth type={showPas} onChange={e => setPassword2(e.target.value)} sx={{ mr:1 }} label='Password Confirm' />
                         </Box>
+                        <div className="d-flex justify-content-end">
+                          <button className='btn text-primary' onClick={handlePas}>
+                            Show password
+                          </button>
+                        </div>
                       </DialogContentText>
                     </DialogContent>
                     <DialogActions>
