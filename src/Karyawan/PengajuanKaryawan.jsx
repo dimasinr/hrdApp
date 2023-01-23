@@ -187,7 +187,7 @@ function PengajuanKaryawan() {
                 </button>
                 <Box sx={{ mt:2 }}>
                     <TextField fullWidth value={NAMES} type="text" label='Nama' variant='standard' />
-                    <TextField fullWidth value={bagian} onChange={e => setBagian(e.target.value)} type="text" label='Bagian' variant='standard' />
+                    <TextField fullWidth value={bagian} type="text" label='Bagian' variant='standard' />
                 </Box>
                 <Box sx={{ mt:2, display: 'flex' }}>
                     <span style={{ marginTop:'10px' }}>Jenis Cuti/Izin : </span>&nbsp;
