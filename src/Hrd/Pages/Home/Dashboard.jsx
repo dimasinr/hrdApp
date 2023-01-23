@@ -8,20 +8,6 @@ function Dashboard() {
 
     const casc = new Date().toISOString().slice(0,4)
     
-    const dae = [{
-        'day':1,
-        'month':1,
-        'year':2023
-      },{
-        'day':23,
-        'month':2,
-        'year':2023
-      },{
-        'day':12,
-        'month':2,
-        'year':2023
-      }]
-
       const [topDash , setTopDash] = useState([])
       const [offDay , setOffDay] = useState([])
 
