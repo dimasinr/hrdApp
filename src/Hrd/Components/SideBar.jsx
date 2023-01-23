@@ -13,12 +13,13 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 // import MailIcon from '@mui/icons-material/Mail';
-import {FactCheck, AutoStories, Logout, DateRange, Person} from '@mui/icons-material';
+import {FactCheck, AutoStories, Logout, DateRange, Person, Dashboard, Badge} from '@mui/icons-material';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { NAMES } from '../../fetch/fetch';
+import { NAMES, ROLES, USER_ID, USER_TOKEN, BASE_URL } from '../../fetch/fetch';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const drawerWidth = 245;
 
@@ -27,6 +28,7 @@ function SideBar(props) {
   const navigate = useNavigate()
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [users, setUsers] = React.useState([])
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -37,56 +39,173 @@ function SideBar(props) {
     navigate('/')
   }
 
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  const getUsers = () => {
+    axios.get(`${BASE_URL}/users/employees/${USER_ID}/`,{
+      headers: {
+        "Authorization" : 'Token ' + USER_TOKEN
+      }
+    })
+    .then((response) => {
+      const res = response.data
+      setUsers(res)
+      console.log(res)
+    })
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  React.useEffect(() => getUsers(), [USER_ID])
+
   const drawer = (
     <div >
       <div className="d-flex justify-content-center mt-4 mb-4">
-       <h5>HRD Pages</h5>
+          <img src="https://media.licdn.com/dms/image/C560BAQFTYr9fTg4UWA/company-logo_200_200/0/1592484860827?e=2147483647&v=beta&t=q2WiLQyOg4xZxA7e3wFA7pkl80rwlcEM3oh1XAOkDPM"
+           width={70} height={70} alt="" />
+      </div>
+      <div className="text-center">
+          <span className='text-secondary'>
+            <b>
+              {capitalizeFirstLetter(NAMES)} | {USER_ID}{users.employee_joined ? users.employee_joined.toString().replace(/\s/g,'-') : '24124321'} | {users.division} 
+            </b> 
+          </span>
       </div>
       {/* <Toolbar /> */}
       <Divider />
       <small className='text-secondary container'>Pengajuan Karyawan</small>
+      {ROLES === 'hrd' ? 
+      <List>
+      <Link to="/home" style={{ textDecoration:'none', color:'black' }}>
+      <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <Dashboard sx={{ color:'#0B305A' }} />
+            </ListItemIcon>
+            <ListItemText primary='Dashboard' />
+          </ListItemButton>
+        </ListItem>
+      </Link>
+      <Link to="/list-pengajuan" style={{ textDecoration:'none', color:'black' }}>
+      <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <FactCheck sx={{ color:'#0B305A' }} />
+            </ListItemIcon>
+            <ListItemText primary='List Pengajuan Karyawan' />
+          </ListItemButton>
+        </ListItem>
+      </Link>
+      <Divider />
+      <small className='text-secondary container'>Menu HRD</small>
+      <Link to="/notes" style={{ textDecoration:'none', color:'black' }}>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <AutoStories sx={{ color:'#0B305A' }} />
+            </ListItemIcon>
+            <ListItemText primary='Catatan HRD' />
+          </ListItemButton>
+        </ListItem>
+      </Link>
+      <Link to="/calendar-cuti" style={{ textDecoration:'none', color:'black' }}>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <DateRange sx={{ color:'#0B305A' }} />
+            </ListItemIcon>
+            <ListItemText primary='Kalender Cuti' />
+          </ListItemButton>
+        </ListItem>
+      </Link>
+      <Divider />
+      <small className='text-secondary container'>Manajemen Karyawan</small>
+      <Link to='/employee/absensi' style={{ textDecoration:'none', color:'black' }}>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <Badge sx={{ color:'#0B305A' }} />
+            </ListItemIcon>
+            <ListItemText primary='Absensi Karyawan' />
+          </ListItemButton>
+        </ListItem>
+      </Link>
+      <Link to="/list-karyawan" style={{ textDecoration:'none', color:'black' }}>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <Person sx={{ color:'#0B305A' }} />
+            </ListItemIcon>
+            <ListItemText primary='List Karyawan' />
+          </ListItemButton>
+        </ListItem>
+      </Link>
+      <Divider />
+      <small className='text-secondary container'>Pengaturan</small>
+        <ListItem disablePadding>
+          <ListItemButton onClick={logout}>
+            <ListItemIcon>
+              <Logout sx={{ color:'red' }} />
+            </ListItemIcon>
+            <ListItemText primary='Keluar' />
+          </ListItemButton>
+        </ListItem>
+    </List>
+      : null
+      }
+      {ROLES === 'karyawan' ? 
       <List>
         <Link to="/home" style={{ textDecoration:'none', color:'black' }}>
         <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
+                <Dashboard sx={{ color:'#0B305A' }} />
+              </ListItemIcon>
+              <ListItemText primary='Dashboard' />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+        <Link to="/list-pengajuan" style={{ textDecoration:'none', color:'black' }}>
+        <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
                 <FactCheck sx={{ color:'#0B305A' }} />
               </ListItemIcon>
-              <ListItemText primary='List Pengajuan Karyawan' />
+              <ListItemText primary='List Pengajuan' />
             </ListItemButton>
           </ListItem>
         </Link>
         <Divider />
-        <small className='text-secondary container'>Menu HRD</small>
-        <Link to="/notes" style={{ textDecoration:'none', color:'black' }}>
-          <ListItem disablePadding>
+        <small className='text-secondary container'>Pengaturan</small>
+        <ListItem disablePadding>
+          <ListItemButton onClick={logout}>
+            <ListItemIcon>
+              <Logout sx={{ color:'red' }} />
+            </ListItemIcon>
+            <ListItemText primary='Keluar' />
+          </ListItemButton>
+        </ListItem>
+      </List>
+      : null}
+      {ROLES === 'atasan' ? 
+      <List>
+        <Link to="/home" style={{ textDecoration:'none', color:'black' }}>
+        <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                <AutoStories sx={{ color:'#0B305A' }} />
+                <Dashboard sx={{ color:'#0B305A' }} />
               </ListItemIcon>
-              <ListItemText primary='Catatan HRD' />
+              <ListItemText primary='Dashboard' />
             </ListItemButton>
           </ListItem>
         </Link>
-        <Link to="/calendar-cuti" style={{ textDecoration:'none', color:'black' }}>
-          <ListItem disablePadding>
+        <Link to="/list-pengajuan/karyawan/" style={{ textDecoration:'none', color:'black' }}>
+        <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                <DateRange sx={{ color:'#0B305A' }} />
+                <FactCheck sx={{ color:'#0B305A' }} />
               </ListItemIcon>
-              <ListItemText primary='Kalender Cuti' />
-            </ListItemButton>
-          </ListItem>
-        </Link>
-        <Divider />
-        <small className='text-secondary container'>Manajemen Karyawan</small>
-        <Link to="/list-karyawan" style={{ textDecoration:'none', color:'black' }}>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <Person sx={{ color:'#0B305A' }} />
-              </ListItemIcon>
-              <ListItemText primary='List Karyawan' />
+              <ListItemText primary='List Pengajuan' />
             </ListItemButton>
           </ListItem>
         </Link>
@@ -101,6 +220,7 @@ function SideBar(props) {
             </ListItemButton>
           </ListItem>
       </List>
+      : null}
     </div>
   );
 
@@ -128,7 +248,7 @@ function SideBar(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Hallo, Selamat Datang {NAMES}
+            Hallo, Selamat Datang
           </Typography>
         </Toolbar>
       </AppBar>
@@ -143,7 +263,6 @@ function SideBar(props) {
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
-          style={{ background:'red' }}
           ModalProps={{
             keepMounted: true, // Better open performance on mobile.
           }}

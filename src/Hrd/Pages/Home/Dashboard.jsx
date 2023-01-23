@@ -1,0 +1,226 @@
+import React,{useState, useEffect} from 'react'
+import SideBar from '../../Components/SideBar'
+import { Calendar, DateObject } from "react-multi-date-picker"
+import axios from 'axios'
+import { USER_TOKEN, BASE_URL } from '../../../fetch/fetch'
+
+function Dashboard() {
+
+    const casc = new Date().toISOString().slice(0,4)
+    
+    const dae = [{
+        'day':1,
+        'month':1,
+        'year':2023
+      },{
+        'day':23,
+        'month':2,
+        'year':2023
+      },{
+        'day':12,
+        'month':2,
+        'year':2023
+      }]
+
+      const [topDash , setTopDash] = useState([])
+      const [offDay , setOffDay] = useState([])
+
+      const getDates = () => {
+        axios.get(`${BASE_URL}/users/employee-total/`,{
+          headers: {
+            "Authorization" : `Token ${USER_TOKEN}`
+          }
+        })
+        .then((response) => {
+          const res = response.data
+          setTopDash(res)
+          console.log(res)
+        })
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      useEffect(() => getDates(), [])
+
+      const getOffDay = () => {
+        axios.get(`${BASE_URL}/dashboard/employee-dashboard/`,{
+          headers: {
+            "Authorization" : `Token ${USER_TOKEN}`
+          }
+        })
+        .then((response) => {
+          const res = response.data
+          setOffDay(res)
+          console.log(res)
+        })
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      useEffect(() => getOffDay(), [])
+
+     
+
+      var dates = new Date().toISOString().slice(0,4)
+      var startDate = new Date(`01/01/${dates}`);
+      var endDate = new Date(`12/31/${dates}`);
+      var numOfDates = getBusinessDatesCount(startDate,endDate);
+      
+      function getBusinessDatesCount(startDate, endDate) {
+          let count = 0;
+          const curDate = new Date(startDate.getTime());
+          while (curDate <= endDate) {
+              const dayOfWeek = curDate.getDay();
+              if(dayOfWeek !== 0 && dayOfWeek !== 6) count++;
+              curDate.setDate(curDate.getDate() + 1);
+          }
+          return count;
+      }
+
+      const dayPerc = numOfDates*800 
+
+      function percentage(perc){
+        return (perc/dayPerc*100)
+      }
+      
+      console.log(numOfDates)
+
+  return (
+    <div id='image__background' className='d-flex'>
+        <SideBar />
+        <main className="container" style={{ marginTop:'75px' }}>
+
+        {/* Top Main */}
+            <div className="col-md-12 d-flex mb-2">
+                <div className="col-md-9">
+                    <div className="d-flex flex-wrap">
+                        <div className="col-md-3 mb-2">
+                            <div className="card shadow-card" style={{ border:'none', marginRight:'10px', marginLeft:'10px' }}>
+                                <div className='card-title text-center' style={{ backgroundColor: '#0B305A', color:'white' }}>Total Working Days</div>
+                                <div className="card-body text-center">
+                                    <span><h4>{numOfDates} Days</h4></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-md-3 mb-2">
+                            <div className="card shadow-card" style={{ border:'none' }}>
+                                <div className='card-title text-center' style={{ backgroundColor: '#0B305A', color:'white' }}>Attendance Percentage</div>
+                                <div className="card-body text-center">
+                                    <span><h4>{percentage(topDash.total_work_hour_all && topDash.total_work_hour_all.working_hour__sum ).toString().slice(0,6)}%</h4></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-md-3 mb-2">
+                            <div className="card shadow-card" style={{ border:'none', marginLeft:'10px' }}>
+                                <div className='card-title text-center' style={{ backgroundColor: '#0B305A', color:'white' }}>Total Active Employee</div>
+                                <div className="card-body text-center">
+                                    <span><h4>{topDash.employee && topDash.employee.active_employee} Employee</h4></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-md-3 mb-2">
+                            <div className="card shadow-card" style={{ border:'none', marginLeft:'10px' }}>
+                                <div className='card-title text-center' style={{ backgroundColor: '#0B305A', color:'white' }}>Total Resign Employee</div>
+                                <div className="card-body text-center">
+                                    <span><h4>{topDash.employee && topDash.employee.inactive_employee} Employee</h4></span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div className="col-md-3" style={{ marginLeft:'10px' }}>
+                    <div className="card shadow-card" style={{ border:'none', marginRight:'10px' }}>
+                        <div className='card-title text-center' style={{ backgroundColor: '#0B305A', color:'white' }}>Year</div>
+                        <div className="card-body text-center">
+                            <span><h4>{casc && casc}</h4></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        {/* Content Main */}
+
+        <div className="col-md-12" style={{ marginLeft:'10px' }}>
+            <div className="d-flex flex-wrap">
+                <div className="col-md-8" style={{ marginRight:'55px' }}>
+                <Calendar
+                fullYear
+                value={offDay.map((da) => {
+                    return new DateObject().setDay(da.days).setMonth(da.months).setYear(da.years)
+                })}
+                // onChange={setDates}
+                disableMonthPicker
+                disableYearPicker
+                readOnly
+                /> 
+                </div>
+                <div className="col-md-3">
+                    <div className="row">
+                        <div className="col-md-12 mb-2">
+                            <div className="card shadow-card" style={{ border:'none' }}>
+                                <div className="card-title text-center" style={{ backgroundColor: '#0B305A', color:'white' }}>Top 5 Employee</div>
+                                <div className="card-body">
+                                    <ol>
+                                        <li>
+                                            <div className='d-flex justify-content-between'>
+                                                <span className='text-secondary'>Fitur Belum Tersedia</span>
+                                                {/* <span>94.23 %</span> */}
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-12 mb-2">
+                            <div className="card shadow-card" style={{ border:'none' }}>
+                                <div className="card-title text-center" style={{ backgroundColor: '#0B305A', color:'white' }}>Bottom 5 Employee</div>
+                                <div className="card-body">
+                                    <ol>
+                                        <li>
+                                            <div className='d-flex justify-content-between'>
+                                                <span className='text-secondary'>Fitur Belum Tersedia</span>
+                                                {/* <span>94.23 %</span> */}
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-md-12 mb-2">
+                            <div className="card shadow-card" style={{ border:'none' }}>
+                                <div className="card-title text-center" style={{ backgroundColor: '#0B305A', color:'white' }}>
+                                    Hari Libur
+                                </div>
+                                <div className="card-body">
+                                    <ol>
+                                        {offDay.map((dayO, index) => {
+                                            return(
+                                                <li key={index}>
+                                                    <div className='d-flex justify-content-between'>
+                                                        <span>{dayO.title_day}</span>
+                                                        <span>{dayO.date}</span>
+                                                    </div>
+                                                </li>
+                                            )
+                                        })}
+                                    </ol>
+                                </div>
+                                <div className="d-flex justify-content-end">
+                                    <button className='btn btn-primary'>Tambah</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+           
+        </main>
+    </div>
+  )
+}
+
+export default Dashboard

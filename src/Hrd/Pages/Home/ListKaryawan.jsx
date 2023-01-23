@@ -60,7 +60,7 @@ function NotesHrd() {
 
 
      const getListPengajuan = () => {
-      axios.get(`${BASE_URL}/users/employees/?first_name=${searchFist}&roles=${searchRoles}`,{
+      axios.get(`${BASE_URL}/users/employee/search/?name=${searchFist}&roles=${searchRoles}`,{
         headers: {
           "Authorization" : 'Token ' + USER_TOKEN
         }
@@ -80,15 +80,12 @@ function NotesHrd() {
       navigate(`/employee/detail/${params.row.pk}`)
     };
 
-    const named = firstName+' '+lastName
-
 
   const addNewEmployee = async e => {
     try{
         const formData = new FormData();
         formData.append("first_name", firstName);
         formData.append("last_name", lastName);
-        formData.append("name", named);
         formData.append("email", email);
         formData.append("password1", password);
         formData.append("password2", password2);
@@ -148,6 +145,10 @@ const handlePas = () => {
                     <Col md={12} sm={12}>
                         <div className="card shadow_card" style={{ border:'none', borderRadius:'10px' }}>
                             <div className="card-body">
+
+                            <div className="card-title">
+                                  <h4>List Karyawan</h4>
+                                </div>
                                
                                     <Col md={12} className='mb-2 text-secondary d-flex justify-content-between'>
                                       <Box>
@@ -193,7 +194,6 @@ const handlePas = () => {
                         </Box>
                         <Box sx={{ mt:2, display:'flex' }}>
                            <TextField value={email} type='email' fullWidth onChange={e => setEmail(e.target.value)} sx={{ mr:1 }} label='Email' />
-                           <TextField value={named} fullWidth sx={{ mr:1 }} label='Nama Karyawan' />
                         </Box>
                         <Box sx={{ mt:2, display:'flex' }}>
                            <TextField value={password} fullWidth type={showPas === false ? 'password' : 'text'} onChange={e => setPassword(e.target.value)} sx={{ mr:1 }} label='Password' />
@@ -204,6 +204,20 @@ const handlePas = () => {
                             Show password
                           </button>
                         </div>
+                        <small className='text-secondary'>
+                          *Password
+                          <ul>
+                            <li>Password minimal 8 digit</li>
+                            <li>Harus dicampur karakter dan angka</li>
+                          </ul>
+                          *Format Password(optional pilih antara format 1 - 3)
+                          <ol>
+                              <li>nama_depan#tanggal_masuk</li>
+                              <li>nama_depan#tanggal_lahir</li>
+                              <li>nws@nama_depan@tanggal_lahir</li>
+                              *cth format 2: dimas#100802
+                          </ol>
+                        </small>
                       </DialogContentText>
                     </DialogContent>
                     <DialogActions>

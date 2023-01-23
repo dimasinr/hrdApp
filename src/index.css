@@ -25,6 +25,19 @@ code {
   width: 100%;
 }
 
+#image__backgrounds{
+  /* align-items: center; */
+  /* background-image: url('./Components/images/background.jpg'); */
+  background-color: #F3F6F9;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 120vh;
+  /* justify-content: center; */
+  /* overflow: hidden; */
+  /* position: relative; */
+  width: 100%;
+}
+
 .bg_colors{
   background-color: rgb(125, 137, 190);
   min-height: 100vh;

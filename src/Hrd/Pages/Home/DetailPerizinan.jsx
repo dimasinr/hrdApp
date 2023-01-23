@@ -30,6 +30,10 @@ function DetailPerizinan() {
     const [sisaCut, setSisaCut] = useState('');
     const [username, setUsername] = useState('');
     const [jumlah_hari, setJumlHari] = useState('');
+    
+    const [lembur_start, setLemburStart] = useState('');
+    const [lembur_end, setLemburEnd] = useState('');
+    const [work_hour, setWorkHour] = useState('');
 
     const [email, setEmail] = useState('')
     const [permission_pil, setPermissionPil] = useState('');
@@ -76,6 +80,9 @@ function DetailPerizinan() {
         setPermissionPi(res.permission_pil)
         setReason(res.reason)
         setJumlHari(res.jumlah_hari)
+        setLemburStart(res.from_hour)
+        setLemburEnd(res.end_hour)
+        setWorkHour(res.lembur_hour)
         setLoading(false)
         setEmpId(res.employee_id)
         console.log(res)
@@ -130,6 +137,12 @@ function DetailPerizinan() {
                     "Authorization" : `Token ${USER_TOKEN}`
                   }
             })
+            if(jenis === 'cuti' & permission_pil === 'disetujui' ){
+                CalendarInput()
+            }
+            if(jenis === 'lembur'){
+                AttendanceInput()
+            }
             console.log(res)
             Swal.fire({
                 icon: 'success',
@@ -157,9 +170,10 @@ function DetailPerizinan() {
     const perizinanSisaCuti = async e => {
         try{
             const formData = new FormData();
-            if(jenis !== 'lembur' & permission_pil === 'disetujui' ){
+            if(jenis !== 'lembur' & jenis !== 'sakit' & permission_pil === 'disetujui' ){
                 formData.append("sisa_cuti", cutiAkhir);
             }
+            
             formData.append("username", username);
             formData.append("email", email);
             const res = await axios({
@@ -170,9 +184,7 @@ function DetailPerizinan() {
                     "Authorization" : `Token ${USER_TOKEN}`
                   }
             })
-            if(jenis !== 'lembur' & permission_pil === 'disetujui' ){
-                CalendarInput()
-            }
+
             console.log(res)
         }catch(error){
             if( error.response &&
@@ -227,6 +239,39 @@ function DetailPerizinan() {
         }
       };
 
+      const AttendanceInput = async e => {
+        try{
+            const formData = new FormData();
+            formData.append("employee_name", employee_names);
+            formData.append("working_date", start_date);
+            formData.append("lembur_start", lembur_start);
+            formData.append("lembur_end", lembur_end);
+            const res = await axios({
+                method: 'post',
+                url:`${BASE_URL}/attendance/employees/`,
+                data: formData,
+                headers: {
+                    "Authorization" : `Token ${USER_TOKEN}`
+                  }
+            })
+            console.log(res)
+        }catch(error){
+            if( error.response &&
+                error.response.status >= 400 &&
+                error.response.status <= 500
+                ){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Failed',
+                        showConfirmButton: false,
+                        timer: 1500
+                      })
+                    console.log(error)
+            }
+        }
+      };
+
+
       const handleCli = () => {
         if (ROLES === 'hrd' & cutiAkhir > '1') {
             perizinanAdm()
@@ -237,6 +282,32 @@ function DetailPerizinan() {
                 showConfirmButton: false,
                 timer: 1500
               })
+        }
+      }
+
+      function hours(x){
+        const delta = x.toString().length
+        if(delta === 4){
+            let hour = x.toString()
+            const diAw = hour.slice(0,2)
+            const diAk = hour.slice(2,4)
+            return diAw + ':' + diAk
+        }
+      }
+
+      function dateHours(y){
+        const delta = y.toString().length
+        let hour = y.toString()
+        if(delta === 4){
+            const diAw = hour.slice(0,2)
+            const diAk = hour.slice(2,4)
+            return diAw + ',' + diAk + ' Jam'
+        }else if(delta === 3){
+            const diAw = hour.slice(0,1)
+            const diAk = hour.slice(1,3)
+            return diAw + ',' + diAk + ' Jam'
+        }else if(delta === 2){
+            return hour + ' Menit'
         }
       }
 
@@ -320,6 +391,13 @@ function DetailPerizinan() {
                                     }
                                 </Box>
 
+                                <Box sx={{ mt:1, display:'flex' }}>
+                                        <TextField value={hours(lembur_start)} sx={{ mr:1 }} onChange={e => setLemburStart(e.target.value)} disabled fullWidth type="text" label='Dari Jam' variant='filled' />
+                                        <TextField value={hours(lembur_end)} onChange={e => setLemburEnd(e.target.value)} disabled fullWidth type="text" label='Sampai Jam' variant='filled' />
+                                </Box>
+
+                                <TextField value={dateHours(work_hour)} sx={{ mt:2 }} onChange={e => setWorkHour(e.target.value)} disabled fullWidth type="text" label='Total Jam' variant='filled' />
+
                                 <Box sx={{ mt:2, mb:2 }}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <MobileDatePicker
@@ -401,7 +479,8 @@ function DetailPerizinan() {
                                 }
 
                                 <div className="d-flex justify-content-between mt-4 mb-4">
-                                    <small className="text-secondary">Sisa Cuti Karyawan Ini : {sisaCut && sisaCut}</small>
+                                    <small className="text-secondary">Sisa Cuti Karyawan Ini : {sisaCut && sisaCut} 
+                                    </small>
                                     {
                                         permission_pi === 'disetujui'?
                                         null
@@ -409,6 +488,9 @@ function DetailPerizinan() {
                                         <button onClick={handleCli} className='btn btn-primary'>Submit</button>
                                     }
                                 </div>
+                                    <small>
+                                    *(pengurangan sisa cuti berdasarkan izin, cuti, dan tanpa keterangan tidak hadir)
+                                    </small>
                             </div>
                         </div>
                     </Col>

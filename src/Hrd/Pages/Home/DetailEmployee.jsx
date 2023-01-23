@@ -11,6 +11,9 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 
 function DetailEmployee() {
 
@@ -22,9 +25,15 @@ function DetailEmployee() {
     const [username, setUsername] = React.useState([])
     const [nama_depan, setNamaDepan] = React.useState([])
     const [nama_belakang, setNamaBelakang] = React.useState([])
-    const [roles, setRoles] = React.useState([])
+    const [roles, setRoles] = React.useState('')
     const [roles2, setRoles2] = React.useState([])
+    const [division, setDivision] = React.useState('')
+    const [division2, setDivision2] = React.useState([])
     const [sisa_cuti, setSisaCuti] = React.useState([])
+    const [religion, setReligion] = React.useState([])
+    const [gender, setGender] = React.useState([])
+    const [date_join, setDateJoin] = React.useState(new Date().toISOString().slice(0,10))
+    const [birth_date, setBirthDate] = React.useState(new Date().toISOString().slice(0,10))
 
     const getEmployee = () => {
         axios.get(`${BASE_URL}/users/employees/${ids}/`,{
@@ -40,7 +49,12 @@ function DetailEmployee() {
           setNamaDepan(res.first_name)
           setNamaBelakang(res.last_name)
           setRoles(res.roles)
+          setDivision(res.division)
           setSisaCuti(res.sisa_cuti)
+          setReligion(res.religion)
+          setGender(res.gender)
+          setDateJoin(res.employee_joined)
+          setBirthDate(res.birth_date)
           console.log(res)
         })
       }
@@ -62,12 +76,30 @@ function DetailEmployee() {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       React.useEffect(() => getRolesEmployee(), [])
 
+      const getDivisionUser = () => {
+        axios.get(`${BASE_URL}/users/employees-division/`,{
+          headers: {
+            "Authorization" : 'Token ' + USER_TOKEN
+          }
+        })
+        .then((response) => {
+          const res = response.data
+          setDivision2(res)
+          console.log(res)
+        })
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      React.useEffect(() => getDivisionUser(), [])
+
       const handleChange = (event) => {
         setRoles(event.target.value);
       };
+
+      const handleChanged = (event) => {
+        setDivision(event.target.value);
+      };
     
       const names = nama_depan+' '+nama_belakang
-      console.log(names)
 
       const editEmployee = async e => {
         try{
@@ -79,6 +111,11 @@ function DetailEmployee() {
             formData.append("last_name", nama_belakang);
             formData.append("roles", roles);
             formData.append("sisa_cuti", sisa_cuti);
+            formData.append("employee_joined", date_join);
+            formData.append("division", division);
+            formData.append("gender", gender);
+            formData.append("religion", religion);
+            formData.append("birth_date", birth_date);
            await axios({
                 method: 'put',
                 url:`${BASE_URL}/users/employees/${ids}/`,
@@ -139,6 +176,17 @@ function DetailEmployee() {
       }
   };
 
+  const convDate = (newdate) => {
+    let event = new Date(newdate);
+    let dated = JSON.stringify(event);
+    setDateJoin(dated.slice(1, 11))
+  }
+
+  const convDated = (newdate) => {
+    let event = new Date(newdate);
+    let dated = JSON.stringify(event);
+    setBirthDate(dated.slice(1, 11))
+  }
 
   return (
     <React.Fragment>
@@ -161,17 +209,24 @@ function DetailEmployee() {
                                           <div className="row">
                                             <Box sx={{ mr:2 }}>
                                                 <TextField value={name ? name : names} disabled id='name' label='Nama karyawan' sx={{ mt:3, mr:1 }}  />
-                                                <TextField value={email} onChange={e => setEmail(e.target.value)} id='email' label='Email' sx={{ mt:3, mr:1 }}  />
+                                                <TextField value={nama_depan} onChange={e => setNamaDepan(e.target.value)} label='Nama Depan' sx={{ mt:3, mr:1 }}  />
+                                                <TextField value={nama_belakang} onChange={e => setNamaBelakang(e.target.value)} label='Nama Belakang' sx={{ mt:3, mr:1 }}  />
                                                 <TextField value={username} onChange={e => setUsername(e.target.value)} id='username' label='Username' sx={{ mt:3, mr:1 }}  />
                                             </Box>
                                             <Box sx={{ mr:2 }}>
-                                                <TextField value={nama_depan} onChange={e => setNamaDepan(e.target.value)} label='Nama Depan' sx={{ mt:3, mr:1 }}  />
-                                                <TextField value={nama_belakang} onChange={e => setNamaBelakang(e.target.value)} label='Nama Belakang' sx={{ mt:3, mr:1 }}  />
-                                                {/* <TextField value={roles} onChange={e => setRoles(e.target.value)} label='Roles' sx={{ mt:3, mr:1 }}  /> */}
+                                                <TextField value={email} onChange={e => setEmail(e.target.value)} id='email' label='Email' sx={{ mt:3, mr:1 }}  />
                                                 <TextField value={sisa_cuti} onChange={e => setSisaCuti(e.target.value)} type='number' label='Jatah Cuti' sx={{ mt:3, mr:1 }}  />
-                                            </Box>
-                                            <Box sx={{ mr:2 }}>
-                                                <FormControl sx={{ mt: 3, minWidth: 120 }}>
+                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                    <MobileDatePicker
+                                                    label="Tanggal Masuk"
+                                                    value={new Date(date_join)}
+                                                    onChange={(newValue) => {
+                                                        convDate(newValue);
+                                                    }}
+                                                    renderInput={(params) => <TextField variant='outlined' sx={{ mt:3 }} {...params} />}
+                                                    />
+                                                </LocalizationProvider>
+                                                <FormControl sx={{ mt: 3, ml:1, minWidth: 220 }}>
                                                     <InputLabel id="role-label">Roles</InputLabel>
                                                     <Select
                                                     labelId="role"
@@ -182,12 +237,46 @@ function DetailEmployee() {
                                                     >
                                                         {roles2 && roles2.map((rol, index) => {
                                                             return(
-                                                                <MenuItem value={rol.roles}>{rol.roles}</MenuItem>
+                                                                <MenuItem value={rol.roles} key={index}>{rol.roles}</MenuItem>
                                                             )
                                                         })}
                                                    
                                                     </Select>
                                                 </FormControl>
+                                            </Box>
+                                            <Box sx={{ mr:2 }}>
+                                                <TextField value={religion} onChange={e => setReligion(e.target.value)} label='Agama' sx={{ mt:3, mr:1 }}  />
+                                                <TextField value={gender} onChange={e => setGender(e.target.value)} type='text' label='Jenis Kelamin' sx={{ mt:3, mr:1 }}  />
+                                               
+                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                    <MobileDatePicker
+                                                    label="Tanggal Lahir"
+                                                    value={new Date(birth_date)}
+                                                    onChange={(newValue) => {
+                                                      convDated(newValue);
+                                                    }}
+                                                    renderInput={(params) => <TextField variant='outlined' sx={{ mt:3, mr:1 }} {...params} />}
+                                                    />
+                                                </LocalizationProvider>
+
+                                                <FormControl sx={{ mt: 3, mr:1, minWidth: 220 }}>
+                                                    <InputLabel id="division-label">Divisi</InputLabel>
+                                                    <Select
+                                                    labelId="division"
+                                                    id="division"
+                                                    value={division}
+                                                    onChange={handleChanged}
+                                                    label="Divisi"
+                                                    >
+                                                        {division2 && division2.map((div, index) => {
+                                                            return(
+                                                                <MenuItem value={div.division} key={index}>{div.division}</MenuItem>
+                                                            )
+                                                        })}
+                                                   
+                                                    </Select>
+                                                </FormControl>
+
                                             </Box>
                                           </div>
                                     

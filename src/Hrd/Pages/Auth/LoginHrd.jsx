@@ -14,7 +14,8 @@ function LoginHrd() {
     username: undefined,
     password: undefined,
   });
-  const { dispatch, error} = useContext(AuthContext);
+  const { dispatch } = useContext(AuthContext);
+  const [errors, setErrors] = useState('')
 
   const handleChange = (e) =>{
     setCredentials(prev=>({...prev, [e.target.id]:e.target.value}))
@@ -33,18 +34,22 @@ function LoginHrd() {
               }
             })
             dispatch({ type: "LOGIN_SUCCESS", payload: res.data.data });
-            console.log(res.data.data)
-            localStorage.setItem("user_token", res.data.data.token)
-            localStorage.setItem("user_id", res.data.data.user_id)
-            localStorage.setItem("name", res.data.data.name)
-            localStorage.setItem("roles", res.data.data.roles)
-            navigate("/home")
+            const rest = res.data.data
+            console.log(rest)
+            localStorage.setItem("user_token",rest.token)
+            localStorage.setItem("user_id",rest.user_id)
+            localStorage.setItem("name",rest.name)
+            localStorage.setItem("roles",rest.roles)
+            navigate("/authentication-user")
             window.location.reload()
         }catch(err){
         dispatch({ type: "LOGIN_FAILURE", payload: err.response.data.detail })
         console.log(err.response)
+        setErrors(err.response.data.error)
         }
   }
+
+  
   
   return (
     <div style={{ height:'100vh', backgroundColor:'rgb(21, 36, 105)', display:'flex', justifyContent:'center', alignItems:'center' }}>
@@ -57,9 +62,11 @@ function LoginHrd() {
                 <TextField fullWidth type='text' onChange={handleChange} id='username' variant='standard' label='Username' />
                 <TextField fullWidth type='password' onChange={handleChange} id='password' variant='standard' label='Password' />
               </Box>
+              <small className='text-danger'>{errors && errors}</small>
               <div className="d-flex justify-content-end mb-3">
                 <button className='btn btn-primary' onClick={LoginUser}>Login</button>
-                {error && error}
+                {/* <button className='btn btn-primary' onClick={da}>das</button> */}
+                
               </div>
             </div>
           </div>
