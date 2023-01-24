@@ -100,7 +100,8 @@ function DetailEmployee() {
       };
     
       const names = nama_depan+' '+nama_belakang
-
+      const actv = true
+      
       const editEmployee = async e => {
         try{
             const formData = new FormData();
@@ -109,6 +110,7 @@ function DetailEmployee() {
             formData.append("username", username);
             formData.append("first_name", nama_depan);
             formData.append("last_name", nama_belakang);
+            formData.append("is_active", actv);
             formData.append("roles", roles);
             formData.append("sisa_cuti", sisa_cuti);
             formData.append("employee_joined", date_join);

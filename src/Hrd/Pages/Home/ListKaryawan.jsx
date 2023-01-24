@@ -158,7 +158,6 @@ const handlePas = () => {
                                       <button onClick={handleClickOpen} className='btn btn-primary' style={{ height:'35px' }}>Tambah Karyawan</button>
                                     </Col>
                                     
-                                    {list_pengajuan.employee_name}
                                     <Col md={12}>
                                        <div style={{ height: 520, width: '100%' }}>
                                         <DataGrid

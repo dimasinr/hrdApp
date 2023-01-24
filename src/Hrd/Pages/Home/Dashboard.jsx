@@ -4,12 +4,14 @@ import { Calendar, DateObject } from "react-multi-date-picker"
 import axios from 'axios'
 import { USER_TOKEN, BASE_URL } from '../../../fetch/fetch'
 
+import { useNavigate } from 'react-router-dom'
+
 function Dashboard() {
 
+    const navigate = useNavigate()
     const casc = new Date().toISOString().slice(0,4)
-    
-      const [topDash , setTopDash] = useState([])
-      const [offDay , setOffDay] = useState([])
+    const [topDash , setTopDash] = useState([])
+    const [offDay , setOffDay] = useState([])
 
       const getDates = () => {
         axios.get(`${BASE_URL}/users/employee-total/`,{
@@ -41,7 +43,6 @@ function Dashboard() {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       useEffect(() => getOffDay(), [])
 
-     
 
       var dates = new Date().toISOString().slice(0,4)
       var startDate = new Date(`01/01/${dates}`);
@@ -59,13 +60,13 @@ function Dashboard() {
           return count;
       }
 
-      const dayPerc = numOfDates*800 
+      const dayPerc = numOfDates*800
+      console.log("das")
 
       function percentage(perc){
         return (perc/dayPerc*100)
       }
       
-      console.log(numOfDates)
 
   return (
     <div id='image__background' className='d-flex'>
@@ -194,7 +195,7 @@ function Dashboard() {
                                     </ol>
                                 </div>
                                 <div className="d-flex justify-content-end">
-                                    <button className='btn btn-primary'>Tambah</button>
+                                    <button onClick={() => navigate('/dashboard/day-off')} className='btn btn-primary'>Tambah</button>
                                 </div>
                             </div>
                         </div>
@@ -203,6 +204,48 @@ function Dashboard() {
                 </div>
             </div>
         </div>
+
+            {/* <Dialog
+                    open={open}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    onClose={handleClickOpen}
+                    aria-describedby="alert-dialog-slide-description"
+                  >
+                    <DialogTitle>{"Tambah Hari Libur"}</DialogTitle>
+                    <DialogContent sx={{ width:520 }}>
+                      <DialogContentText id="alert-dialog-slide-description">
+                        
+                      <TextField 
+                        fullWidth
+                        value={day_name}
+                        onChange={e => setDayName(e.target.value)}
+                        id="Harilibur"
+                        sx={{ mt:2 }} 
+                        label='Hari Libur'
+                         />
+                        <Box sx={{ mt:2 }}>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <MobileDatePicker
+                              label="Tanggal Libur"
+                              value={new Date(tanggal)}
+                            //   value={tanggal}
+                              onChange={(valuese) => {
+                                  setTanggal(valuese);
+                              }}
+                              renderInput={(params) => <TextField fullWidth variant='outlined' label='Tanggal Hari Libur' {...params} />}
+                              />
+                          </LocalizationProvider>
+                        </Box>
+                       
+                      </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleClickOpen}>Tutup</Button>
+                      <Button onClick={addOffDay}>Tambah</Button>
+                    </DialogActions>
+                  </Dialog> */}
+
            
         </main>
     </div>
