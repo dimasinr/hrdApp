@@ -22,22 +22,24 @@ export default async function runOneSignal() {
 //     });
 //   });
 
-
+OneSignalReact.getNotificationPermission()
+OneSignalReact.registerForPushNotifications()
+OneSignalReact.getSubscription()
   // var OneSignal = window.OneSignalReact || [];
-OneSignalReact.push(["init", {
-    appId           :   "9343c96f-aa0a-4af0-9f87-93d2c02b9ce0",
-    autoRegister    :   true, /* Set to true to automatically prompt visitors */
-    subdomainName   :   "https://sdm-app.netlify.app/",
-    notifyButton    :   {
-        enable: true /* Set to false to hide */
-    }
-}]);
+// OneSignalReact.push(["init", {
+//     appId           :   "9343c96f-aa0a-4af0-9f87-93d2c02b9ce0",
+//     autoRegister    :   true, /* Set to true to automatically prompt visitors */
+//     subdomainName   :   "https://sdm-app.netlify.app/",
+//     notifyButton    :   {
+//         enable: true /* Set to false to hide */
+//     }
+// }]);
 
-OneSignalReact.push(function() {
+// OneSignalReact.push(function() {
     OneSignalReact.once("init", function(event) {
         alert("testt");
     });
- });
+//  });
 
     // await OneSignalReact.init({ appId: '9343c96f-aa0a-4af0-9f87-93d2c02b9ce0',
     //  allowLocalhostAsSecureOrigin: true,
