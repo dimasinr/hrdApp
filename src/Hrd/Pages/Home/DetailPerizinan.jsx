@@ -286,17 +286,20 @@ function DetailPerizinan() {
       }
 
       function hours(x){
-        const delta = x.toString().length
-        if(delta === 4){
-            let hour = x.toString()
-            const diAw = hour.slice(0,2)
-            const diAk = hour.slice(2,4)
-            return diAw + ':' + diAk
+        if(x !== null){
+            const delta = x.toString().length
+            if(delta === 4){
+                let hour = x.toString()
+                const diAw = hour.slice(0,2)
+                const diAk = hour.slice(2,4)
+                return diAw + ':' + diAk
+            }
         }
       }
 
       function dateHours(y){
-        const delta = y.toString().length
+        if(y !== null){
+            const delta = y.toString().length
         let hour = y.toString()
         if(delta === 4){
             const diAw = hour.slice(0,2)
@@ -308,6 +311,7 @@ function DetailPerizinan() {
             return diAw + ',' + diAk + ' Jam'
         }else if(delta === 2){
             return hour + ' Menit'
+        }
         }
       }
 
@@ -391,13 +395,17 @@ function DetailPerizinan() {
                                     }
                                 </Box>
 
-                                <Box sx={{ mt:1, display:'flex' }}>
-                                        <TextField value={hours(lembur_start)} sx={{ mr:1 }} onChange={e => setLemburStart(e.target.value)} disabled fullWidth type="text" label='Dari Jam' variant='filled' />
-                                        <TextField value={hours(lembur_end)} onChange={e => setLemburEnd(e.target.value)} disabled fullWidth type="text" label='Sampai Jam' variant='filled' />
+                               {jenis === 'lembur' ?
+                            <React.Fragment>
+                                 <Box sx={{ mt:1, display:'flex' }}>
+                             <TextField value={hours(lembur_start)} sx={{ mr:1 }} onChange={e => setLemburStart(e.target.value)} disabled fullWidth type="text" label='Dari Jam' variant='filled' />
+                             <TextField value={hours(lembur_end)} onChange={e => setLemburEnd(e.target.value)} disabled fullWidth type="text" label='Sampai Jam' variant='filled' />
                                 </Box>
 
                                 <TextField value={dateHours(work_hour)} sx={{ mt:2 }} onChange={e => setWorkHour(e.target.value)} disabled fullWidth type="text" label='Total Jam' variant='filled' />
-
+                            </React.Fragment>
+                                : null
+                            }
                                 <Box sx={{ mt:2, mb:2 }}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <MobileDatePicker
