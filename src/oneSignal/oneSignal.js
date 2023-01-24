@@ -23,8 +23,8 @@ export default async function runOneSignal() {
 //   });
 
 
-  var OneSignal = window.OneSignalReact || [];
-OneSignal.push(["init", {
+  // var OneSignal = window.OneSignalReact || [];
+OneSignalReact.push(["init", {
     appId           :   "9343c96f-aa0a-4af0-9f87-93d2c02b9ce0",
     autoRegister    :   true, /* Set to true to automatically prompt visitors */
     subdomainName   :   "https://sdm-app.netlify.app/",
@@ -33,8 +33,8 @@ OneSignal.push(["init", {
     }
 }]);
 
-OneSignal.push(function() {
-    OneSignal.once("init", function(event) {
+OneSignalReact.push(function() {
+    OneSignalReact.once("init", function(event) {
         alert("testt");
     });
  });
