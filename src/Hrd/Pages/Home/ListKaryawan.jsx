@@ -55,12 +55,12 @@ function NotesHrd() {
       setOpen(!open);
     };
 
-    const [searchFist, setSearchFirst] = useState('')
+    // const [searchFist, setSearchFirst] = useState('')
     // const [searchRoles, setSearchRoles] = useState('')
 
 
      const getListPengajuan = () => {
-      axios.get(`${BASE_URL}/users/employee/search/?name=${searchFist}`,{
+      axios.get(`${BASE_URL}/users/employee/search/`,{
         headers: {
           "Authorization" : 'Token ' + USER_TOKEN
         }
@@ -73,7 +73,7 @@ function NotesHrd() {
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    React.useEffect(() => getListPengajuan(), [searchFist])
+    React.useEffect(() => getListPengajuan(), [])
   
 
     const handleRowClick = (params) => {
@@ -152,7 +152,7 @@ const handlePas = () => {
                                
                                     <Col md={12} className='mb-2 text-secondary d-flex justify-content-between'>
                                       <Box>
-                                        <TextField placeholder='Cari Nama Karyawan berdasarkan Nama Depan' sx={{ mt:3, mr:2 }} value={searchFist} onChange={e => setSearchFirst(e.target.value)} />
+                                        {/* <TextField placeholder='Cari Nama Karyawan berdasarkan Nama Depan' sx={{ mt:3, mr:2 }} value={searchFist} onChange={e => setSearchFirst(e.target.value)} /> */}
                                         {/* <TextField placeholder='Cari Roles' sx={{ mt:3 }} value={searchRoles} onChange={e => setSearchRoles(e.target.value)} /> */}
                                       </Box>
                                       <button onClick={handleClickOpen} className='btn btn-primary' style={{ height:'35px' }}>Tambah Karyawan</button>
