@@ -98,6 +98,10 @@ function DetailEmployee() {
       const handleChanged = (event) => {
         setDivision(event.target.value);
       };
+
+      const handleGend = (event) => {
+        setGender(event.target.value);
+      };
     
       const names = nama_depan+' '+nama_belakang
       const actv = true
@@ -190,6 +194,15 @@ function DetailEmployee() {
     setBirthDate(dated.slice(1, 11))
   }
 
+  const gende = [
+    {'id': 1,
+    'name' : 'Laki-Laki'
+  },
+    {
+      'id':2,
+      'name' : 'Perempuan'}
+  ]
+
   return (
     <React.Fragment>
         {/* <Navbars /> */}
@@ -248,7 +261,24 @@ function DetailEmployee() {
                                             </Box>
                                             <Box sx={{ mr:2 }}>
                                                 <TextField value={religion} onChange={e => setReligion(e.target.value)} label='Agama' sx={{ mt:3, mr:1 }}  />
-                                                <TextField value={gender} onChange={e => setGender(e.target.value)} type='text' label='Jenis Kelamin' sx={{ mt:3, mr:1 }}  />
+                                                <FormControl sx={{ mt: 3, mr:1, minWidth: 220 }}>
+                                                    <InputLabel id="jenkel-label">Jenis Kelamin</InputLabel>
+                                                    <Select
+                                                    labelId="Jenis Kelamin"
+                                                    id="Jenis Kelamin"
+                                                    value={gender}
+                                                    onChange={handleGend}
+                                                    label="Jenis Kelamin"
+                                                    >
+                                                        {gende && gende.map((div, index) => {
+                                                            return(
+                                                                <MenuItem value={div.name} key={index}>{div.name}</MenuItem>
+                                                            )
+                                                        })}
+                                                   
+                                                    </Select>
+                                                </FormControl>
+                                                {/* <TextField value={gender} onChange={e => setGender(e.target.value)} type='text' label='Jenis Kelamin' sx={{ mt:3, mr:1 }}  /> */}
                                                
                                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                     <MobileDatePicker
