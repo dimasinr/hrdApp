@@ -73,7 +73,7 @@ function NotesHrd() {
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    React.useEffect(() => getListPengajuan(), [searchFist, searchRoles])
+    React.useEffect(() => getListPengajuan(), [searchFist])
   
 
     const handleRowClick = (params) => {
