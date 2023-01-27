@@ -141,8 +141,8 @@ const handlePas = () => {
         <SideBar />
         <div id="image__background">
             <main className="container" style={{ marginTop:'74px' }}>
-                <div className='d-flex justify-content-center'>
-                    <Col md={12} sm={12}>
+                <div className=''>
+                    <Col md={12}>
                         <div className="card shadow_card" style={{ border:'none', borderRadius:'10px' }}>
                             <div className="card-body">
 
@@ -159,7 +159,7 @@ const handlePas = () => {
                                     </Col>
                                     
                                     <Col md={12}>
-                                       <div style={{ height: 520, width: '100%' }}>
+                                       <div style={{ height: 520 }}>
                                         <DataGrid
                                         rows={list_pengajuan}
                                         columns={columns}

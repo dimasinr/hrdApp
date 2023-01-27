@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Col } from 'react-bootstrap'
 import { TextField, Box } from '@mui/material'
-import { ArrowBackIos, Delete } from '@mui/icons-material';
+import { ArrowBackIos, Delete, VisibilityOff, Visibility } from '@mui/icons-material';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BASE_URL, USER_TOKEN } from '../../../fetch/fetch';
@@ -34,6 +34,9 @@ function DetailEmployee() {
     const [gender, setGender] = React.useState([])
     const [date_join, setDateJoin] = React.useState(new Date().toISOString().slice(0,10))
     const [birth_date, setBirthDate] = React.useState(new Date().toISOString().slice(0,10))
+
+    const [visib, setVisib] = useState("password");
+    const [rest, setRest] = useState(false)
 
     const getEmployee = () => {
         axios.get(`${BASE_URL}/users/employees/${ids}/`,{
@@ -182,6 +185,70 @@ function DetailEmployee() {
       }
   };
 
+  const [urlData, setUrlData] = useState([])
+  const resetPasswordEmployee = async e => {
+    try{
+        const formData = new FormData();
+        formData.append("email", email);
+      const res = await axios({
+            method: 'post',
+            url:`${BASE_URL}/api/reset-password/`,
+            data: formData,
+            headers: {
+                "Authorization" : `Token ${USER_TOKEN}`
+              }
+        })
+        console.log(res)
+        setUrlData(res.data.Message)
+        setRest(true)
+    }catch(error){
+        if( error.response &&
+            error.response.status >= 400 &&
+            error.response.status <= 500
+            ){
+                Swal.fire({
+                    icon: 'error',
+              title: 'Oops...',
+              text: `${error.response.data.detail}`
+            })
+        }
+    }
+};
+
+const [password_new, setPasswordNew] = useState('')
+const postNewPassword = async e => {
+  try{
+      const formData = new FormData();
+      formData.append("password", password_new);
+    const res =  await axios({
+          method: 'patch',
+          url:`${BASE_URL}${urlData}`,
+          data: formData,
+          headers: {
+              "Authorization" : `Token ${USER_TOKEN}`
+            }
+      })
+
+      console.log(res)
+      Swal.fire({
+        icon: 'success',
+        text: `${res.data.Message}`})
+        setRest(false)
+  
+  }catch(error){
+      if( error.response &&
+          error.response.status >= 400 &&
+          error.response.status <= 500
+          ){
+              Swal.fire({
+                  icon: 'error',
+            title: 'Oops...',
+            // text: `${error.response.data.detail}`
+          })
+      }
+  }
+};
+
   const convDate = (newdate) => {
     let event = new Date(newdate);
     let dated = JSON.stringify(event);
@@ -202,6 +269,15 @@ function DetailEmployee() {
       'id':2,
       'name' : 'Perempuan'}
   ]
+
+  const showPassword = () => {
+    setVisib("text")
+  }
+  const hiddenPassword = () => {
+      setVisib("password")
+  }
+
+
 
   return (
     <React.Fragment>
@@ -309,6 +385,27 @@ function DetailEmployee() {
                                                     </Select>
                                                 </FormControl>
 
+                                            </Box>
+
+                                            <Box sx={{ mt:2}}>
+                                              <button className='btn text-primary' onClick={resetPasswordEmployee}>Reset Password User</button>
+                                              {rest === true ?
+                                              <Box sx={{ mt:2}}>
+                                                <Box sx={{ display:'flex' }}>
+                                                  <TextField label='Password baru' onChange={e => setPasswordNew(e.target.value)} value={password_new} sx={{ mr:2 }} type={visib} />
+                                                  <span onClick={visib === "password" ? showPassword : hiddenPassword} className="field-icon">
+                                                    {visib === "password" ?
+                                                        <Visibility style={{ color: "#80848C"}} /> : (
+                                                            <VisibilityOff style={{ color: "#80848C"}} />
+                                                        )
+                                                    }
+                                                    </span>
+                                                </Box>
+                                                  <Box>
+                                                    <button className='btn btn-primary mt-2' onClick={postNewPassword}>Reset Password</button>
+                                                  </Box>
+                                              </Box>
+                                              : null}
                                             </Box>
                                           </div>
                                     

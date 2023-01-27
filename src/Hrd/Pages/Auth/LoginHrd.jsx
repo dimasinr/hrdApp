@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { BASE_URL, API_KEY } from '../../../fetch/fetch'
 import axios from 'axios'
 import { AuthContext } from '../../../Context/AuthContext'
+import { VisibilityOff, Visibility } from '@mui/icons-material'
 
 function LoginHrd() {
 
@@ -16,6 +17,8 @@ function LoginHrd() {
   });
   const { dispatch } = useContext(AuthContext);
   const [errors, setErrors] = useState('')
+  const [visib, setVisib] = useState("password");
+
 
   const handleChange = (e) =>{
     setCredentials(prev=>({...prev, [e.target.id]:e.target.value}))
@@ -49,7 +52,13 @@ function LoginHrd() {
         }
   }
 
-  
+  const showPassword = () => {
+    setVisib("text")
+  }
+  const hiddenPassword = () => {
+      setVisib("password")
+  }
+
   
   return (
     <div style={{ height:'100vh', backgroundColor:'rgb(21, 36, 105)', display:'flex', justifyContent:'center', alignItems:'center' }}>
@@ -57,10 +66,17 @@ function LoginHrd() {
        <Form onSubmit={LoginUser}>
           <div className="card shadow-card" style={{ border:'none', borderRadius:'12px' }}>
             <div className="card-body">
-              <div className="card-title"><h5>Login HRD</h5></div>
+              <div className="card-title"><h5>Login</h5></div>
               <Box sx={{ mt:1, mb:2 }}>
                 <TextField fullWidth type='text' onChange={handleChange} id='username' variant='standard' label='Username' />
-                <TextField fullWidth type='password' onChange={handleChange} id='password' variant='standard' label='Password' />
+                <TextField fullWidth type={visib} onChange={handleChange} id='password' variant='standard' label='Password' />
+                <span onClick={visib === "password" ? showPassword : hiddenPassword} className="field-icon">
+                  {visib === "password" ?
+                      <Visibility style={{ color: "#80848C"}} /> : (
+                          <VisibilityOff style={{ color: "#80848C"}} />
+                      )
+                  }
+                  </span>
               </Box>
               <small className='text-danger'>{errors && errors}</small>
               <div className="d-flex justify-content-end mb-3">

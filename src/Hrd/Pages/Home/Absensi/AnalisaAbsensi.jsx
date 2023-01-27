@@ -64,6 +64,7 @@ function AnalisaAbsensi() {
 
   const name_id = location.pathname.split('/')[3]
   const month_id = location.pathname.split('/')[4]
+  const year_id = location.pathname.split('/')[5]
   const month_a = month_id-1
 
   const [loading, setLoading] = useState(true)
@@ -73,7 +74,7 @@ function AnalisaAbsensi() {
   const [results_lembur, setResultsLembur] = useState([])
 
   const getListPengajuan = () => {
-    axios.get(`${BASE_URL}/attendance/employee-sea/?employee_name=${name_id}&months=${month_id}`,{
+    axios.get(`${BASE_URL}/attendance/employee-sea/?employee_name=${name_id}&months=${month_id}&years=${year_id}`,{
       headers: {
         "Authorization" : 'Token ' + USER_TOKEN
       }

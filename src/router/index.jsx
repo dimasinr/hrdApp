@@ -5,6 +5,7 @@ import {
   } from "react-router-dom";
 import { ROLES } from "../fetch/fetch";
 import AuthenticationPages from "../Components/AuthenticationPages";
+import AccountSettings from "../Components/AccountSettings";
 
   // Hrd
 import LoginHrd from "../Hrd/Pages/Auth/LoginHrd";
@@ -42,7 +43,10 @@ export const AppRouter = () => {
         <Routes>
             <Route path='/' element={<LoginHrd />} />
             {user ? 
-            <Route path='/authentication-user' element={<AuthenticationPages />} />
+           <React.Fragment>
+             <Route path='/authentication-user' element={<AuthenticationPages />} />
+             <Route path='/settings' element={<AccountSettings />} />
+           </React.Fragment>
             :
             null}
         {
@@ -55,10 +59,12 @@ export const AppRouter = () => {
                 <Route path='/list-karyawan' element={<ListKaryawan />} />
                 <Route path='/detail-perizinan/:id' element={<PerizinanHrd />} />
                 <Route path='/perizinan/detail/:id' element={<DetailPerizinan />} />
+                <Route path='/pengajuan' element={<PengajuanKaryawan />} />
+                <Route path='/pengajuan/me' element={<PerizinanKaryawan />} />
                 <Route path='/employee/detail/:id' element={<DetailEmployee />} />
                 <Route path='/employee/absensi' element={<AbsensiKaryawan />} />
                 <Route path='/employee/absensi/:id' element={<DetailAbsensi />} />
-                <Route path='/employee/absensi/:id/:month_id' element={<AnalisaAbsensi />} />
+                <Route path='/employee/absensi/:id/:month_id/:year_id' element={<AnalisaAbsensi />} />
                 <Route path='/dashboard/day-off/' element={<DayOff />} />
             </React.Fragment>
             : null

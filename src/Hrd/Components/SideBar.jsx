@@ -13,13 +13,14 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 // import MailIcon from '@mui/icons-material/Mail';
-import {FactCheck, AutoStories, Logout, DateRange, Person, Dashboard, Badge} from '@mui/icons-material';
+import {FactCheck, AutoStories, Logout, DateRange, Person, Dashboard, Badge, Settings, Feed} from '@mui/icons-material';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { NAMES, ROLES, USER_ID, USER_TOKEN, BASE_URL } from '../../fetch/fetch';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Tooltip } from '@mui/material';
 
 const drawerWidth = 245;
 
@@ -97,6 +98,18 @@ function SideBar(props) {
         </ListItem>
       </Link>
       <Divider />
+      <small className='text-secondary container'>Pengajuan Saya</small>
+      <Link to="/pengajuan" style={{ textDecoration:'none', color:'black' }}>
+      <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <Feed sx={{ color:'#0B305A' }} />
+            </ListItemIcon>
+            <ListItemText primary='Pengajuan' />
+          </ListItemButton>
+        </ListItem>
+      </Link>
+      <Divider />
       <small className='text-secondary container'>Menu HRD</small>
       <Link to="/notes" style={{ textDecoration:'none', color:'black' }}>
         <ListItem disablePadding>
@@ -142,6 +155,16 @@ function SideBar(props) {
       </Link>
       <Divider />
       <small className='text-secondary container'>Pengaturan</small>
+      <ListItem disablePadding>
+          <Tooltip title='Belum tersedia'>
+            <ListItemButton>
+              <ListItemIcon>
+                <Settings sx={{ color:'#A8A8A8' }} />
+              </ListItemIcon>
+              <ListItemText primary='Pengaturan Akun' />
+            </ListItemButton>
+          </Tooltip>
+          </ListItem>
         <ListItem disablePadding>
           <ListItemButton onClick={logout}>
             <ListItemIcon>
@@ -177,6 +200,18 @@ function SideBar(props) {
         </Link>
         <Divider />
         <small className='text-secondary container'>Pengaturan</small>
+        {/* <Link to="/settings/" style={{ textDecoration:'none', color:'black' }}> */}
+        <ListItem disablePadding>
+          <Tooltip title='Belum tersedia'>
+            <ListItemButton>
+              <ListItemIcon>
+                <Settings sx={{ color:'#A8A8A8' }} />
+              </ListItemIcon>
+              <ListItemText primary='Pengaturan Akun' />
+            </ListItemButton>
+          </Tooltip>
+          </ListItem>
+        {/* </Link> */}
         <ListItem disablePadding>
           <ListItemButton onClick={logout}>
             <ListItemIcon>
@@ -211,6 +246,18 @@ function SideBar(props) {
         </Link>
         <Divider />
         <small className='text-secondary container'>Pengaturan</small>
+        {/* <Link to="/settings/" style={{ textDecoration:'none', color:'black' }}> */}
+        <ListItem disablePadding>
+          <Tooltip title='Belum tersedia'>
+            <ListItemButton>
+              <ListItemIcon>
+                <Settings sx={{ color:'#A8A8A8' }} />
+              </ListItemIcon>
+              <ListItemText primary='Pengaturan Akun' />
+            </ListItemButton>
+          </Tooltip>
+          </ListItem>
+        {/* </Link> */}
           <ListItem disablePadding>
             <ListItemButton onClick={logout}>
               <ListItemIcon>

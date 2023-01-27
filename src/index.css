@@ -38,6 +38,15 @@ code {
   width: 100%;
 }
 
+.field-icon {
+  cursor: pointer;
+  float: right;
+  margin-left: -48px;
+  margin-top: 13px;
+  position: relative;
+  z-index: 2;
+}
+
 .bg_colors{
   background-color: rgb(125, 137, 190);
   min-height: 100vh;
