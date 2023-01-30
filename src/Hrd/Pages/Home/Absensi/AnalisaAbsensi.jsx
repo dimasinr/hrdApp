@@ -374,6 +374,18 @@ function AnalisaAbsensi() {
                             </tr> 
                             <tr>
                                 <td colSpan={7}>Jumlah Jam Lembur</td>
+                                {sumTotal(results_lembur).toString().length === 0 ?
+                                    <td colSpan={3}>
+                                      
+                                    </td>
+                                    : null
+                                  }
+                                  {sumTotal(results_lembur).toString().length === 1 ?
+                                    <td colSpan={3}>
+                                      {sumTotal(results_lembur).toString()} Menit
+                                    </td>
+                                    : null
+                                  }
                                   {sumTotal(results_lembur).toString().length === 2 ?
                                     <td colSpan={3}>
                                       {sumTotal(results_lembur).toString()} Menit
@@ -405,7 +417,14 @@ function AnalisaAbsensi() {
                                     <td colSpan={3}>
                                     </td>
                                     : null
+                                  } 
+                                  {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))) === 1 ?
+                                    <td colSpan={3}>
+                                      {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().slice(0,2)} Menit
+                                    </td>
+                                    : null
                                   }
+
                                 {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().length === 2 ?
                                     <td colSpan={3}>
                                       {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().slice(0,2)} Menit
