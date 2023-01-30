@@ -78,7 +78,7 @@ function AbsensiKaryawan() {
 
   const [employeeS, setEmployeeS] = useState([])
   const getEmployeeData = () => {
-    axios.get(`${BASE_URL}/users/employee/name/?employee_name=${searchEmployee}`,{
+    axios.get(`${BASE_URL}/users/employee/search/?name=${searchEmployee}`,{
       headers: {
         "Authorization" : 'Token ' + USER_TOKEN
       }
@@ -94,7 +94,7 @@ function AbsensiKaryawan() {
 
 
   const handleRowClick = (params) => {
-    navigate(`/employee/absensi/${params.row.employee_name}`)
+    navigate(`/employee/absensi/${params.row.id}`)
   };
 
   function delta(x){
@@ -155,8 +155,8 @@ function AbsensiKaryawan() {
               error.response.status <= 500
               ){
                   Swal.fire({
-                      icon: 'success',
-                title: 'Berhasil',
+                    icon: 'error',
+                    title: 'Gagal',
                 // text: `${error.response.data.detail}`
               })
               setLoadingBut('Tambah')
@@ -266,10 +266,10 @@ return (
                         <Box sx={{ mt:2, mb:2, display:'flex' }}>
                           <TextField value={working_hour} fullWidth onChange={e => setWorkingHour(e.target.value)} sx={{ mr:1 }} label='Jam Kerja' />
                         </Box>
-                        <small className='text-secondary mt-2'>(opsional jika ingin input lembur manual)</small>
+                        {/* <small className='text-secondary mt-2'>(opsional jika ingin input lembur manual)</small>
                         <Box sx={{ display:'flex' }}>
-                          <TextField value={working_hour} fullWidth onChange={e => setWorkingHour(e.target.value)} sx={{ mr:1 }} label='Jam Lembur' />
-                        </Box>
+                          <TextField disabled value={working_hour} fullWidth onChange={e => setWorkingHour(e.target.value)} sx={{ mr:1 }} label='Jam Lembur' />
+                        </Box> */}
                      
                        
                       </DialogContentText>

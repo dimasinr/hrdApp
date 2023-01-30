@@ -143,6 +143,16 @@ function SideBar(props) {
           </ListItemButton>
         </ListItem>
       </Link>
+      <Link to='/absensi' style={{ textDecoration:'none', color:'black' }}>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <Badge sx={{ color:'#0B305A' }} />
+            </ListItemIcon>
+            <ListItemText primary='Detail Absensi Karyawan' />
+          </ListItemButton>
+        </ListItem>
+      </Link>
       <Link to="/list-karyawan" style={{ textDecoration:'none', color:'black' }}>
         <ListItem disablePadding>
           <ListItemButton>

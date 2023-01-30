@@ -288,6 +288,12 @@ function AnalisaAbsensi() {
 
                                 {/* Lembur */}
 
+                                {sumTotal(results_lembur).toString().length === 2 ?
+                                    <td colSpan={1}>
+                                      {sumTotal(results_lembur).toString()} Menit
+                                    </td>
+                                    : null
+                                  }
                                 {sumTotal(results_lembur).toString().length === 3 ?
                                     <td colSpan={1}>
                                       {sumTotal(results_lembur).toString().slice(0,1)},{sumTotal(results_lembur).toString().slice(1,3)} Jam
@@ -368,7 +374,13 @@ function AnalisaAbsensi() {
                             </tr> 
                             <tr>
                                 <td colSpan={7}>Jumlah Jam Lembur</td>
-                                {sumTotal(results_lembur).toString().length === 3 ?
+                                  {sumTotal(results_lembur).toString().length === 2 ?
+                                    <td colSpan={3}>
+                                      {sumTotal(results_lembur).toString()} Menit
+                                    </td>
+                                    : null
+                                  }
+                                  {sumTotal(results_lembur).toString().length === 3 ?
                                     <td colSpan={3}>
                                       {sumTotal(results_lembur).toString().slice(0,1)},{sumTotal(results_lembur).toString().slice(1,3)} Jam
                                     </td>

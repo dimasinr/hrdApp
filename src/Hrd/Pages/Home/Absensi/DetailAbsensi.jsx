@@ -1,87 +1,165 @@
-import React from 'react'
+import React,{useState, useEffect} from 'react'
 import SideBar from '../../../Components/SideBar'
-import { useNavigate, useLocation, Link } from 'react-router-dom'
-import { ArrowBackIos } from '@mui/icons-material'
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { ArrowBackIos, Delete } from '@mui/icons-material'
+import { Box, TextField, InputLabel, Select, FormControl, MenuItem } from '@mui/material'
+import axios from 'axios'
+import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch'
+import Swal from 'sweetalert2'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 
 function DetailAbsensi() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const bulan = [
-    {
-      'month': 'Januari',
-      'value': 1
-    },
-    {
-      'month': 'Febuari',
-      'value': 2
-    },
-    {
-      'month': 'Maret',
-      'value': 3
-    },
-    {
-      'month': 'April',
-      'value': 4
-    },
-    {
-      'month': 'Mei',
-      'value': 5
-    },{
-      'month': 'Juni',
-      'value': 6
-    },
-    {
-      'month': 'Juli',
-      'value': 7
-    },
-    {
-      'month': 'Agustus',
-      'value': 8
-    },
-    {
-      'month': 'September',
-      'value': 9
-    },
-    {
-      'month': 'Oktober',
-      'value': 10
-    },
-    {
-      'month': 'November',
-      'value': 11
-    },
-    {
-      'month': 'Desember',
-      'value': 12
+  const id_att = location.pathname.split('/')[3]
+
+  const [employeeName, setEmployeeName] = useState('')
+  const [jam_masuk, setJamMasuk] = useState('')
+  const [jam_keluar, setJamKeluar] = useState('')
+  const [total_jam, setTotalJam] = useState('')
+  const [lembur_total, setLemburTotal] = useState('')
+  const [lembur_start, setLemburStart] = useState('')
+  const [lembur_end, setLemburEnd] = useState('')
+  const [working_date, setWorkingDate] = useState(new Date())
+
+  const convDate = (newdate) => {
+    let event = new Date(newdate);
+    let dated = JSON.stringify(event);
+    setWorkingDate(dated.slice(1, 11))
+  }
+
+  const getAttendanceEmp = () => {
+    axios.get(`${BASE_URL}/attendance/employees/${id_att}/`,{
+      headers: {
+        "Authorization" : 'Token ' + USER_TOKEN
+      }
+    })
+    .then((response) => {
+      const res = response.data
+      setEmployeeName(res.employee_name)
+      setJamMasuk(res.start_from)
+      setJamKeluar(res.end_from)
+      setLemburStart(res.lembur_start)
+      setLemburEnd(res.lembur_end)
+      setLemburTotal(res.lembur_hour)
+      setTotalJam(res.working_hour)
+      setWorkingDate(res.working_date)
+      console.log(res)
+    })
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => getAttendanceEmp(), [id_att])
+
+  const savedAttendace = () =>{
+    if(lembur_start !== null & lembur_end !== null){
+      if(lembur_start < lembur_end & lembur_start < jam_keluar){
+        Swal.fire({
+          icon: 'error',
+          text: 'Jam awal lembur tidak boleh kurang dari jam keluar atau Jam awal Lembur tidak boleh kurang dari jam akhir lembur',
+    })
+      }else{
+        saveAttendance()
+      }
+    }else{
+      saveAttendance()
     }
+  }
 
-  ]
+  const saveAttendance = async e => {
+    try{
+        const formData = new FormData();
+        formData.append("employee_name", employeeName);
+        formData.append("working_date", working_date);
+        formData.append("start_from", jam_masuk);
+        formData.append("end_from", jam_keluar);
+        if(lembur_start !== null & lembur_end !== null){
+          if(lembur_start <= lembur_end & lembur_start > jam_keluar){
+            formData.append("lembur_start", lembur_start);
+            formData.append("lembur_end", lembur_end);
+          }
+        }
+       await axios({
+            method: 'put',
+            url:`${BASE_URL}/attendance/employees/${id_att}/`,
+            data: formData,
+            headers: {
+                "Authorization" : `Token ${USER_TOKEN}`
+              }
+        })
+        Swal.fire({
+            icon: 'success',
+            title: `Data Berhasil dibuat`,
+            showConfirmButton: false,
+            timer: 1500
+          })
+          getEmployeeData()
+          navigate(-1)
+        }catch(error){
+            if( error.response &&
+                error.response.status >= 400 &&
+                error.response.status <= 500
+                ){
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'Gagal',
+                  // text: `${error.response.data.detail}`
+                })
+            }
+        }
+      };
 
-  const name_id = location.pathname.split('/')[3]
+      const deleteAttendance = async e => {
+        try{
+           await axios({
+                method: 'put',
+                url:`${BASE_URL}/attendance/employees/${id_att}/`,
+                headers: {
+                    "Authorization" : `Token ${USER_TOKEN}`
+                  }
+            })
+            Swal.fire({
+                icon: 'success',
+                title: `Data Berhasil dihapus`,
+                showConfirmButton: false,
+                timer: 1500
+              })
+              navigate(-1)
+            }catch(error){
+                if( error.response &&
+                    error.response.status >= 400 &&
+                    error.response.status <= 500
+                    ){
+                        Swal.fire({
+                          icon: 'error',
+                          title: 'Gagal',
+                      // text: `${error.response.data.detail}`
+                    })
+                }
+            }
+          };
 
-  const [year, setYear] = React.useState(new Date().getFullYear())
+      const [employeeS, setEmployeeS] = useState([])
+      const getEmployeeData = () => {
+        axios.get(`${BASE_URL}/users/employee/name/`,{
+          headers: {
+            "Authorization" : 'Token ' + USER_TOKEN
+          }
+        })
+        .then((response) => {
+          const res = response.data
+          setEmployeeS(res)
+          console.log(res)
+        })
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      useEffect(() => getEmployeeData(), [])
 
-  const handleGend = (event) => {
-    setYear(event.target.value);
-  };
-
-  const tahun = [
-    {'id': 1,
-    'year' : 2022
-  },
-    {
-      'id':2,
-      'year' : 2023},
-      {
-        'id':3,
-        'year' : 2024},
-        {
-          'id':4,
-          'year' : 2025}
-  ]
-  
+      const handleChanged = (event) => {
+        setEmployeeName(event.target.value);
+      };
 
   return (
     <div className='d-flex'>
@@ -96,41 +174,59 @@ function DetailAbsensi() {
                           </span>
                         </button>
                         <div className="d-flex justify-content-between align-items-center">
-                          <h4>Rekap Karyawan {name_id && name_id.replace(/%20/g, " ")} {year && year}</h4>
-                          <FormControl sx={{ mt: 1, mr:1, minWidth: 220 }}>
-                              <InputLabel id="tahun-label">Tahun Absensi</InputLabel>
+                          <h4>Edit Absensi Karyawan</h4>
+                        </div>
+                         <Box sx={{ display:'flex', mt:1, mb:2 }}>
+                            <FormControl sx={{ mr:1, minWidth: 220 }}>
+                              <InputLabel id="division-label">Nama Karyawan</InputLabel>
                               <Select
-                              // variant='standard'
-                              labelId="Tahun"
-                              id="Tahun"
-                              value={year}
-                              onChange={handleGend}
-                              label="Tahun"
+                              labelId="division"
+                              id="division"
+                              value={employeeName}
+                              onChange={handleChanged}
+                              label="Divisi"
                               >
-                                  {tahun && tahun.map((div, index) => {
+                                  {employeeS && employeeS.map((emp, index) => {
                                       return(
-                                          <MenuItem value={div.year} key={index}>{div.year}</MenuItem>
+                                          <MenuItem value={emp.name} key={index}>{emp.name}</MenuItem>
                                       )
                                   })}
                               
                               </Select>
                           </FormControl>
-                        </div>
-                      <div className="d-flex flex-wrap">
-                        {bulan.map((bul, index) => {
-                          return(
-                            <div className="col-md-3 m-2">
-                                  <Link to={`/employee/absensi/${name_id}/${bul.value}/${year}`} style={{ textDecoration:'none', color:'#0B305A' }}>
-                                  <div className="card shadow-card" style={{ border:'none', borderRadius:'10px' }} key={index}>
-                                    <div className="card-body text-center">
-                                        <h5>{bul.month}</h5>
-                                    </div>
-                                  </div>
-                            </Link>
-                            </div>
-                          )
-                        })}
+                            <TextField sx={{ mr:2 }} value={jam_masuk} onChange={e => setJamMasuk(e.target.value)} fullWidth type='text' label='Jam Masuk' />
+                            <TextField sx={{ mr:2 }} value={jam_keluar} onChange={e => setJamKeluar(e.target.value)} fullWidth type='text' label='Jam Pulang' />
+                            <TextField fullWidth disabled value={total_jam} type='text' label='Total Jam Kerja' />
+                         </Box>
+                         <Box sx={{ display:'flex', mr:2, mb:2 }}>
+                            <TextField sx={{ mr:2 }} value={lembur_start} onChange={e => setLemburStart(e.target.value)} fullWidth type='text' label='Jam Awal Lembur' />
+                            <TextField sx={{ mr:2 }} value={lembur_end} onChange={e => setLemburEnd(e.target.value)} fullWidth type='text' label='Jam Akhir Lembur' />
+                            <TextField sx={{ mr:2 }} value={lembur_total} disabled fullWidth type='text' label='Total Jam Lembur' />
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <MobileDatePicker
+                                label="Working Date"
+                                value={working_date}
+                                onChange={(newValue) => {
+                                    convDate(newValue);
+                                }}
+                                renderInput={(params) => <TextField fullWidth variant='outlined' {...params} />}
+                                />
+                            </LocalizationProvider>
+                         </Box>
+                      <div className="d-flex justify-content-end">
+                            <button onClick={savedAttendace} className="btn text-primary" style={{ marginRight:'20px' }}>Simpan</button>
+                            <button onClick={deleteAttendance} className="btn text-danger"><Delete /></button>
                       </div>
+                      <Box>
+                        <div className="text-secondary">
+                            Format untuk input jam, contoh : 
+                          <ul>
+                            <li>950 untuk jam 09:50</li>
+                            <li>2210 untuk jam 22:10</li>
+                          </ul>
+                          <small>*Penginputan seperti diatas agar bisa dihitung oleh programnya. Jam Lembur hanya opsional saja tidak perlu di isi</small>
+                        </div>
+                      </Box>
                   </div>
                 </div>
             </main>
