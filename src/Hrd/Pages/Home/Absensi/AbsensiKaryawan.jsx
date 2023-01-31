@@ -182,6 +182,65 @@ function AbsensiKaryawan() {
       setEmployeeName(event.target.value);
     };
 
+    const bulan = [
+      {
+        'month': 'All',
+        'value': ''
+      },
+      {
+        'month': 'Januari',
+        'value': 1
+      },
+      {
+        'month': 'Febuari',
+        'value': 2
+      },
+      {
+        'month': 'Maret',
+        'value': 3
+      },
+      {
+        'month': 'April',
+        'value': 4
+      },
+      {
+        'month': 'Mei',
+        'value': 5
+      },{
+        'month': 'Juni',
+        'value': 6
+      },
+      {
+        'month': 'Juli',
+        'value': 7
+      },
+      {
+        'month': 'Agustus',
+        'value': 8
+      },
+      {
+        'month': 'September',
+        'value': 9
+      },
+      {
+        'month': 'Oktober',
+        'value': 10
+      },
+      {
+        'month': 'November',
+        'value': 11
+      },
+      {
+        'month': 'Desember',
+        'value': 12
+      }
+  
+    ]
+
+    const handleGend = (event) => {
+      setSearchMonth(event.target.value);
+    };
+
 return (
     <div className='d-flex'>
         <SideBar />
@@ -196,8 +255,26 @@ return (
                                 </div>
                                     <Col md={12} className='mb-2 text-secondary d-flex justify-content-between'>
                                       <Box>
-                                        <TextField placeholder='Nama Lengkap' sx={{ mt:3, mr:2 }} value={searchEmployee} onChange={e => setSearchEmployee(e.target.value)} />
-                                        <TextField placeholder='Pilih Bulan' sx={{ mt:3 }} value={searchMonth} onChange={e => setSearchMonth(e.target.value)} />
+                                        <TextField placeholder='Nama Lengkap' sx={{ mt:3, mr:2, mb:1 }} value={searchEmployee} onChange={e => setSearchEmployee(e.target.value)} />
+                                        <FormControl sx={{ mr:1, mt:3, minWidth: 220 }}>
+                                          <InputLabel id="tahun-label">Pilih bulan</InputLabel>
+                                          <Select
+                                          // variant='standard'
+                                          labelId="Tahun"
+                                          id="Tahun"
+                                          value={searchMonth}
+                                          onChange={handleGend}
+                                          label="Tahun"
+                                          >
+                                              {bulan && bulan.map((div, index) => {
+                                                  return(
+                                                      <MenuItem value={div.value} key={index}>{div.month}</MenuItem>
+                                                  )
+                                              })}
+                                          
+                                          </Select>
+                                      </FormControl>
+                                        {/* <TextField placeholder='Pilih Bulan' sx={{ mt:3 }} value={searchMonth} onChange={e => setSearchMonth(e.target.value)} /> */}
                                       </Box>
                                       <button onClick={handleClickOpen} className='btn btn-primary' style={{ height:'35px' }}>Tambah Data</button>
                                     </Col>
