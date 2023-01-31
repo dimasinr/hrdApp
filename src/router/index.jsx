@@ -21,6 +21,7 @@ import AbsensiKaryawan from "../Hrd/Pages/Home/Absensi/AbsensiKaryawan";
 import DetailAbsensi from "../Hrd/Pages/Home/Absensi/DetailAbsensi";
 import AnalisaAbsensi from "../Hrd/Pages/Home/Absensi/AnalisaAbsensi";
 import AbsensiDetail from "../Hrd/Pages/Home/Absensi/AbsensiDetail";
+import AbsensiPeriode from "../Hrd/Pages/Home/Absensi/AbsensiPeriode";
 import ListAbsensi from "../Hrd/Pages/Home/Absensi/ListAbsensi";
 import DayOff from "../Hrd/Pages/Home/DayOff/DayOff";
 
@@ -69,6 +70,8 @@ export const AppRouter = () => {
                 <Route path='/absensi/' element={<ListAbsensi />} />
                 <Route path='/absensi/:name_id' element={<AbsensiDetail />} />
                 <Route path='/employee/absensi/:id/:month_id/:year_id' element={<AnalisaAbsensi />} />
+                <Route path='/employee/absensi/periode/:name_id/:start_date/:end_date' element={<AbsensiPeriode />} />
+                
                 <Route path='/dashboard/day-off/' element={<DayOff />} />
             </React.Fragment>
             : null
