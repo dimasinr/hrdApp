@@ -113,8 +113,8 @@ function DetailAbsensi() {
 
       const deleteAttendance = async e => {
         try{
-           await axios({
-                method: 'put',
+           const res = await axios({
+                method: 'delete',
                 url:`${BASE_URL}/attendance/employees/${id_att}/`,
                 headers: {
                     "Authorization" : `Token ${USER_TOKEN}`
@@ -126,6 +126,7 @@ function DetailAbsensi() {
                 showConfirmButton: false,
                 timer: 1500
               })
+              console.log(res)
               navigate(-1)
             }catch(error){
                 if( error.response &&
