@@ -115,11 +115,14 @@ function AnalisaAbsensi() {
     }
 
     function leb(x,y){
-        if(x < 800){
-            return '-' + x - y
+        if(x < y ){
+            return  x - y + 40
+        }else if(x > y){
+            return x - y
         }else{
-            return '+' + x - y
+          return 0
         }
+  
     }
 
     function sumTotal(arr){
@@ -135,9 +138,11 @@ function AnalisaAbsensi() {
         }
     }
 
-    console.log(sumTotal(results_lembur))
+    console.log("x = ", + sumTotal(results_working))
+    console.log("y = ", + sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)))
+    console.log(leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString())
     function sumHE(he){
-      if(name_id.replace(/%20/g, " ") === 'kunut'){
+      if(name_id.replace(/%20/g, " ") === 'Kunut C'){
         return he*900
       }else{
         return he*800
@@ -413,14 +418,15 @@ function AnalisaAbsensi() {
                             </tr>  */}
                             <tr>
                                 <td colSpan={7}>(Kurang/Lebih) Jam Kerja</td>
-                                {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))) === 0 ?
+                                {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().length === 0 ?
                                     <td colSpan={3}>
                                     </td>
                                     : null
                                   } 
-                                  {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))) === 1 ?
+                                  {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().length === 1 ?
                                     <td colSpan={3}>
                                       {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().slice(0,2)} Menit
+                                   
                                     </td>
                                     : null
                                   }
@@ -433,7 +439,8 @@ function AnalisaAbsensi() {
                                   }
                                 {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().length === 3 ?
                                     <td colSpan={3}>
-                                      {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().slice(0,1)},{leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().slice(1,3)} Jam
+                                      {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().slice(0,1)},
+                                      {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().slice(1,3)} Jams
                                     </td>
                                     : null
                                   }
