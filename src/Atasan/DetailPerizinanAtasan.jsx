@@ -166,12 +166,15 @@ function DetailPerizinanAtasan() {
       }
     };
 
+  const  actv = true
+
   const perizinanSisaCuti = async e => {
       try{
           const formData = new FormData();
           formData.append("sisa_cuti", cutiAkhir);
           formData.append("username", username);
           formData.append("email", email);
+          formData.append("is_active", actv);
           const res = await axios({
               method: 'put',
               url:`${BASE_URL}/users/employees/${emp_id}/`,
