@@ -26,7 +26,9 @@ function DetailPerizinanAtasan() {
   const [permission_pi, setPermissionPi] = useState('');
   const [emp_id, setEmpId] = useState('');
   const [sisaCut, setSisaCut] = useState('');
+
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
 
   const [permission_pil, setPermissionPil] = useState('');
   const [reason_rejected, setReasonRejected] = useState(null);
@@ -99,6 +101,7 @@ function DetailPerizinanAtasan() {
         setLoading(false)
         setSisaCut(res.sisa_cuti)
         setUsername(res.username)
+        setEmail(res.email)
         console.log(res)
       })
     }
@@ -168,6 +171,7 @@ function DetailPerizinanAtasan() {
           const formData = new FormData();
           formData.append("sisa_cuti", cutiAkhir);
           formData.append("username", username);
+          formData.append("email", email);
           const res = await axios({
               method: 'put',
               url:`${BASE_URL}/users/employees/${emp_id}/`,
