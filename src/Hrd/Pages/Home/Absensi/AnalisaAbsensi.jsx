@@ -170,7 +170,7 @@ function AnalisaAbsensi() {
                         <Table bordered hover>
                         <thead>
                             <tr>
-                            <th>id</th>
+                            <th>Id</th>
                             <th>Nama Karyawan</th>
                             <th>Tanggal Hari Kerja</th>
                             <th>Masuk</th>
@@ -189,16 +189,23 @@ function AnalisaAbsensi() {
                                     <td>{att.employee_name}</td>
                                     <td>{att.working_date ? att.working_date : '-'}</td>
                                     <td>
+                                      {/* Masuk */}
                                       {att.start_from !== null ? att.start_from.toString().length === 4 ?
                                         att.start_from.toString().slice(0,2) + ':' + att.start_from.toString().slice(2,4)
                                         : null : ''
                                       }
                                       {att.start_from !== null ? att.start_from.toString().length === 3 ?
-                                        att.start_from.toString().slice(0,1) + ':' + att.start_from.toString().slice(1,3)
+                                        '0'+att.start_from.toString().slice(0,1) + ':' + att.start_from.toString().slice(1,3)
+                                        : null : '-'
+                                      }
+                                       {att.start_from !== null ? att.start_from.toString().length === 2 ?
+                                         '00:' + att.start_from.toString().slice(0,2)
                                         : null : '-'
                                       }
                                     </td>
                                     <td>
+                                      {/* Pulang */}
+
                                       {att.end_from !== null ?
                                       att.end_from.toString().length === 4 ?
                                       att.end_from.toString().slice(0,2) + ':' + att.end_from.toString().slice(2,4)
@@ -211,6 +218,8 @@ function AnalisaAbsensi() {
                                       }
                                     </td>
                                     <td>
+                                      {/* Lembur Start */}
+
                                       {att.lembur_start !== null ? att.lembur_start.toString().length === 4 ?
                                         att.lembur_start.toString().slice(0,2) + ':' + att.lembur_start.toString().slice(2,4)
                                         : null
@@ -223,6 +232,8 @@ function AnalisaAbsensi() {
                                       }
                                     </td>
                                     <td>
+                                      {/* Lembur End */}
+
                                       {att.lembur_end !== null ? att.lembur_end.toString().length === 4 ?
                                         att.lembur_end.toString().slice(0,2) + ':' + att.lembur_end.toString().slice(2,4)
                                         : null
@@ -236,6 +247,15 @@ function AnalisaAbsensi() {
                                     </td>
                                    
                                     <td>
+                                      {/* Total Jam Kerja */}
+                                      {att.working_hour !== null ? att.working_hour.toString().length === 1 ?
+                                      att.working_hour.toString() + ' Menit'
+                                      : null : null
+                                    }
+                                      {att.working_hour !== null ? att.working_hour.toString().length === 2 ?
+                                      att.working_hour.toString() + ' Menit'
+                                      : null : null
+                                    }
                                     {att.working_hour !== null ? att.working_hour.toString().length === 3 ?
                                       att.working_hour.toString().slice(0,1) + ','+ att.working_hour.toString().slice(1,3) + ' Jam'
                                       : null : null
@@ -248,6 +268,8 @@ function AnalisaAbsensi() {
                                       {/* <td> */}
                                     </td>
                                     <td>
+                                      {/* Total Jam Lembur */}
+
                                       {att.lembur_hour !== null ? att.lembur_hour.toString().length === 2 ?
                                         att.lembur_hour + ' Menit'
                                         : null : null

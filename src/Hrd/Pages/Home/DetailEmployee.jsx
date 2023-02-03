@@ -20,7 +20,7 @@ function DetailEmployee() {
     const navigate = useNavigate()
     const location = useLocation()
     const ids = location.pathname.split('/')[3]
-    const [name, setName] = React.useState([])
+    const [employee_code, setEmployeeCode] = React.useState([])
     const [email, setEmail] = React.useState([])
     const [username, setUsername] = React.useState([])
     const [nama_depan, setNamaDepan] = React.useState([])
@@ -46,7 +46,7 @@ function DetailEmployee() {
         })
         .then((response) => {
           const res = response.data
-          setName(res.name)
+          setEmployeeCode(res.employee_code)
           setEmail(res.email)
           setUsername(res.username)
           setNamaDepan(res.first_name)
@@ -106,13 +106,12 @@ function DetailEmployee() {
         setGender(event.target.value);
       };
     
-      const names = nama_depan+' '+nama_belakang
       const actv = true
       
       const editEmployee = async e => {
         try{
             const formData = new FormData();
-            formData.append("name", names);
+            formData.append("employee_code", employee_code);
             formData.append("email", email);
             formData.append("username", username);
             formData.append("first_name", nama_depan);
@@ -292,14 +291,15 @@ const postNewPassword = async e => {
                               <div className="card-body">
                                       <button onClick={() => navigate(-1)} className="d-flex align-items-center btn">
                                           <ArrowBackIos />
-                                          <h5>Detail Karyawan</h5>
+                                          <h5 style={{ marginTop:'7px'}}>Detail Karyawan</h5>
                                       </button>
 
                                       <Col md={12} className='mb-2 text-secondary d-flex'>
                                         <Col md={12} className="mt-2">
                                           <div className="row">
                                             <Box sx={{ mr:2 }}>
-                                                <TextField value={name ? name : names} disabled id='name' label='Nama karyawan' sx={{ mt:3, mr:1 }}  />
+                                                {/* <TextField value={name ? name : names} disabled id='name' label='Nama karyawan' sx={{ mt:3, mr:1 }}  /> */}
+                                                <TextField value={employee_code} onChange={e => setEmployeeCode(e.target.value)} label='Employee Code' sx={{ mt:3, mr:1 }}  />
                                                 <TextField value={nama_depan} onChange={e => setNamaDepan(e.target.value)} label='Nama Depan' sx={{ mt:3, mr:1 }}  />
                                                 <TextField value={nama_belakang} onChange={e => setNamaBelakang(e.target.value)} label='Nama Belakang' sx={{ mt:3, mr:1 }}  />
                                                 <TextField value={username} onChange={e => setUsername(e.target.value)} id='username' label='Username' sx={{ mt:3, mr:1 }}  />
@@ -310,6 +310,7 @@ const postNewPassword = async e => {
                                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                     <MobileDatePicker
                                                     label="Tanggal Masuk"
+                                                    inputFormat="DD MMMM YYYY"
                                                     value={new Date(date_join)}
                                                     onChange={(newValue) => {
                                                         convDate(newValue);
@@ -359,6 +360,7 @@ const postNewPassword = async e => {
                                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                     <MobileDatePicker
                                                     label="Tanggal Lahir"
+                                                    inputFormat="DD MMMM YYYY"
                                                     value={new Date(birth_date)}
                                                     onChange={(newValue) => {
                                                       convDated(newValue);

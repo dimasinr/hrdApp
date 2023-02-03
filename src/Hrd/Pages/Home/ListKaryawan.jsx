@@ -10,7 +10,8 @@ import SideBar from '../../Components/SideBar'
 import { useNavigate } from 'react-router-dom';
 
 const columns = [
-      { field: 'pk', headerName: 'User Id', width: 70 },
+      { field: 'pk', headerName: 'UId', width: 50 },
+      { field: 'employee_code', headerName: 'Emp Code', width: 90 },
       { field: 'first_name', headerName: 'Nama Depan', width: 130 },
       { field: 'last_name', headerName: 'Nama Belakang', width: 150 },
       { field: 'username', headerName: 'Username', width: 150 },
@@ -188,7 +189,7 @@ const handlePas = () => {
                     <DialogContent sx={{ width:520 }}>
                       <DialogContentText id="alert-dialog-slide-description">
                         <Box sx={{ mt:2, display:'flex' }}>
-                          <TextField value={firstName} fullWidth onChange={e => setFirstName(e.target.value)} sx={{ mr:1 }} label='Nama Depan' />
+                          <TextField value={firstName}  fullWidth onChange={e => setFirstName(e.target.value)} sx={{ mr:1 }} label='Nama Depan' />
                           <TextField value={lastName} fullWidth onChange={e => setLastName(e.target.value)} sx={{ mr:1 }} label='Nama Belakang' />
                         </Box>
                         <Box sx={{ mt:2, display:'flex' }}>
