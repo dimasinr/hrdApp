@@ -3,6 +3,8 @@ import SideBar from '../../Components/SideBar'
 import { Calendar, DateObject } from "react-multi-date-picker"
 import axios from 'axios'
 import { USER_TOKEN, BASE_URL } from '../../../fetch/fetch'
+import multiColors from "react-multi-date-picker/plugins/colors"
+import { Add } from '@mui/icons-material'
 
 import { useNavigate } from 'react-router-dom'
 
@@ -43,7 +45,6 @@ function Dashboard() {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       useEffect(() => getOffDay(), [])
 
-
       var dates = new Date().toISOString().slice(0,4)
       var startDate = new Date(`01/01/${dates}`);
       var endDate = new Date(`12/31/${dates}`);
@@ -66,6 +67,29 @@ function Dashboard() {
       function percentage(perc){
         return (perc/dayPerc*100)
       }
+
+    const dateOff = off => {
+        return new DateObject().setDay(off.days).setMonth(off.months).setYear(off.years)
+    }
+      
+     const offDayColor = {
+        red: offDay.map(dateOff),
+      }
+
+      Object.keys(offDayColor).forEach(color => {
+        offDayColor[color].forEach((date, index) => {
+            offDayColor[color][index].color = color
+        })
+      })
+
+      const initialProps = {
+        value: [
+          ...offDayColor.red,
+        ], 
+        multiple: true
+      }
+
+      
       
 
   return (
@@ -133,9 +157,10 @@ function Dashboard() {
                 <div className="col-md-8" style={{ marginRight:'55px' }}>
                 <Calendar
                 fullYear
-                value={offDay.map((da) => {
-                    return new DateObject().setDay(da.days).setMonth(da.months).setYear(da.years)
-                })}
+                {...initialProps}
+                plugins={[
+                    multiColors({ position: 'none' }),
+                ]}
                 // onChange={setDates}
                 disableMonthPicker
                 disableYearPicker
@@ -180,6 +205,14 @@ function Dashboard() {
                                 <div className="card-title text-center" style={{ backgroundColor: '#0B305A', color:'white' }}>
                                     Hari Libur
                                 </div>
+                                 <div className="d-flex justify-content-between">
+                                        <button onClick={() => navigate('/dashboard/day-off')} className='btn text-primary align-items-center'>
+                                            <div className="d-flex justify-content-between">
+                                                    <Add />
+                                                <span>Tambah Hari Libur</span>
+                                            </div>
+                                        </button>
+                                </div>
                                 <div className="card-body">
                                     <ol>
                                         {offDay.map((dayO, index) => {
@@ -194,9 +227,7 @@ function Dashboard() {
                                         })}
                                     </ol>
                                 </div>
-                                <div className="d-flex justify-content-end">
-                                    <button onClick={() => navigate('/dashboard/day-off')} className='btn btn-primary'>Tambah</button>
-                                </div>
+                               
                             </div>
                         </div>
 

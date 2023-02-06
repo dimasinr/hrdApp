@@ -14,6 +14,8 @@ import Swal from 'sweetalert2';
 import { Col } from 'react-bootstrap';
 import { DataGrid } from '@mui/x-data-grid';
 import {Skeleton} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { ArrowBackIos } from '@mui/icons-material';
 
 const columns = [
     { field: 'id', headerName: 'Id', width: 120 },
@@ -40,6 +42,7 @@ const LoadingSkeleton = () => (
 function DayOff() {
 
     // const [open, setOpen] = useState(false)
+    const navigate = useNavigate()
     const [day_name, setDayName] = useState('')
     const [tanggal, setTanggal] = useState(new Date())
     const [offDay, setOffDay] = useState([])
@@ -142,18 +145,19 @@ function DayOff() {
   return (
     <div id='image__background' className='d-flex'>
     <SideBar />
-        <main className="container" style={{ marginTop:'75px' }}>
+        <main className="container" style={{ marginTop:'-10px' }}>
 
             <Col md={12} sm={12}>
                 <div className="card shadow_card" style={{ border:'none', borderRadius:'10px' }}>
                     <div className="card-body">
 
                     <div className="card-title">
-                            <h4>List Karyawan</h4>
+                        <button className="btn align-items-center d-flex" onClick={() => navigate(-1)}>
+                            <ArrowBackIos style={{ marginTop:'-6px'}} />
+                            <h4>List Hari Libur</h4>
+                        </button>
                         </div>
                         
-                        
-
                             <Col md={12} className='mb-2 text-secondary d-flex justify-content-between'>
                                 <Box sx={{ display:'flex' }}>
                                 <TextField placeholder='Id Hari' sx={{ mr:2, mt:2, width:'90px' }} value={searchFirst} onChange={e => setSearchFirst(e.target.value)} />
