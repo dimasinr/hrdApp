@@ -214,7 +214,7 @@ function PengajuanKaryawan() {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <MobileDatePicker
                     label="Tanggal Awal"
-                    disablePast
+                    // disablePast
                     value={start_date}
                     onChange={(newValue) => {
                         setStartDate(newValue);
@@ -224,7 +224,7 @@ function PengajuanKaryawan() {
                     <span className='p-3'>s/d</span>
                     <MobileDatePicker
                     label="Tanggal Berakhir"
-                    disablePast
+                    // disablePast
                     value={end_date}
                     onChange={(newValue) => {
                         setEndDate(newValue);
@@ -264,7 +264,7 @@ function PengajuanKaryawan() {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <MobileDatePicker
                     label="Masuk Kembali Tanggal"
-                    disablePast
+                    // disablePast
                     value={back_date}
                     onChange={(newValue) => {
                         setBackDate(newValue);
