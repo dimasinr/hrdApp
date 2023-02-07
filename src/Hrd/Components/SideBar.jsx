@@ -200,6 +200,16 @@ function SideBar(props) {
           </ListItem>
         </Link>
         <Link to="/list-pengajuan" style={{ textDecoration:'none', color:'black' }}>
+        <Link to="/pengajuan" style={{ textDecoration:'none', color:'black' }}>
+        <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <Feed sx={{ color:'#0B305A' }} />
+              </ListItemIcon>
+              <ListItemText primary='Pengajuan' />
+            </ListItemButton>
+          </ListItem>
+        </Link>
         <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>

@@ -1,13 +1,13 @@
 import React from 'react'
 import SideBar from '../Hrd/Components/SideBar'
 import { Col } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL, USER_TOKEN, NAMES } from '../fetch/fetch'
 
 function DashboardKaryawan() {
 
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   const [users, setUsers] = React.useState([])
   // const [loading, setLoading] = React.useState(true)
   
@@ -40,9 +40,6 @@ function DashboardKaryawan() {
                   Sisa Cuti Anda : {users.sisa_cuti}
                   <br />
                   Bergabung Tanggal : {users.employee_joined}
-                <div className="d-flex justify-content-end">
-                  <button className='btn btn-primary' onClick={() => navigate('/pengajuan')}>Ajukan Perizinan</button>
-                </div>
               </Col>
           </div>
         </div>
