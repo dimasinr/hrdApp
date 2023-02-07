@@ -257,11 +257,11 @@ function AnalisaAbsensi() {
                                       : null : null
                                     }
                                     {att.working_hour !== null ? att.working_hour.toString().length === 3 ?
-                                      att.working_hour.toString().slice(0,1) + ','+ att.working_hour.toString().slice(1,3) + ' Jam'
+                                      att.working_hour.toString().slice(0,1) + ':'+ att.working_hour.toString().slice(1,3) + ' Jam'
                                       : null : null
                                     }
                                     {att.working_hour !== null ? att.working_hour.toString().length === 4 ?
-                                      att.working_hour.toString().slice(0,2) + ',' + att.working_hour.toString().slice(2,4) + ' Jam'
+                                      att.working_hour.toString().slice(0,2) + ':' + att.working_hour.toString().slice(2,4) + ' Jam'
                                     : null : null
                                     }
                                       {/* </td> */}
@@ -275,11 +275,11 @@ function AnalisaAbsensi() {
                                         : null : null
                                       }
                                       {att.lembur_hour !== null ? att.lembur_hour.toString().length === 3 ?
-                                        att.lembur_hour.toString().slice(0,1) + ','+ att.lembur_hour.toString().slice(1,3) + ' Jam'
+                                        att.lembur_hour.toString().slice(0,1) + ':'+ att.lembur_hour.toString().slice(1,3) + ' Jam'
                                         : null : null
                                       }
                                       {att.lembur_hour !== null ? att.lembur_hour.toString().length === 4 ?
-                                        att.lembur_hour.toString().slice(0,2) + ',' + att.lembur_hour.toString().slice(2,4) + ' Jam'
+                                        att.lembur_hour.toString().slice(0,2) + ':' + att.lembur_hour.toString().slice(2,4) + ' Jam'
                                       : null : null
                                       }
                                     </td>
@@ -323,13 +323,15 @@ function AnalisaAbsensi() {
                                   }
                                 {sumTotal(results_lembur).toString().length === 3 ?
                                     <td colSpan={1}>
-                                      {sumTotal(results_lembur).toString().slice(0,1)},{sumTotal(results_lembur).toString().slice(1,3)} Jam
+                                      {sumTotal(results_lembur).toString().slice(0,1)}:
+                                      {sumTotal(results_lembur).toString().slice(1,3)} Jam
                                     </td>
                                     : null
                                   }
                                   {sumTotal(results_lembur).toString().length === 4 ?
                                     <td colSpan={1}>
-                                      {sumTotal(results_lembur).toString().slice(0,2)},{sumTotal(results_lembur).toString().slice(2,4)} Jam
+                                      {sumTotal(results_lembur).toString().slice(0,2)}:
+                                      {sumTotal(results_lembur).toString().slice(2,4)} Jam
                                     </td>
                                     : null
                                   }
@@ -349,7 +351,7 @@ function AnalisaAbsensi() {
                                 }
                                 {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().length === 3 ?
                                 <td colSpan={3}>
-                                  {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,1)}, 
+                                  {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,1)}: 
                                   {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(1,3)} Jam
                                   </td>
                                   : null
@@ -357,7 +359,7 @@ function AnalisaAbsensi() {
 
                                 {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().length === 4 ?
                                 <td colSpan={3}>
-                                  {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,2)}, 
+                                  {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,2)}: 
                                   {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(2,4)} Jam
                                   </td>
                                   : null
@@ -365,7 +367,7 @@ function AnalisaAbsensi() {
 
                               {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().length === 5 ?
                                 <td colSpan={3}>
-                                  {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,3)}, 
+                                  {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,3)}: 
                                   {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(3,5)} Jam
                                   </td>
                                   : null
@@ -382,19 +384,22 @@ function AnalisaAbsensi() {
                                   }
                                 {sumTotal(results_working).toString().length === 3 ?
                                     <td colSpan={3}>
-                                      {sumTotal(results_working).toString().slice(0,1)},{sumTotal(results_working).toString().slice(1,3)} Jam
+                                      {sumTotal(results_working).toString().slice(0,1)}:
+                                      {sumTotal(results_working).toString().slice(1,3)} Jam
                                     </td>
                                     : null
                                   }
                                 {sumTotal(results_working).toString().length === 4 ?
                                     <td colSpan={3}>
-                                      {sumTotal(results_working).toString().slice(0,2)},{sumTotal(results_working).toString().slice(2,4)} Jam
+                                      {sumTotal(results_working).toString().slice(0,2)}:
+                                      {sumTotal(results_working).toString().slice(2,4)} Jam
                                     </td>
                                     : null
                                   }
                                   {sumTotal(results_working).toString().length === 5 ?
                                     <td colSpan={3}>
-                                      {sumTotal(results_working).toString().slice(0,3)},{sumTotal(results_working).toString().slice(3,5)} Jam
+                                      {sumTotal(results_working).toString().slice(0,3)}:
+                                      {sumTotal(results_working).toString().slice(3,5)} Jam
                                     </td>
                                     : null
                                   }
@@ -421,13 +426,15 @@ function AnalisaAbsensi() {
                                   }
                                   {sumTotal(results_lembur).toString().length === 3 ?
                                     <td colSpan={3}>
-                                      {sumTotal(results_lembur).toString().slice(0,1)},{sumTotal(results_lembur).toString().slice(1,3)} Jam
+                                      {sumTotal(results_lembur).toString().slice(0,1)}:
+                                      {sumTotal(results_lembur).toString().slice(1,3)} Jam
                                     </td>
                                     : null
                                   }
                                   {sumTotal(results_lembur).toString().length === 4 ?
                                     <td colSpan={3}>
-                                      {sumTotal(results_lembur).toString().slice(0,2)},{sumTotal(results_lembur).toString().slice(2,4)} Jam
+                                      {sumTotal(results_lembur).toString().slice(0,2)}:
+                                      {sumTotal(results_lembur).toString().slice(2,4)} Jam
                                     </td>
                                     : null
                                   }
