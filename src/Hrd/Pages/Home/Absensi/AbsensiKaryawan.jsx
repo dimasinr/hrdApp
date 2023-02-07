@@ -280,7 +280,7 @@ return (
                                     </Col>
                                     
                                     <Col md={12}>
-                                       <div style={{ height: 520, width: '100%' }}>
+                                       <div style={{ height: 1280, width: '100%' }}>
                                         <DataGrid
                                         rows={list_pengajuan}
                                         columns={columns}
