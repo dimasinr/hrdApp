@@ -24,7 +24,7 @@ function AbsensiPeriode() {
   const [attendance, setAttendance] = useState([])
 
   const getListPengajuan = () => {
-    axios.get(`${BASE_URL}/attendance/employee/compare/?work_date=2023-01-01&end_work_date=2023-01-19&employee_name=${name_id}`,{
+    axios.get(`${BASE_URL}/attendance/employee/compare/?work_date=${start_date}&end_work_date=${end_date}&employee_name=${name_id}`,{
       headers: {
         "Authorization" : 'Token ' + USER_TOKEN
       }
@@ -37,7 +37,7 @@ function AbsensiPeriode() {
     })
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => getListPengajuan(), [name_id])
+  useEffect(() => getListPengajuan(), [name_id, start_date, end_date])
 
 return (
     <div className='d-flex'>
