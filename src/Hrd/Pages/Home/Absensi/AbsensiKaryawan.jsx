@@ -284,8 +284,8 @@ return (
                                         <DataGrid
                                         rows={list_pengajuan}
                                         columns={columns}
-                                        pageSize={10}
-                                        rowsPerPageOptions={[10]}
+                                        pageSize={31}
+                                        rowsPerPageOptions={[31]}
                                         getRowId={(row) => row.id}
                                         onRowClick={handleRowClick}
                                         components={{

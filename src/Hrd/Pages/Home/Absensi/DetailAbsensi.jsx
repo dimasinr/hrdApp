@@ -75,12 +75,12 @@ function DetailAbsensi() {
         formData.append("working_date", working_date);
         formData.append("start_from", jam_masuk);
         formData.append("end_from", jam_keluar);
-        if(lembur_start !== null & lembur_end !== null){
-          if(lembur_start <= lembur_end & lembur_start > jam_keluar){
-            formData.append("lembur_start", lembur_start);
-            formData.append("lembur_end", lembur_end);
-          }
-        }
+        // if(lembur_start !== null & lembur_end !== null){
+          // if(lembur_start <= lembur_end & lembur_start > jam_keluar){
+        formData.append("lembur_start", lembur_start);
+        formData.append("lembur_end", lembur_end);
+          // }
+        // }
        await axios({
             method: 'put',
             url:`${BASE_URL}/attendance/employees/${id_att}/`,
