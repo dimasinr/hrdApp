@@ -13,7 +13,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 // import MailIcon from '@mui/icons-material/Mail';
-import {FactCheck, AutoStories, Logout, DateRange, Person, Dashboard, Badge, Settings, Feed} from '@mui/icons-material';
+import {FactCheck, AutoStories, Logout, DateRange, Analytics, Person, Dashboard, Badge, Settings, Feed} from '@mui/icons-material';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { NAMES, ROLES, USER_ID, USER_TOKEN, BASE_URL } from '../../fetch/fetch';
@@ -132,7 +132,7 @@ function SideBar(props) {
         </ListItem>
       </Link>
       <Divider />
-      <small className='text-secondary container'>Manajemen Karyawan</small>
+      <small className='text-secondary container'>Manajemen Absensi</small>
       <Link to='/employee/absensi' style={{ textDecoration:'none', color:'black' }}>
         <ListItem disablePadding>
           <ListItemButton>
@@ -147,12 +147,13 @@ function SideBar(props) {
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
-              <Badge sx={{ color:'#0B305A' }} />
+              <Analytics sx={{ color:'#0B305A' }} />
             </ListItemIcon>
-            <ListItemText primary='Detail Absensi Karyawan' />
+            <ListItemText primary='Analisa Absensi Karyawan' />
           </ListItemButton>
         </ListItem>
       </Link>
+      <small className='text-secondary container'>Manajemen Karyawan</small>
       <Link to="/list-karyawan" style={{ textDecoration:'none', color:'black' }}>
         <ListItem disablePadding>
           <ListItemButton>
