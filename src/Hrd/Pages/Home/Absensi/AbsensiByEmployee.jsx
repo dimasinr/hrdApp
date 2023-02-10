@@ -41,7 +41,7 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
     return <Slide direction="up" ref={ref} {...props} />;
   });
 
-function AbsensiKaryawan() {
+function AbsensiByEmployee() {
 
   const navigate = useNavigate()
   const [list_pengajuan, setListPengajuan] = React.useState([])
@@ -285,12 +285,10 @@ return (
                                           
                                           </Select>
                                       </FormControl>
+                                      <button className='btn btn-primary'>Search Pages</button>
                                         {/* <TextField placeholder='Pilih Bulan' sx={{ mt:3 }} value={searchMonth} onChange={e => setSearchMonth(e.target.value)} /> */}
                                       </Box>
-                                      <Box>
-                                      <button className='btn btn-primary'>Search Pages</button>
-                                      <button onClick={handleClickOpen} className='btn btn-primary' style={{ marginLeft:'5px' }}>Tambah Data</button>
-                                      </Box>
+                                      <button onClick={handleClickOpen} className='btn btn-primary' style={{ height:'35px' }}>Tambah Data</button>
                                     </Col>
                                     
                                     <Col md={12}>
@@ -377,4 +375,4 @@ return (
   )
 }
 
-export default AbsensiKaryawan
+export default AbsensiByEmployee

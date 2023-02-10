@@ -1,8 +1,9 @@
 import React from 'react'
 import SideBar from '../../../Components/SideBar';
 import { TextField, Box, 
-    // Slide, 
-    // Dialog, DialogTitle, DialogContent, DialogContentText,  DialogActions, Button
+    Slide, 
+    Dialog, DialogTitle, DialogContent, DialogContentText,  DialogActions, Button,
+    FormControl, InputLabel, Select, MenuItem
  } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -18,13 +19,13 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowBackIos } from '@mui/icons-material';
 
 const columns = [
-    { field: 'id', headerName: 'Id', width: 120 },
-    { field: 'title_day', headerName: 'Nama Hari', width: 170 },
-    { field: 'date', headerName: 'Tanggal', width: 190 },
-    { field: 'type_day', headerName: 'Jenis Libur', width: 190 },
-    // { field: 'days', headerName: 'Tanggal', width: 140 },
-    // { field: 'months', headerName: 'Bulan', width: 120 },
-    { field: 'years', headerName: 'Tahun', width: 270 },
+    { field: 'id', headerName: 'Id', width: 60 },
+    { field: 'title_day', headerName: 'Nama Hari', width: 140 },
+    { field: 'date', headerName: 'Tanggal', width: 180 },
+    { field: 'type_day', headerName: 'Jenis Libur', width: 140 },
+    { field: 'day_name', headerName: 'Hari', width: 140 },
+    { field: 'day_of', headerName: 'Tipe Libur', width: 130 },
+    { field: 'years', headerName: 'Tahun', width: 120 },
 ];
 
 const LoadingSkeleton = () => (
@@ -39,22 +40,27 @@ const LoadingSkeleton = () => (
   </Box>
 );
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
+
 function DayOff() {
 
-    // const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false)
     const navigate = useNavigate()
     const [day_name, setDayName] = useState('')
     const [tanggal, setTanggal] = useState(new Date())
     const [offDay, setOffDay] = useState([])
     const [searchFirst, setSearchFirst] = useState('')
     const [loading, setLoading] = useState(true)
+    const [type_date, setTypeDate] = useState('weekday')
 
     const dated = tanggal.toISOString().slice(0,10)
     const type_day = 'national'
 
-    // const handleClickClose = () => {
-    //     setOpen(false)
-    // }
+    const handleClick = () => {
+        setOpen(!open)
+    }
 
     const getOffDay = () => {
         axios.get(`${BASE_URL}/dashboard/employee-dashboard/`,{
@@ -77,6 +83,7 @@ function DayOff() {
             const formData = new FormData();
             formData.append("title_day", day_name);
             formData.append("date", dated);
+            formData.append("day_of", type_date);
             formData.append("type_day", type_day);
            await axios({
                 method: 'post',
@@ -137,9 +144,24 @@ function DayOff() {
         }
     };
 
-    // const Transition = React.forwardRef(function Transition(props, ref) {
-    //     return <Slide direction="up" ref={ref} {...props} />;
-    //   });
+    const changeDate = (event) => {
+        setTypeDate(event.target.value);
+      };
+
+      const dataNotes = [
+        {
+          'id' : 1,
+          'name' : 'weekend'
+        },
+        {
+          'id' : 2,
+          'name' : 'weekday'
+        },
+      ]
+
+      const handleRowClick = (params) => {
+        navigate(`/dashboard/day-off/${params.row.id}`)
+      };
 
 
   return (
@@ -165,27 +187,11 @@ function DayOff() {
                                 {/* <TextField placeholder='Cari Roles' sx={{ mt:3 }} value={searchRoles} onChange={e => setSearchRoles(e.target.value)} /> */}
                                 </Box>
                                 <Box sx={{ display:'flex' }}>
-                                <TextField 
-                                    fullWidth
-                                    value={day_name}
-                                    onChange={e => setDayName(e.target.value)}
-                                    id="Harilibur"
-                                    sx={{ mt:2, mr:2 }} 
-                                    label='Nama Hari Libur'
-                                    />
-                                
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <MobileDatePicker
-                                        label="Tanggal Libur"
-                                        value={tanggal}
-                                        onChange={(valuese) => {
-                                            setTanggal(valuese);
-                                        }}
-                                        renderInput={(params) => <TextField fullWidth sx={{ mt:2, mr:2}} variant='outlined' label='Tanggal Hari Libur' {...params} />}
-                                        />
-                                    </LocalizationProvider>
-                                    <button onClick={addOffDay} className='btn btn-primary' style={{ height:'35px', marginTop:'20px' }}>Tambah Hari Libur</button>
+                                    <button onClick={handleClick} className='btn btn-primary' style={{ height:'35px', marginTop:'20px' }}>Tambah Hari Libur</button>
                                 </Box>
+
+                                
+
                             </Col>
                             
                             <Col md={12}>
@@ -196,7 +202,7 @@ function DayOff() {
                                 pageSize={10}
                                 rowsPerPageOptions={[10]}
                                 getRowId={(row) => row.id}
-                                // onRowClick={handleRowClick}
+                                onRowClick={handleRowClick}
                                 components={{
                                     LoadingOverlay: LoadingSkeleton,
                                     }}
@@ -209,10 +215,10 @@ function DayOff() {
             </Col>
         
 
-             {/* <Dialog
+             <Dialog
                     open={open}
                     TransitionComponent={Transition}
-                    onClose={handleClickOpen}
+                    onClose={handleClick}
                     aria-describedby="alert-dialog-slide-description"
                 >
                     <DialogTitle>{"Tambah Hari Libur"}</DialogTitle>
@@ -234,20 +240,38 @@ function DayOff() {
                             label="Tanggal Libur"
                             value={tanggal}
                             onChange={(valuese) => {
-                                convDate(valuese);
+                                setTanggal(valuese);
                             }}
                             renderInput={(params) => <TextField fullWidth variant='outlined' label='Tanggal Hari Libur' {...params} />}
                             />
                         </LocalizationProvider>
                         </Box>
                     
+                        <FormControl fullWidth sx={{ mt: 3, minWidth: 120 }}>
+                            <InputLabel id="type-notes-label">Tipe Hari Libur</InputLabel>
+                            <Select
+                            labelId="type-notes"
+                            id="type-notes"
+                            value={type_date}
+                            onChange={changeDate}
+                            label="Type Notes"
+                            >
+                                {dataNotes && dataNotes.map((rol, index) => {
+                                    return(
+                                        <MenuItem key={index} value={rol.name}>{rol.name.charAt(0).toUpperCase() + rol.name.slice(1)}</MenuItem>
+                                    )
+                                })}
+                            
+                            </Select>
+                        </FormControl>
+                    
                     </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                    <Button onClick={handleClickClose}>Tutup</Button>
+                    <Button onClick={handleClick}>Tutup</Button>
                     <Button onClick={addOffDay}>Tambah</Button>
                     </DialogActions>
-                </Dialog> */}
+                </Dialog>
 
         
         </main>

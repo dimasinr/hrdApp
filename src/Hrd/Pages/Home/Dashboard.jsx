@@ -14,6 +14,8 @@ function Dashboard() {
     const casc = new Date().toISOString().slice(0,4)
     const [topDash , setTopDash] = useState([])
     const [offDay , setOffDay] = useState([])
+    // const [weekOffs, setWeekOffs] = useState([])
+    const [weekdays, setWeekdays] = useState([])
 
       const getDates = () => {
         axios.get(`${BASE_URL}/users/employee-total/`,{
@@ -45,6 +47,22 @@ function Dashboard() {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       useEffect(() => getOffDay(), [])
 
+      const getWeekOf = () => {
+        axios.get(`${BASE_URL}/dashboard/week-of`,{
+          headers: {
+            "Authorization" : `Token ${USER_TOKEN}`
+          }
+        })
+        .then((response) => {
+          const res = response.data
+        //   setWeekOffs(res)
+          setWeekdays(res.weekday)
+          console.log(res)
+        })
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      useEffect(() => getWeekOf(), [])
+
       var dates = new Date().toISOString().slice(0,4)
       var startDate = new Date(`01/01/${dates}`);
       var endDate = new Date(`12/31/${dates}`);
@@ -62,7 +80,6 @@ function Dashboard() {
       }
 
       const dayPerc = numOfDates*800
-      console.log("das")
 
       function percentage(perc){
         return (perc/dayPerc*100)
@@ -89,6 +106,10 @@ function Dashboard() {
         multiple: true
       }
 
+      function sumMin(x,y){
+        return x-y
+      }
+
       
       
 
@@ -105,7 +126,7 @@ function Dashboard() {
                             <div className="card shadow-card" style={{ border:'none', marginRight:'10px', marginLeft:'10px' }}>
                                 <div className='card-title text-center' style={{ backgroundColor: '#0B305A', color:'white' }}>Total Working Days</div>
                                 <div className="card-body text-center">
-                                    <span><h4>{numOfDates} Days</h4></span>
+                                    <span><h4>{sumMin(numOfDates, weekdays && weekdays.length)} Days</h4></span>
                                 </div>
                             </div>
                         </div>

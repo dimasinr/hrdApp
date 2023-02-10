@@ -73,14 +73,16 @@ function DetailAbsensi() {
         const formData = new FormData();
         formData.append("employee_name", employeeName);
         formData.append("working_date", working_date);
-        formData.append("start_from", jam_masuk);
-        formData.append("end_from", jam_keluar);
-        // if(lembur_start !== null & lembur_end !== null){
+        if(jam_masuk !== null & jam_keluar !== null){
+          formData.append("start_from", jam_masuk);
+          formData.append("end_from", jam_keluar);
+        }
+        if(lembur_start !== null & lembur_end !== null){
           // if(lembur_start <= lembur_end & lembur_start > jam_keluar){
-        formData.append("lembur_start", lembur_start);
-        formData.append("lembur_end", lembur_end);
+          formData.append("lembur_start", lembur_start);
+          formData.append("lembur_end", lembur_end);
           // }
-        // }
+        }
        await axios({
             method: 'put',
             url:`${BASE_URL}/attendance/employees/${id_att}/`,
@@ -107,6 +109,7 @@ function DetailAbsensi() {
                       title: 'Gagal',
                   // text: `${error.response.data.detail}`
                 })
+                console.log(error)
             }
         }
       };

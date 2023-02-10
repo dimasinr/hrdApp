@@ -11,7 +11,7 @@ import AccountSettings from "../Components/AccountSettings";
 import LoginHrd from "../Hrd/Pages/Auth/LoginHrd";
 import HomeHrd from "../Hrd/Pages/Home/HomeHrd";
 import NotesHrd from "../Hrd/Pages/Home/NotesHrd";
-import PerizinanHrd from "../Hrd/Pages/Home/PerizinanHrd";
+import NotesHrdDetail from "../Hrd/Pages/Home/NotesHrdDetail";
 import DetailPerizinan from "../Hrd/Pages/Home/DetailPerizinan";
 import CalendarCuti from "../Hrd/Pages/Home/CalendarCuti";
 import ListKaryawan from "../Hrd/Pages/Home/ListKaryawan";
@@ -24,6 +24,7 @@ import AbsensiDetail from "../Hrd/Pages/Home/Absensi/AbsensiDetail";
 import AbsensiPeriode from "../Hrd/Pages/Home/Absensi/AbsensiPeriode";
 import ListAbsensi from "../Hrd/Pages/Home/Absensi/ListAbsensi";
 import DayOff from "../Hrd/Pages/Home/DayOff/DayOff";
+import DayOffDetail from "../Hrd/Pages/Home/DayOff/DayOffDetail";
 
 // Atasan
 import DashboardAtasan from "../Atasan/DashboardAtasan";
@@ -60,7 +61,7 @@ export const AppRouter = () => {
                 <Route path='/notes' element={<NotesHrd />} />
                 <Route path='/calendar-cuti' element={<CalendarCuti />} />
                 <Route path='/list-karyawan' element={<ListKaryawan />} />
-                <Route path='/detail-perizinan/:id' element={<PerizinanHrd />} />
+                <Route path='/detail-notes/:id' element={<NotesHrdDetail />} />
                 <Route path='/perizinan/detail/:id' element={<DetailPerizinan />} />
                 <Route path='/pengajuan' element={<PengajuanKaryawan />} />
                 <Route path='/pengajuan/me' element={<PerizinanKaryawan />} />
@@ -73,6 +74,7 @@ export const AppRouter = () => {
                 <Route path='/employee/absensi/periode/:name_id/:start_date/:end_date' element={<AbsensiPeriode />} />
 
                 <Route path='/dashboard/day-off/' element={<DayOff />} />
+                <Route path='/dashboard/day-off/:id' element={<DayOffDetail />} />
             </React.Fragment>
             : null
         } 

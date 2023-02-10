@@ -1,6 +1,6 @@
 import React from 'react'
 import { Col } from 'react-bootstrap'
-import { TextField, Box, Skeleton } from '@mui/material'
+import { TextField, Box, Skeleton, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
 // import Navbars from '../../../Components/Navbars'
 import { ArrowBackIos, Delete, Edit } from '@mui/icons-material';
 // import { Skeleton } from '@mui/material';
@@ -33,7 +33,7 @@ const LoadingSkeleton = () => (
     </Box>
   );
 
-function PerizinanHrd() {
+function NotesHrdDetail() {
 
     const navigate = useNavigate()
     const location = useLocation()
@@ -41,6 +41,7 @@ function PerizinanHrd() {
     const [name, setName] = React.useState([])
     const [date_note, setDates] = React.useState([])
     const [notes, setNotes] = React.useState([])
+    const [type_notes, setTypeNotes] = React.useState([])
     const [listNotes, setListNotes] = React.useState([])
     const [loading, setLoading] = React.useState(true)
 
@@ -68,6 +69,7 @@ function PerizinanHrd() {
           const res = response.data
           setName(res.employee_name)
           setDates(res.date_note)
+          setTypeNotes(res.type_notes)
           setNotes(res.notes)
           console.log(res)
         })
@@ -160,11 +162,66 @@ function PerizinanHrd() {
       }
   };
 
+  const [employees, setEmployees] = React.useState([])
+  const getEmployees = () => {
+    axios.get(`${BASE_URL}/users/employees/`,{
+      headers: {
+        "Authorization" : 'Token ' + USER_TOKEN
+      }
+    })
+    .then((response) => {
+      const res = response.data
+      setEmployees(res)
+      console.log(res)
+    })
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  React.useEffect(() => getEmployees(), [])
+
   const convDate = (newdate) => {
     let event = new Date(newdate);
     let dated = JSON.stringify(event);
     setDates(dated.slice(1, 11))
   }
+
+  const handleChange = (event) => {
+    setName(event.target.value);
+  };
+
+  const changeNotes = (event) => {
+    setTypeNotes(event.target.value);
+  };
+
+  const dataNotes = [
+    {
+      'id' : 1,
+      'name' : 'catatan'
+    },
+    {
+      'id' : 2,
+      'name' : 'masuk'
+    },
+    {
+      'id' : 3,
+      'name' : 'tidak masuk'
+    },
+    {
+      'id' : 4,
+      'name' : 'cuti'
+    },
+    {
+      'id' : 5,
+      'name' : 'izin'
+    },
+    {
+      'id' : 6,
+      'name' : 'sakit'
+    },
+    {
+      'id' : 7,
+      'name' : 'lembur'
+    },
+  ]
 
   return (
     <React.Fragment>
@@ -194,7 +251,41 @@ function PerizinanHrd() {
                                         <Col md={12} className="mt-2">
                                           <div className="d-flex justify-content-between">
                                             <Box sx={{ mr:2 }}>
-                                                <TextField value={name} disabled label='Nama karyawan' sx={{ mt:3, mr:1 }}  />
+                                                {/* <TextField value={name} disabled label='Nama karyawan' sx={{ mt:3, mr:1 }}  /> */}
+                                                <FormControl fullWidth sx={{ mt: 3, maxWidth: 650}}>
+                                                    <InputLabel id="role-label">Nama Karyawan</InputLabel>
+                                                    <Select
+                                                    labelId="role"
+                                                    id="role"
+                                                    value={name}
+                                                    onChange={handleChange}
+                                                    label="Roles"
+                                                    >
+                                                        {employees && employees.map((rol, index) => {
+                                                            return(
+                                                                <MenuItem key={index} value={rol.name}>{rol.name}</MenuItem>
+                                                            )
+                                                        })}
+                                                    
+                                                    </Select>
+                                                </FormControl>
+                                                <FormControl fullWidth sx={{ mt: 3, maxWidth: 190, mr:1 }}>
+                                                    <InputLabel id="type-notes-label">Tipe Notes</InputLabel>
+                                                    <Select
+                                                    labelId="type-notes"
+                                                    id="type-notes"
+                                                    value={type_notes}
+                                                    onChange={changeNotes}
+                                                    label="Type Notes"
+                                                    >
+                                                        {dataNotes && dataNotes.map((rol, index) => {
+                                                            return(
+                                                                <MenuItem key={index} value={rol.name}>{rol.name.charAt(0).toUpperCase() + rol.name.slice(1)}</MenuItem>
+                                                            )
+                                                        })}
+                                                    
+                                                    </Select>
+                                                </FormControl>
                                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                     <MobileDatePicker
                                                     label="Tanggal Catatan"
@@ -257,4 +348,4 @@ function PerizinanHrd() {
   )
 }
 
-export default PerizinanHrd
+export default NotesHrdDetail

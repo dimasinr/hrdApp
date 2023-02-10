@@ -108,14 +108,6 @@ function DetailPerizinanAtasan() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     React.useEffect(() => getEmployees(), [emp_id])
   
-    console.log(sisaCut)
-
-  function TotalCu(x,y){
-      return x-y
-  }
-
-  console.log(TotalCu(sisaCut, jumlah_hari))
-  const cutiAkhir = TotalCu(sisaCut, jumlah_hari)
 
   const perizinanAdm = async e => {
       try{
@@ -166,12 +158,24 @@ function DetailPerizinanAtasan() {
       }
     };
 
-  const  actv = true
+  const actv = true
+    function TotalCu(x,y){
+        return x-y
+    }
+    function TotalCuPlus(x,y){
+        return x+y
+    }
+    const cutiAkhir = TotalCu(sisaCut, jumlah_hari)
+    const cutiAkhirPlus = TotalCuPlus(sisaCut, jumlah_hari)
 
   const perizinanSisaCuti = async e => {
       try{
           const formData = new FormData();
-          formData.append("sisa_cuti", cutiAkhir);
+          if(permission_pi === 'disetujui'){
+            formData.append("sisa_cuti", cutiAkhirPlus);
+          }else{
+            formData.append("sisa_cuti", cutiAkhir);
+          }
           formData.append("username", username);
           formData.append("email", email);
           formData.append("is_active", actv);

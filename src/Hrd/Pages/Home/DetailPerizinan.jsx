@@ -109,13 +109,6 @@ function DetailPerizinan() {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       React.useEffect(() => getEmployees(), [emp_id])
 
-    function TotalCu(x,y){
-        return x-y
-    }
-
-    const cutiAkhir = TotalCu(sisaCut, jumlah_hari)
-    console.log(TotalCu(sisaCut, jumlah_hari))
-
     const perizinanAdm = async e => {
         try{
             const formData = new FormData();
@@ -125,7 +118,7 @@ function DetailPerizinan() {
                 formData.append("suspended_end", suspended_end);
             }else if(permission_pil === 'ditolak'){
                 formData.append("reason_rejected", reason_rejected);
-            }else if(permission_pil === 'disetujui'){
+            }else if(permission_pil === 'disetujui' & jenis !== 'lembur' & jenis !== 'sakit'){
                 perizinanSisaCuti()
             }
             formData.append("jumlah_hari", jumlah_hari);
@@ -166,16 +159,31 @@ function DetailPerizinan() {
             }
         }
       };
+    
+    const actv = true
+    function TotalCu(x,y){
+        return x-y
+    }
+    function TotalCuPlus(x,y){
+        return x+y
+    }
+    const cutiAkhir = TotalCu(sisaCut, jumlah_hari)
+    const cutiAkhirPlus = TotalCuPlus(sisaCut, jumlah_hari)
+
+    console.log("min cuti :", TotalCu(sisaCut, jumlah_hari))
+    console.log("plus cuti :", TotalCuPlus(sisaCut, jumlah_hari))
 
     const perizinanSisaCuti = async e => {
         try{
             const formData = new FormData();
-            if(jenis !== 'lembur' & jenis !== 'sakit' & permission_pil === 'disetujui' ){
+            if(permission_pi === 'disetujui'){
+                formData.append("sisa_cuti", cutiAkhirPlus);
+            }else{
                 formData.append("sisa_cuti", cutiAkhir);
             }
-            
             formData.append("username", username);
             formData.append("email", email);
+            formData.append("is_active", actv);
             const res = await axios({
                 method: 'put',
                 url:`${BASE_URL}/users/employees/${emp_id}/`,
@@ -267,6 +275,40 @@ function DetailPerizinan() {
                         timer: 1500
                       })
                     console.log(error)
+            }
+        }
+      };
+
+      const pengajuanDelete = async e => {
+        try{
+            const res = await axios({
+                method: 'delete',
+                url:`${BASE_URL}/petitions/employee/${id}/`,
+                headers: {
+                    "Authorization" : `Token ${USER_TOKEN}`
+                  }
+            })
+            perizinanSisaCuti()
+            console.log(res)
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                showConfirmButton: false,
+                timer: 1500
+                })
+            navigate(-1)
+        }catch(error){
+            if( error.response &&
+                error.response.status >= 400 &&
+                error.response.status <= 500
+                ){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Failed',
+                    showConfirmButton: false,
+                    timer: 1500
+                    })
+                console.log(error)
             }
         }
       };
@@ -491,7 +533,9 @@ function DetailPerizinan() {
                                     </small>
                                     {
                                         permission_pi === 'disetujui'?
-                                        null
+                                        <button onClick={pengajuanDelete} className='btn text-danger'>
+                                            Hapus Pengajuan
+                                        </button>
                                         : 
                                         <button onClick={handleCli} className='btn btn-primary'>Submit</button>
                                     }
@@ -499,6 +543,7 @@ function DetailPerizinan() {
                                     <small>
                                     *(pengurangan sisa cuti berdasarkan izin, cuti, dan tanpa keterangan tidak hadir)
                                     </small>
+                                
                             </div>
                         </div>
                     </Col>

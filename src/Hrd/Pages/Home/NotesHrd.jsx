@@ -13,8 +13,9 @@ import SideBar from '../../Components/SideBar'
 
 const columns = [
       { field: 'id', headerName: 'Id', width: 70 },
-      { field: 'employee_name', headerName: 'Nama Karyawan', width: 270 },
-      { field: 'date_note', headerName: 'Tanggal Catatan', width: 270 },
+      { field: 'employee_name', headerName: 'Nama Karyawan', width: 190 },
+      { field: 'date_note', headerName: 'Tanggal Catatan', width: 180 },
+      { field: 'type_notes', headerName: 'Type', width: 120 },
       { field: 'notes', headerName: 'Notes', width: 520 },
   ];
   
@@ -45,6 +46,7 @@ function NotesHrd() {
 
     const [employeName, setEmployeName] = React.useState('')
     const [tanggal, setTanggal] = React.useState(new Date().toISOString().slice(0,10))
+    const [type_notes, setTypeNotes] = React.useState('catatan')
     const [notes_employee, setNotesEmployee] = React.useState('')
 
     const handleClickOpen = () => {
@@ -97,7 +99,7 @@ function NotesHrd() {
   
 
     const handleRowClick = (params) => {
-      navigate(`/detail-perizinan/${params.row.id}`)
+      navigate(`/detail-notes/${params.row.id}`)
     };
 
   const convDate = (newdate) => {
@@ -117,6 +119,7 @@ function NotesHrd() {
         const formData = new FormData();
         formData.append("employee_name", employeName);
         formData.append("date_note", tanggal);
+        formData.append("type_notes", type_notes);
         formData.append("notes", notes_employee);
        await axios({
             method: 'post',
@@ -171,6 +174,43 @@ function NotesHrd() {
     setEmployeName(event.target.value);
   };
 
+  const changeNotes = (event) => {
+    setTypeNotes(event.target.value);
+  };
+
+
+  const dataNotes = [
+    {
+      'id' : 1,
+      'name' : 'catatan'
+    },
+    {
+      'id' : 2,
+      'name' : 'masuk'
+    },
+    {
+      'id' : 3,
+      'name' : 'tidak masuk'
+    },
+    {
+      'id' : 4,
+      'name' : 'cuti'
+    },
+    {
+      'id' : 5,
+      'name' : 'izin'
+    },
+    {
+      'id' : 6,
+      'name' : 'sakit'
+    },
+    {
+      'id' : 7,
+      'name' : 'lembur'
+    },
+  ]
+
+
   return (
     <React.Fragment>
         <div className="d-flex">
@@ -205,15 +245,13 @@ function NotesHrd() {
 
                                     </div>
 
-
-                                    {list_pengajuan.employee_name}
                                     <Col md={12}>
-                                       <div style={{ height: 420, width: '100%' }}>
+                                       <div style={{ height: 660, width: '100%' }}>
                                         <DataGrid
                                         rows={list_pengajuan}
                                         columns={columns}
-                                        pageSize={6}
-                                        rowsPerPageOptions={[6]}
+                                        pageSize={10}
+                                        rowsPerPageOptions={[10]}
                                         getRowId={(row) => row.id}
                                         onRowClick={handleRowClick}
                                         components={{
@@ -266,6 +304,25 @@ function NotesHrd() {
                               renderInput={(params) => <TextField fullWidth variant='outlined' label='Tanggal Catatan' {...params} />}
                               />
                           </LocalizationProvider>
+                        </Box>
+                        <Box sx={{ }}>
+                          <FormControl fullWidth sx={{ mt: 3, minWidth: 120 }}>
+                              <InputLabel id="type-notes-label">Tipe Notes</InputLabel>
+                              <Select
+                              labelId="type-notes"
+                              id="type-notes"
+                              value={type_notes}
+                              onChange={changeNotes}
+                              label="Type Notes"
+                              >
+                                  {dataNotes && dataNotes.map((rol, index) => {
+                                      return(
+                                          <MenuItem key={index} value={rol.name}>{rol.name.charAt(0).toUpperCase() + rol.name.slice(1)}</MenuItem>
+                                      )
+                                  })}
+                              
+                              </Select>
+                          </FormControl>
                         </Box>
                         <TextField 
                         fullWidth
