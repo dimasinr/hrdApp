@@ -1,13 +1,15 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState, useEffect, useRef} from 'react'
 import SideBar from '../../../Components/SideBar'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { ArrowBackIos } from '@mui/icons-material'
+import { ArrowBackIos, GetApp } from '@mui/icons-material'
 import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch'
 import axios from 'axios'
 import Table from 'react-bootstrap/Table';
-import { CircularProgress } from '@mui/material'
+import { CircularProgress, Tooltip } from '@mui/material'
+import { DownloadTableExcel } from 'react-export-table-to-excel';
 
 function AnalisaAbsensi() {
+  const tableRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -332,17 +334,30 @@ function dividDed(x, y){
             <main className="container mt-3">
                 <div className="card shadow-card" style={{ border:'none', borderRadius:'10px' }}>
                   <div className="card-body">
+                    <div className="d-flex justify-content-between">
                       <button className='btn' onClick={() => navigate(-1)}>
                           <span className="d-flex align-items-center mb-2">
                             <ArrowBackIos />
                             <h4 style={{ marginTop:'8px' }}>Analisa Absensi {name_id && name_id.replace(/%20/g, " ")} Bulan {bulan[month_a].month} </h4>
                           </span>
                         </button>
+                        <DownloadTableExcel
+                            filename={`Analisa Absensi ${name_id && name_id.replace(/%20/g, " ")} Bulan ${bulan[month_a].month}`}
+                            sheet={`Analisa Absensi ${name_id && name_id.replace(/%20/g, " ")} Bulan ${bulan[month_a].month}`}
+                            currentTableRef={tableRef.current}
+                        >
+                          <Tooltip title='Export to excel'>
+                          <button className='btn'> <GetApp /> </button>
+                          </Tooltip>
+
+                        </DownloadTableExcel>
+
+                    </div>
                       <div className="col-md-12">
                         {loading && loading ? 
                         <CircularProgress />
                         : 
-                        <Table bordered hover>
+                        <Table ref={tableRef} bordered hover>
                         <thead>
                             <tr>
                             <th>Id</th>
