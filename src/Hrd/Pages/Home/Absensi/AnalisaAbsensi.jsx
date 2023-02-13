@@ -70,9 +70,91 @@ function AnalisaAbsensi() {
   const [loading, setLoading] = useState(true)
   const [attendance, setAttendance] = useState([])
   const [TotalAttendance, setTotalAttendance] = useState([])
-  const [results_working, setWorkingHourTotal] = useState([])
-  const [results_lembur, setResultsLembur] = useState([])
 
+  const [hour_working, setHourWorking] = useState([])
+  const [minutes_working, setMinutesWorking] = useState([])
+
+  const [hour_lembur, setHourLembur] = useState([])
+  const [minutes_lembur, setMinutesLembur] = useState([])
+
+  console.log(asce(minutes_working))
+  console.log(ascr(hour_working))
+
+
+  function asce(a){
+    if(a === null ){
+      a = 0
+      var str = a.toString()
+    }else{
+      // eslint-disable-next-line no-redeclare
+      var str = a.toString()
+    }
+    // console.log(str)
+    let leng = str.length
+    if(leng === 1){
+        var val = 1
+    }else if(leng > 1){
+        // eslint-disable-next-line no-redeclare
+        var val = 2
+    }
+    const val2 = leng-val
+    const slic = str.slice(val2, leng)
+    const pars = parseInt(slic)
+    return pars
+}
+
+function ascr(a){
+  if(a === null ){
+    a = 0
+    var str = a.toString()
+  }else{
+    // eslint-disable-next-line no-redeclare
+    var str = a.toString()
+  }
+  let leng = str.length
+  if(leng === 1 || leng === 2){
+      var val = 0
+  }else if(leng > 2){
+        // eslint-disable-next-line no-redeclare
+      var val = leng - 2
+  }
+  const val2 = val
+  var slic = str.slice(0, val2)
+  if(slic === null){
+      // eslint-disable-next-line no-redeclare, no-const-assign
+      slic = 0
+  }else{
+      slic = str.slice(0, val2)
+  }
+  if(slic === ''){
+    return 0
+  }else{
+    const pars = parseInt(slic)
+    return pars
+  }
+}
+
+
+function dividDed(x, y){
+  const removedDecimal = Math.trunc(x); // 2
+  console.log(removedDecimal)
+  const dataX = parseInt(y)
+  console.log(dataX)
+  const dataY = removedDecimal+dataX
+  console.log(dataY)
+  const minDec = x-removedDecimal // 0.93
+  console.log(minDec)
+  var data = minDec*60 // 56
+  var fixedNum = Math.round(data)
+  if(fixedNum === 0){
+    fixedNum = '00'
+  }else{
+    fixedNum = Math.round(data)
+  }
+  const varXY =  dataY+''+fixedNum
+  console.log(varXY)
+  return parseInt(varXY)
+}
 
   const getListPengajuan = () => {
     axios.get(`${BASE_URL}/attendance/employee-analysis/?employee_name=${name_id}&months=${month_id}&years=${year_id}`,{
@@ -84,12 +166,32 @@ function AnalisaAbsensi() {
       const res = response.data
       setAttendance(res)
       setLoading(false) 
-      setWorkingHourTotal(res.map((ab) => {
-        return(ab.working_hour)
+
+      // setWorkingHourTotal(res.map((ab) => {
+      //   return (ab.working_hour)
+      //   }))
+
+      setHourWorking(res.map((ab) => {
+        return(ascr(ab.working_hour))
         }))
-      setResultsLembur(res.map((ab) => {
-        return(ab.lembur_hour)
+
+      setMinutesWorking(res.map((ab) => {
+        return(asce(ab.working_hour))
         }))
+
+      // setResultsLembur(res.map((ab) => {
+      //   return(ab.lembur_hour)
+      //   }))
+
+      setHourLembur(res.map((ab) => {
+          return(ascr(ab.lembur_hour))
+        }))
+      
+      setMinutesLembur(res.map((ab) => {
+        return(asce(ab.lembur_hour))
+        }))
+
+
       console.log(res)
     })
   }
@@ -121,13 +223,14 @@ function AnalisaAbsensi() {
       const len = varX.length
       const data1 =len-2
       const slics = varX.slice(data1, len)
-      if(slics > '59'){
+      if(slics > 59){
         return varD-100+60
       }else if(len > 1){
-        if(slics > '59'){
-          return varD-100-40
+        if(slics > 59){
+          return varD-40
         }else{
-          return varD-100-40
+          console.log("hi")
+          return varD-40
         }
       }else if(len === 2){
         return varD-40
@@ -147,7 +250,6 @@ function AnalisaAbsensi() {
   
     }
 
-    console.log(results_working)
 
     // function sumTotaled(arr){
     //     let results = arr.reduce((a, b) => {
@@ -189,34 +291,8 @@ function AnalisaAbsensi() {
           return a+b
         }, 0);
         return results
-        // const lent = results.toString().length 
-        // console.log(results)
-        // var ce = lent-2
-        // const sliced = results.toString().slice(ce, lent)
-        // console.log(sliced)
-        // console.log(ce)
-        // console.log(lent)
-        // if(sliced < 60 ){
-        //   if(lent > 1){
-        //     const resi = results+160
-        //     const slicing = resi.toString().slice(ce, lent)
-        //     if(slicing > 60){
-        //       return results+120+320
-        //     }else{
-        //       return results+160
-        //     }
-        //   }else{
-        //     return results
-        //   }
-        // }else{
-        //   return results-100+60+120
-        // }
-
     }
 
-    console.log("x = ", + sumTotal(results_working))
-    console.log("y = ", + sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)))
-    console.log(leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString())
     function sumHE(he){
       if(name_id.replace(/%20/g, " ") === 'Kunut C'){
         return he*900
@@ -225,9 +301,29 @@ function AnalisaAbsensi() {
       }
     }
 
-  console.log(sumTotal(results_lembur))
+  
+    const sumData = sumTotal(minutes_working)/60
+    const sumDataLembur = sumTotal(minutes_lembur)/60
+    
+    const sumDataWork = sumTotal(hour_working)
+    const sumHourLembur = sumTotal(hour_lembur)
+    
+    console.log(sumTotal(hour_working))
+    console.log("func baru : ",dividDed(sumData, sumDataWork))
+    console.log(sumTotal(minutes_working))
+    // console.log(dividDe(sumData, sumDataWork))
 
+    const lemburTotal = dividDed(sumDataLembur, sumHourLembur)
+    const jamKerjaA = dividDed(sumData, sumDataWork)
 
+    const jamKerjaS = sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))
+
+    const kurangLeb = leb(aktualLembur(jamKerjaA, lemburTotal), jamKerjaS)
+
+    const ak_le = aktualLembur(jamKerjaA, lemburTotal)
+
+    console.log("aktual - lembur : ", ak_le)
+    console.log("kurang lebih : ", kurangLeb)
 
   return (
     <div className='d-flex'>
@@ -380,60 +476,66 @@ function AnalisaAbsensi() {
                             })}
                             <tr>
                                 <td colSpan={9}>Total</td>
-                                  {sumTotal(results_working).toString().length === 1 ?
+                                
+                                  {dividDed(sumData, sumDataWork).toString().length === 1 ?
                                     <td colSpan={1}>
-                                      {sumTotal(results_working).toString()} Menit
+                                      {dividDed(sumData, sumDataWork).toString()} Menit
                                     </td>
                                     : null
                                   }
-                                  {sumTotal(results_working).toString().length === 2 ?
+                                  {dividDed(sumData, sumDataWork).toString().length === 2 ?
                                     <td colSpan={1}>
-                                      {sumTotal(results_working).toString()} Menit
+                                      {dividDed(sumData, sumDataWork).toString()} Menit
                                     </td>
                                     : null
                                   }
-                                  {sumTotal(results_working).toString().length === 3 ?
+                                  {dividDed(sumData, sumDataWork).toString().length === 3 ?
                                     <td colSpan={1}>
-                                      {sumTotal(results_working).toString().slice(0,1)},{sumTotal(results_working).toString().slice(1,3)} Jam
+                                      {dividDed(sumData, sumDataWork).toString().slice(0,1)},{dividDed(sumData, sumDataWork).toString().slice(1,3)} Jam
                                     </td>
                                     : null
                                   }
-                                  {sumTotal(results_working).toString().length === 4 ?
+                                  {dividDed(sumData, sumDataWork).toString().length === 4 ?
                                     <td colSpan={1}>
-                                      {sumTotal(results_working).toString().slice(0,2)},{sumTotal(results_working).toString().slice(2,4)} Jam
+                                      {dividDed(sumData, sumDataWork).toString().slice(0,2)},{dividDed(sumData, sumDataWork).toString().slice(2,4)} Jam
                                     </td>
                                     : null
                                   }
-                                  {sumTotal(results_working).toString().length === 5 ?
+                                  {dividDed(sumData, sumDataWork).toString().length === 5 ?
                                     <td colSpan={1}>
-                                      {sumTotal(results_working).toString().slice(0,3)},{sumTotal(results_working).toString().slice(3,5)} Jam
+                                      {dividDed(sumData, sumDataWork).toString().slice(0,3)},{dividDed(sumData, sumDataWork).toString().slice(3,5)} Jam
                                     </td>
                                     : null
                                   }
-                                  {sumTotal(results_working) === 0 ?
+                                  {/* {dividDed(sumData, sumDataWork) === 0 ?
                                     <td colSpan={1}>
                                       
                                     </td>
                                     : null
-                                  }
+                                  } */}
 
                                 {/* Total Lembur */}
 
                                 <td colSpan={1}>
-                                  {sumTotal(results_lembur).toString().length === 2 ?
-                                      sumTotal(results_lembur).toString() +' Menit'
+                                  {lemburTotal.toString().length === 2 ?
+                                      lemburTotal.toString() +' Menit'
                                       : null
                                   }
                             
-                                {sumTotal(results_lembur).toString().length === 3 ?
-                                      sumTotal(results_lembur).toString().slice(0,1)+":"+
-                                      sumTotal(results_lembur).toString().slice(1,3)+" Jam"
+                                {lemburTotal.toString().length === 3 ?
+                                      lemburTotal.toString().slice(0,1)+":"+
+                                      lemburTotal.toString().slice(1,3)+" Jam"
                                     : null
                                   }
                                  
-                                {sumTotal(results_lembur).toString().length === 4 ?
-                                      sumTotal(results_lembur).toString().slice(0,2)+':'+
-                                      sumTotal(results_lembur).toString().slice(2,4) +' Jam'
+                                {lemburTotal.toString().length === 4 ?
+                                      lemburTotal.toString().slice(0,2)+':'+
+                                      lemburTotal.toString().slice(2,4) +' Jam'
+                                    : null
+                                  }
+                                   {lemburTotal.toString().length === 5 ?
+                                      lemburTotal.toString().slice(0,3)+':'+
+                                      lemburTotal.toString().slice(3,5) +' Jam'
                                     : null
                                   }
                                 </td>
@@ -478,70 +580,70 @@ function AnalisaAbsensi() {
                             </tr> 
                             <tr>
                                 <td colSpan={8}>Jumlah Jam Kerja Aktual</td>
-                                {sumTotal(results_working) === 0 ?
+                                {dividDed(sumData, sumDataWork) === 0 ?
                                     <td colSpan={3}>
                                     </td>
                                     : null
                                   }
-                                  {sumTotal(results_working).toString().length === 2 ?
+                                  {dividDed(sumData, sumDataWork).toString().length === 2 ?
                                     <td colSpan={3}>
-                                      {sumTotal(results_working).toString()} Menit
+                                      {dividDed(sumData, sumDataWork).toString()} Menit
                                     </td>
                                     : null
                                   }
-                                {sumTotal(results_working).toString().length === 3 ?
+                                {dividDed(sumData, sumDataWork).toString().length === 3 ?
                                     <td colSpan={3}>
-                                      {sumTotal(results_working).toString().slice(0,1)}:
-                                      {sumTotal(results_working).toString().slice(1,3)} Jam
+                                      {dividDed(sumData, sumDataWork).toString().slice(0,1)}:
+                                      {dividDed(sumData, sumDataWork).toString().slice(1,3)} Jam
                                     </td>
                                     : null
                                   }
-                                {sumTotal(results_working).toString().length === 4 ?
+                                {dividDed(sumData, sumDataWork).toString().length === 4 ?
                                     <td colSpan={3}>
-                                      {sumTotal(results_working).toString().slice(0,2)}:
-                                      {sumTotal(results_working).toString().slice(2,4)} Jam
+                                      {dividDed(sumData, sumDataWork).toString().slice(0,2)}:
+                                      {dividDed(sumData, sumDataWork).toString().slice(2,4)} Jam
                                     </td>
                                     : null
                                   }
-                                  {sumTotal(results_working).toString().length === 5 ?
+                                  {dividDed(sumData, sumDataWork).toString().length === 5 ?
                                     <td colSpan={3}>
-                                      {sumTotal(results_working).toString().slice(0,3)}:
-                                      {sumTotal(results_working).toString().slice(3,5)} Jam
+                                      {dividDed(sumData, sumDataWork).toString().slice(0,3)}:
+                                      {dividDed(sumData, sumDataWork).toString().slice(3,5)} Jam
                                     </td>
                                     : null
                                   }
                             </tr> 
                             <tr>
                                 <td colSpan={8}>Jumlah Jam Lembur</td>
-                                {sumTotal(results_lembur).toString().length === 0 ?
+                                {lemburTotal.toString().length === 0 ?
                                     <td colSpan={3}>
                                       
                                     </td>
                                     : null
                                   }
-                                  {sumTotal(results_lembur).toString().length === 1 ?
+                                  {lemburTotal.toString().length === 1 ?
                                     <td colSpan={3}>
-                                      {sumTotal(results_lembur).toString()} Menit
+                                      {lemburTotal.toString()} Menit
                                     </td>
                                     : null
                                   }
-                                  {sumTotal(results_lembur).toString().length === 2 ?
+                                  {lemburTotal.toString().length === 2 ?
                                     <td colSpan={3}>
-                                      {sumTotal(results_lembur).toString()} Menit
+                                      {lemburTotal.toString()} Menit
                                     </td>
                                     : null
                                   }
-                                  {sumTotal(results_lembur).toString().length === 3 ?
+                                  {lemburTotal.toString().length === 3 ?
                                     <td colSpan={3}>
-                                      {sumTotal(results_lembur).toString().slice(0,1)}:
-                                      {sumTotal(results_lembur).toString().slice(1,3)} Jam
+                                      {lemburTotal.toString().slice(0,1)}:
+                                      {lemburTotal.toString().slice(1,3)} Jam
                                     </td>
                                     : null
                                   }
-                                  {sumTotal(results_lembur).toString().length === 4 ?
+                                  {lemburTotal.toString().length === 4 ?
                                     <td colSpan={3}>
-                                      {sumTotal(results_lembur).toString().slice(0,2)}:
-                                      {sumTotal(results_lembur).toString().slice(2,4)} Jam
+                                      {lemburTotal.toString().slice(0,2)}:
+                                      {lemburTotal.toString().slice(2,4)} Jam
                                     </td>
                                     : null
                                   }
@@ -549,66 +651,72 @@ function AnalisaAbsensi() {
                             <tr>
                                 <td colSpan={8}>Jam Kerja Aktual - lembur</td>
                                 <td colSpan={3}>
-                                {aktualLembur(sumTotal(results_working), sumTotal(results_lembur)).toString().length === 2?
-                                  aktualLembur(sumTotal(results_working), sumTotal(results_lembur)).toString().slice(0,1)+':'+
-                                  aktualLembur(sumTotal(results_working), sumTotal(results_lembur)).toString().slice(1,3) + ' Menit' :
+                                {aktualLembur(jamKerjaA, lemburTotal).toString().length === 2?
+                                  aktualLembur(jamKerjaA, lemburTotal).toString().slice(0,1)+':'+
+                                  aktualLembur(jamKerjaA, lemburTotal).toString().slice(1,3) + ' Menit' :
                                   null
                                 }
-                                  {aktualLembur(sumTotal(results_working), sumTotal(results_lembur)).toString().length === 3?
-                                  aktualLembur(sumTotal(results_working), sumTotal(results_lembur)).toString().slice(0,1)+':'+
-                                  aktualLembur(sumTotal(results_working), sumTotal(results_lembur)).toString().slice(1,3) + ' Jam' :
+                                  {aktualLembur(jamKerjaA, lemburTotal).toString().length === 3?
+                                  aktualLembur(jamKerjaA, lemburTotal).toString().slice(0,1)+':'+
+                                  aktualLembur(jamKerjaA, lemburTotal).toString().slice(1,3) + ' Jam' :
                                   null
                                 }
 
-                                 {aktualLembur(sumTotal(results_working), sumTotal(results_lembur)).toString().length === 4?
-                                  aktualLembur(sumTotal(results_working), sumTotal(results_lembur)).toString().slice(0,2)+':'+
-                                  aktualLembur(sumTotal(results_working), sumTotal(results_lembur)).toString().slice(2,4) + ' Jam' :
+                                 {aktualLembur(jamKerjaA, lemburTotal).toString().length === 4?
+                                  aktualLembur(jamKerjaA, lemburTotal).toString().slice(0,2)+':'+
+                                  aktualLembur(jamKerjaA, lemburTotal).toString().slice(2,4) + ' Jam' :
+                                  null
+                                } 
+                                 {aktualLembur(jamKerjaA, lemburTotal).toString().length === 5?
+                                  aktualLembur(jamKerjaA, lemburTotal).toString().slice(0,3)+':'+
+                                  aktualLembur(jamKerjaA, lemburTotal).toString().slice(3,5) + ' Jam' :
                                   null
                                 } 
                                 </td>
                             </tr> 
                             <tr>
                                 <td colSpan={8}>(Kurang/Lebih) Jam Kerja</td>
-                                {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().length === 0 ?
+                                {kurangLeb.toString().length === 0 ?
                                     <td colSpan={3}>
                                     </td>
                                     : null
                                   } 
-                                  {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().length === 1 ?
+                                  {kurangLeb.toString().length === 1 ?
                                     <td colSpan={3}>
-                                      {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().slice(0,2)} Menit
+                                      {kurangLeb.toString().slice(0,2)} Menit
                                    
                                     </td>
                                     : null
                                   }
 
-                                {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().length === 2 ?
+                                {kurangLeb.toString().length === 2 ?
                                     <td colSpan={3}>
-                                      {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().slice(0,2)} Menit
+                                      {kurangLeb.toString().slice(0,2)} Menit
                                     </td>
                                     : null
                                   }
-                                {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().length === 3 ?
+                                {kurangLeb.toString().length === 3 ?
                                     <td colSpan={3}>
-                                      {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().slice(0,1)},
-                                      {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().slice(1,3)} 
-                                      {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().slice(0,1) === '-' ?
-                                      "Menit"
+                                      {kurangLeb.toString().slice(0,1)},
+                                      {kurangLeb.toString().slice(1,3)} 
+                                      {kurangLeb.toString().slice(0,1) === '-' ?
+                                      " Menit"
                                       :
-                                      "Jam"
+                                      " Jam"
                                       } 
                                     </td>
                                     : null
                                   }
-                                  {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().length === 4 ?
+                                  {kurangLeb.toString().length === 4 ?
                                     <td colSpan={3}>
-                                      {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().slice(0,2)},{leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().slice(2,4)} Jam
+                                      {kurangLeb.toString().slice(0,2)},{kurangLeb.toString().slice(2,4)} Jam
                                     </td>
                                     : null
                                   }
-                                  {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().length === 5 ?
+                                  {kurangLeb.toString().length === 5 ?
                                     <td colSpan={3}>
-                                      {leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().slice(0,3)},{leb(sumTotal(results_working), sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))).toString().slice(3,5)} Jam
+                                      {kurangLeb.toString().slice(0,3)},
+                                      {kurangLeb.toString().slice(3,5)} Jam
                                     </td>
                                     : null
                                   }
