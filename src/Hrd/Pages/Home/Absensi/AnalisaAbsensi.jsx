@@ -231,8 +231,8 @@ function dividDed(x, y){
         if(slics > 59){
           return varD-40
         }else{
-          console.log("hi")
-          return varD-40
+          console.log("hi", slics)
+          return varD
         }
       }else if(len === 2){
         return varD-40
@@ -242,13 +242,25 @@ function dividDed(x, y){
     }
 
     function leb(x,y){
-        if(x < y ){
-            return  x - y + 40
-        }else if(x > y){
-            return x - y
+      const varD = x-y
+      const varX = varD.toString()
+      const len = varX.length
+      const data1 =len-2
+      const slics = varX.slice(data1, len)
+      if(slics > 59){
+        return varD-100+60
+      }else if(len > 1){
+        if(slics > 59){
+          return varD-40
         }else{
-          return 0
+          console.log("hi", slics)
+          return varD
         }
+      }else if(len === 2){
+        return varD-40
+      }else{
+        return varD
+      }
   
     }
 
@@ -320,12 +332,14 @@ function dividDed(x, y){
 
     const jamKerjaS = sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))
 
-    const kurangLeb = leb(aktualLembur(jamKerjaA, lemburTotal), jamKerjaS)
+    const aktualLem = aktualLembur(jamKerjaA, lemburTotal)
+    
+    const kurangLeb = leb(aktualLem, jamKerjaS)
 
-    const ak_le = aktualLembur(jamKerjaA, lemburTotal)
-
-    console.log("aktual - lembur : ", ak_le)
+    console.log("aktual - lembur : ", aktualLem)
     console.log("kurang lebih : ", kurangLeb)
+    console.log("aktual lem : ", aktualLembur(jamKerjaA, lemburTotal))
+    console.log("lembur total : ", lemburTotal  )
 
   return (
     <div className='d-flex'>
@@ -595,8 +609,14 @@ function dividDed(x, y){
                             </tr> 
                             <tr>
                                 <td colSpan={8}>Jumlah Jam Kerja Aktual</td>
-                                {dividDed(sumData, sumDataWork) === 0 ?
+                                {/* {dividDed(sumData, sumDataWork) === 0 ?
                                     <td colSpan={3}>
+                                    </td>
+                                    : null
+                                  } */}
+                                  {dividDed(sumData, sumDataWork).toString().length === 1 ?
+                                    <td colSpan={3}>
+                                      {dividDed(sumData, sumDataWork).toString()} Menit
                                     </td>
                                     : null
                                   }
@@ -666,25 +686,29 @@ function dividDed(x, y){
                             <tr>
                                 <td colSpan={8}>Jam Kerja Aktual - lembur</td>
                                 <td colSpan={3}>
-                                {aktualLembur(jamKerjaA, lemburTotal).toString().length === 2?
-                                  aktualLembur(jamKerjaA, lemburTotal).toString().slice(0,1)+':'+
-                                  aktualLembur(jamKerjaA, lemburTotal).toString().slice(1,3) + ' Menit' :
+                                {aktualLem.toString().length === 1?
+                                  aktualLem.toString().slice(0,1)+' Menit' :
                                   null
                                 }
-                                  {aktualLembur(jamKerjaA, lemburTotal).toString().length === 3?
-                                  aktualLembur(jamKerjaA, lemburTotal).toString().slice(0,1)+':'+
-                                  aktualLembur(jamKerjaA, lemburTotal).toString().slice(1,3) + ' Jam' :
+                                {aktualLem.toString().length === 2?
+                                  aktualLem.toString().slice(0,1)+':'+
+                                  aktualLem.toString().slice(1,3) + ' Menit' :
+                                  null
+                                }
+                                  {aktualLem.toString().length === 3?
+                                  aktualLem.toString().slice(0,1)+':'+
+                                  aktualLem.toString().slice(1,3) + ' Jam' :
                                   null
                                 }
 
-                                 {aktualLembur(jamKerjaA, lemburTotal).toString().length === 4?
-                                  aktualLembur(jamKerjaA, lemburTotal).toString().slice(0,2)+':'+
-                                  aktualLembur(jamKerjaA, lemburTotal).toString().slice(2,4) + ' Jam' :
+                                 {aktualLem.toString().length === 4?
+                                  aktualLem.toString().slice(0,2)+':'+
+                                  aktualLem.toString().slice(2,4) + ' Jam' :
                                   null
                                 } 
-                                 {aktualLembur(jamKerjaA, lemburTotal).toString().length === 5?
-                                  aktualLembur(jamKerjaA, lemburTotal).toString().slice(0,3)+':'+
-                                  aktualLembur(jamKerjaA, lemburTotal).toString().slice(3,5) + ' Jam' :
+                                 {aktualLem.toString().length === 5?
+                                  aktualLem.toString().slice(0,3)+':'+
+                                  aktualLem.toString().slice(3,5) + ' Jam' :
                                   null
                                 } 
                                 </td>

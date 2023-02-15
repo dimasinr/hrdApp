@@ -13,7 +13,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 // import MailIcon from '@mui/icons-material/Mail';
-import {FactCheck, AutoStories, Logout, DateRange, Analytics, Person, Dashboard, Badge, Settings, Feed} from '@mui/icons-material';
+import {FactCheck, AutoStories, Logout, DateRange, Analytics, Person, 
+  Dashboard, Badge, Settings, Feed, Gavel} from '@mui/icons-material';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { NAMES, ROLES, USER_ID, USER_TOKEN, BASE_URL } from '../../fetch/fetch';
@@ -161,6 +162,16 @@ function SideBar(props) {
               <Person sx={{ color:'#0B305A' }} />
             </ListItemIcon>
             <ListItemText primary='List Karyawan' />
+          </ListItemButton>
+        </ListItem>
+      </Link>
+      <Link to="/employee/contract" style={{ textDecoration:'none', color:'black' }}>
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <Gavel sx={{ color:'#0B305A' }} />
+            </ListItemIcon>
+            <ListItemText primary='Kontrak Karyawan' />
           </ListItemButton>
         </ListItem>
       </Link>

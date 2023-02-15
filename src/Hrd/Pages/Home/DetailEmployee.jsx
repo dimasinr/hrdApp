@@ -34,6 +34,8 @@ function DetailEmployee() {
     const [gender, setGender] = React.useState([])
     const [date_join, setDateJoin] = React.useState(new Date().toISOString().slice(0,10))
     const [birth_date, setBirthDate] = React.useState(new Date().toISOString().slice(0,10))
+    const [awal_kontrak, setAwalKontrak] = React.useState(new Date().toISOString().slice(0,10))
+    const [akhir_kontrak, setAkhirKontrak] = React.useState(new Date().toISOString().slice(0,10))
 
     const [visib, setVisib] = useState("password");
     const [rest, setRest] = useState(false)
@@ -58,6 +60,8 @@ function DetailEmployee() {
           setGender(res.gender)
           setDateJoin(res.employee_joined)
           setBirthDate(res.birth_date)
+          setAwalKontrak(res.contract_start)
+          setAkhirKontrak(res.contract_end)
           console.log(res)
         })
       }
@@ -124,6 +128,8 @@ function DetailEmployee() {
             formData.append("gender", gender);
             formData.append("religion", religion);
             formData.append("birth_date", birth_date);
+            formData.append("contract_start", awal_kontrak);
+            formData.append("contract_end", akhir_kontrak);
            await axios({
                 method: 'put',
                 url:`${BASE_URL}/users/employees/${ids}/`,
@@ -260,6 +266,18 @@ const postNewPassword = async e => {
     setBirthDate(dated.slice(1, 11))
   }
 
+  const AwalKontrak = (newdate) => {
+    let event = new Date(newdate);
+    let date = JSON.stringify(event);
+    setAwalKontrak(date.slice(1, 11))
+  }
+
+  const AkhirKontrak = (newdate) => {
+    let event = new Date(newdate);
+    let dated = JSON.stringify(event);
+    setAkhirKontrak(dated.slice(1, 11))
+  }
+
   const gende = [
     {'id': 1,
     'name' : 'Laki-Laki'
@@ -299,14 +317,14 @@ const postNewPassword = async e => {
                                           <div className="row">
                                             <Box sx={{ mr:2 }}>
                                                 {/* <TextField value={name ? name : names} disabled id='name' label='Nama karyawan' sx={{ mt:3, mr:1 }}  /> */}
-                                                <TextField value={employee_code} onChange={e => setEmployeeCode(e.target.value)} label='Employee Code' sx={{ mt:3, mr:1 }}  />
-                                                <TextField value={nama_depan} onChange={e => setNamaDepan(e.target.value)} label='Nama Depan' sx={{ mt:3, mr:1 }}  />
-                                                <TextField value={nama_belakang} onChange={e => setNamaBelakang(e.target.value)} label='Nama Belakang' sx={{ mt:3, mr:1 }}  />
-                                                <TextField value={username} onChange={e => setUsername(e.target.value)} id='username' label='Username' sx={{ mt:3, mr:1 }}  />
+                                                <TextField value={employee_code} onChange={e => setEmployeeCode(e.target.value)} label='Employee Code' sx={{ mt:3, mr:1 }} variant='outlined' />
+                                                <TextField value={nama_depan} onChange={e => setNamaDepan(e.target.value)} label='Nama Depan' sx={{ mt:3, mr:1 }} variant='outlined' />
+                                                <TextField value={nama_belakang} onChange={e => setNamaBelakang(e.target.value)} label='Nama Belakang' sx={{ mt:3, mr:1 }} variant='outlined' />
+                                                <TextField value={username} onChange={e => setUsername(e.target.value)} id='username' label='Username' sx={{ mt:3, mr:1 }} variant='outlined' />
                                             </Box>
                                             <Box sx={{ mr:2 }}>
-                                                <TextField value={email} onChange={e => setEmail(e.target.value)} id='email' label='Email' sx={{ mt:3, mr:1 }}  />
-                                                <TextField value={sisa_cuti} onChange={e => setSisaCuti(e.target.value)} type='number' label='Jatah Cuti' sx={{ mt:3, mr:1 }}  />
+                                                <TextField value={email} onChange={e => setEmail(e.target.value)} id='email' label='Email' sx={{ mt:3, mr:1 }} variant='outlined' />
+                                                <TextField value={sisa_cuti} onChange={e => setSisaCuti(e.target.value)} type='number' label='Jatah Cuti' sx={{ mt:3, mr:1 }} variant='outlined' />
                                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                     <MobileDatePicker
                                                     label="Tanggal Masuk"
@@ -319,8 +337,9 @@ const postNewPassword = async e => {
                                                     />
                                                 </LocalizationProvider>
                                                 <FormControl sx={{ mt: 3, ml:1, minWidth: 220 }}>
-                                                    <InputLabel id="role-label">Roles</InputLabel>
+                                                    <InputLabel id="role-label" variant='outlined'>Roles</InputLabel>
                                                     <Select
+                                                    variant='outlined'
                                                     labelId="role"
                                                     id="role"
                                                     value={roles}
@@ -337,10 +356,11 @@ const postNewPassword = async e => {
                                                 </FormControl>
                                             </Box>
                                             <Box sx={{ mr:2 }}>
-                                                <TextField value={religion} onChange={e => setReligion(e.target.value)} label='Agama' sx={{ mt:3, mr:1 }}  />
+                                                <TextField value={religion} onChange={e => setReligion(e.target.value)} variant='outlined' label='Agama' sx={{ mt:3, mr:1 }}  />
                                                 <FormControl sx={{ mt: 3, mr:1, minWidth: 220 }}>
                                                     <InputLabel id="jenkel-label">Jenis Kelamin</InputLabel>
                                                     <Select
+                                                    variant='outlined'
                                                     labelId="Jenis Kelamin"
                                                     id="Jenis Kelamin"
                                                     value={gender}
@@ -372,6 +392,7 @@ const postNewPassword = async e => {
                                                 <FormControl sx={{ mt: 3, mr:1, minWidth: 220 }}>
                                                     <InputLabel id="division-label">Divisi</InputLabel>
                                                     <Select
+                                                    variant='outlined'
                                                     labelId="division"
                                                     id="division"
                                                     value={division}
@@ -386,6 +407,34 @@ const postNewPassword = async e => {
                                                    
                                                     </Select>
                                                 </FormControl>
+
+                                            </Box>
+
+                                            <Box sx={{ mr:2 }}>
+                                                
+                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                    <MobileDatePicker
+                                                    label="Awal Kontrak"
+                                                    inputFormat="DD MMMM YYYY"
+                                                    value={new Date(awal_kontrak)}
+                                                    onChange={(newValue) => {
+                                                      AwalKontrak(newValue);
+                                                    }}
+                                                    renderInput={(params) => <TextField variant='outlined' sx={{ mt:3, mr:1 }} {...params} />}
+                                                    />
+                                                </LocalizationProvider>
+
+                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                    <MobileDatePicker
+                                                    label="Akhir Kontrak"
+                                                    inputFormat="DD MMMM YYYY"
+                                                    value={new Date(akhir_kontrak)}
+                                                    onChange={(newValue) => {
+                                                      AkhirKontrak(newValue);
+                                                    }}
+                                                    renderInput={(params) => <TextField variant='outlined' sx={{ mt:3, mr:1 }} {...params} />}
+                                                    />
+                                                </LocalizationProvider>
 
                                             </Box>
 

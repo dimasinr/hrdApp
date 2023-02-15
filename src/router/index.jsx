@@ -16,6 +16,7 @@ import DetailPerizinan from "../Hrd/Pages/Home/DetailPerizinan";
 import CalendarCuti from "../Hrd/Pages/Home/CalendarCuti";
 import ListKaryawan from "../Hrd/Pages/Home/ListKaryawan";
 import DetailEmployee from "../Hrd/Pages/Home/DetailEmployee"; 
+import EmployeeContract from "../Hrd/Pages/Home/Employee/EmployeeContract";
 import Dashboard from "../Hrd/Pages/Home/Dashboard";
 import AbsensiKaryawan from "../Hrd/Pages/Home/Absensi/AbsensiKaryawan";
 import DetailAbsensi from "../Hrd/Pages/Home/Absensi/DetailAbsensi";
@@ -68,6 +69,8 @@ export const AppRouter = () => {
                 <Route path='/employee/detail/:id' element={<DetailEmployee />} />
                 <Route path='/employee/absensi' element={<AbsensiKaryawan />} />
                 <Route path='/employee/absensi/:id' element={<DetailAbsensi />} />
+                <Route path='/employee/contract/' element={<EmployeeContract />} />
+                <Route path='/employee/contract/:id' element={<EmployeeContract />} />
                 <Route path='/absensi/' element={<ListAbsensi />} />
                 <Route path='/absensi/:name_id' element={<AbsensiDetail />} />
                 <Route path='/employee/absensi/:id/:month_id/:year_id' element={<AnalisaAbsensi />} />

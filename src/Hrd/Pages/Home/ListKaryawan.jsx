@@ -60,7 +60,7 @@ function NotesHrd() {
     // const [searchRoles, setSearchRoles] = useState('')
 
 
-     const getListPengajuan = () => {
+    const getListPengajuan = () => {
       axios.get(`${BASE_URL}/users/employee/search/`,{
         headers: {
           "Authorization" : 'Token ' + USER_TOKEN
