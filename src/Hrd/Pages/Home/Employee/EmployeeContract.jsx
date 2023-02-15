@@ -61,7 +61,7 @@ function EmployeeContract() {
         .then((response) => {
           const res = response.data
           setEmployee(res.map((emp) => {
-            return createData(emp.pk, emp.name, emp.employee_code, toShort(emp.contract_start), toShort(emp.contract_end))
+            return createData(emp.pk, emp.name, emp.employee_code, toShort(emp.contract_start), toShort(emp.contract_end), emp.contract_time)
           }))
           console.log(res)
         })
