@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Col } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
@@ -38,19 +38,30 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 function NotesHrd() {
 
     const navigate = useNavigate()
-    const [employees_name, setemployeesName] = React.useState('')
-    const [note_dates, setNotesDate] = React.useState('')
-    const [list_pengajuan, setListPengajuan] = React.useState([])
-    const [loading, setLoading] = React.useState(true)
-    const [open, setOpen] = React.useState(false);
+    const [employees_name, setemployeesName] = useState('')
+    const [note_dates, setNotesDate] = useState('')
+    const [list_pengajuan, setListPengajuan] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [open, setOpen] = useState(false);
 
-    const [employeName, setEmployeName] = React.useState('')
-    const [tanggal, setTanggal] = React.useState(new Date().toISOString().slice(0,10))
-    const [type_notes, setTypeNotes] = React.useState('catatan')
-    const [notes_employee, setNotesEmployee] = React.useState('')
+    const [employeName, setEmployeName] = useState('')
+    const [tanggal, setTanggal] = useState(new Date().toISOString().slice(0,10))
+    const [type_notes, setTypeNotes] = useState('catatan')
+    const [notes_employee, setNotesEmployee] = useState('')
+  
+    const [year, setYear] = useState('')
+    const [month, setSearchMonth] = useState('')
+    
+    const handleYear = (event) => {
+      setYear(event.target.value);
+    };
 
     const handleClickOpen = () => {
       setOpen(!open);
+    };
+
+    const handleMonth = (event) => {
+      setSearchMonth(event.target.value);
     };
 
     
@@ -82,7 +93,7 @@ function NotesHrd() {
   // const ca = merge(dataCharts, list_pengajuan, 'index');
 
      const getListPengajuan = () => {
-      axios.get(`${BASE_URL}/notes/list/?employee_name=${employees_name}&date_note=${note_dates}`,{
+      axios.get(`${BASE_URL}/notes/list/?employee_name=${employees_name}&date_note=${note_dates}&month=${month}&year=${year}`,{
         headers: {
           "Authorization" : 'Token ' + USER_TOKEN
         }
@@ -95,7 +106,7 @@ function NotesHrd() {
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    React.useEffect(() => getListPengajuan(), [employees_name, note_dates])
+    React.useEffect(() => getListPengajuan(), [employees_name, note_dates, year, month])
   
 
     const handleRowClick = (params) => {
@@ -210,6 +221,88 @@ function NotesHrd() {
     },
   ]
 
+  const tahun = [
+    {
+      'id':0,
+      'year': '',
+      'name': 'all year'
+    },
+    {'id': 1,
+    'year' : 2022,
+    'name': '2022'
+  },
+    {
+      'id':2,
+      'year' : 2023,
+      'name': '2023'
+    },
+      {
+        'id':3,
+        'year' : 2024,
+        'name': '2024'
+      },
+        {
+          'id':4,
+          'year' : 2025,
+          'name': '2024'
+        }
+  ]
+
+  const bulan = [
+    {
+      'month': 'All',
+      'value': ''
+    },
+    {
+      'month': 'Januari',
+      'value': 1
+    },
+    {
+      'month': 'Febuari',
+      'value': 2
+    },
+    {
+      'month': 'Maret',
+      'value': 3
+    },
+    {
+      'month': 'April',
+      'value': 4
+    },
+    {
+      'month': 'Mei',
+      'value': 5
+    },{
+      'month': 'Juni',
+      'value': 6
+    },
+    {
+      'month': 'Juli',
+      'value': 7
+    },
+    {
+      'month': 'Agustus',
+      'value': 8
+    },
+    {
+      'month': 'September',
+      'value': 9
+    },
+    {
+      'month': 'Oktober',
+      'value': 10
+    },
+    {
+      'month': 'November',
+      'value': 11
+    },
+    {
+      'month': 'Desember',
+      'value': 12
+    }
+
+  ]
+
 
   return (
     <React.Fragment>
@@ -232,9 +325,45 @@ function NotesHrd() {
                                             onChange={(newValue) => {
                                               convDate(newValue);
                                             }}
-                                            renderInput={(params) => <TextField variant='outlined' sx={{ ml:1, mt:3 }} {...params} />}
+                                            renderInput={(params) => <TextField variant='outlined' sx={{ ml:1, mr:1, mt:3 }} {...params} />}
                                             />
                                         </LocalizationProvider>
+                                        <FormControl sx={{ mr:1, mt:3, minWidth: 220 }}>
+                                          <InputLabel id="bulan-label">Pilih bulan</InputLabel>
+                                          <Select
+                                          // variant='standard'
+                                          labelId="Bulan"
+                                          id="Bulan"
+                                          value={month}
+                                          onChange={handleMonth}
+                                          label="Bulan"
+                                          >
+                                              {bulan && bulan.map((div, index) => {
+                                                  return(
+                                                      <MenuItem value={div.value} key={index}>{div.month}</MenuItem>
+                                                  )
+                                              })}
+                                          
+                                          </Select>
+                                      </FormControl>
+                                      <FormControl sx={{ mr:1, mt:3, minWidth: 220 }}>
+                                          <InputLabel id="tahun-label">Pilih Tahun</InputLabel>
+                                          <Select
+                                          // variant='standard'
+                                          labelId="Tahun"
+                                          id="Tahun"
+                                          value={year}
+                                          onChange={handleYear}
+                                          label="Tahun"
+                                          >
+                                              {tahun && tahun.map((div, index) => {
+                                                  return(
+                                                      <MenuItem value={div.year} key={index}>{div.name}</MenuItem>
+                                                  )
+                                              })}
+                                          
+                                          </Select>
+                                      </FormControl>
 
                                     </Col>
                                      <Col md={4}>
