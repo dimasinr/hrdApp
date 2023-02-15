@@ -15,12 +15,14 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import SideBar from '../../Components/SideBar';
 
 const columns = [
-    { field: 'id', headerName: 'Id', width: 70 },
-    { field: 'employee_name', headerName: 'Nama Karyawan', width: 230 },
-    { field: 'date_note', headerName: 'Tanggal Catatan', width: 290 },
-    { field: 'notes', headerName: 'Notes', width: 510 },
+  { field: 'id', headerName: 'Id', width: 70 },
+  { field: 'employee_name', headerName: 'Nama Karyawan', width: 190 },
+  { field: 'date_note', headerName: 'Tanggal Catatan', width: 180 },
+  { field: 'type_notes', headerName: 'Type', width: 120 },
+  { field: 'notes', headerName: 'Notes', width: 520 },
 ];
 
+// sadafa
 const LoadingSkeleton = () => (
     <Box
       sx={{
@@ -100,8 +102,10 @@ function NotesHrdDetail() {
       const editNotes = async e => {
         try{
             const formData = new FormData();
+            formData.append("employee_name", name);
             formData.append("date_note", date_note);
             formData.append("notes", notes);
+            formData.append("type_notes", type_notes);
            await axios({
                 method: 'put',
                 url:`${BASE_URL}/notes/employee/${ids}/`,
