@@ -20,19 +20,20 @@ const columns = [
     { id: 'contract_end', label: 'Akhir Kontrak', minWidth: 170, align: 'center',
       format: (value) => value.toLocaleString('en-US'),
     },
+    { id: 'contract_time', label: 'Lama Kontrak', align: 'center', minWidth: 100 },
     
   ];
   
-  function createData(pk, name, employee_code, contract_start, contract_end) {
-    return { pk, name, employee_code, contract_start, contract_end };
+  function createData(pk, name, employee_code, contract_start, contract_end, contract_time) {
+    return { pk, name, employee_code, contract_start, contract_end, contract_time };
   }
 
   function toShort(arr) {
     const newD = new Date(arr)
 
-    const monthNames = ["Jan", "Feb", "Mar", "Apr",
-                        "May", "Jun", "Jul", "Aug",
-                        "Sep", "Oct", "Nov", "Dec"];
+    const monthNames = ["Januari", "Febuari", "Maret", "April",
+                        "Mai", "Juni", "Juli", "Agustus",
+                        "September", "Oktober", "November", "Desember"];
     
     const day = newD.getDate();
     const monthIndex = newD.getMonth();

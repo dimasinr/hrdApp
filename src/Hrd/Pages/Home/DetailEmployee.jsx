@@ -36,6 +36,7 @@ function DetailEmployee() {
     const [birth_date, setBirthDate] = React.useState(new Date().toISOString().slice(0,10))
     const [awal_kontrak, setAwalKontrak] = React.useState(new Date().toISOString().slice(0,10))
     const [akhir_kontrak, setAkhirKontrak] = React.useState(new Date().toISOString().slice(0,10))
+    const [contract_time, setContractTime] = React.useState([])
 
     const [visib, setVisib] = useState("password");
     const [rest, setRest] = useState(false)
@@ -62,6 +63,7 @@ function DetailEmployee() {
           setBirthDate(res.birth_date)
           setAwalKontrak(res.contract_start)
           setAkhirKontrak(res.contract_end)
+          setContractTime(res.contract_time)
           console.log(res)
         })
       }
@@ -435,6 +437,8 @@ const postNewPassword = async e => {
                                                     renderInput={(params) => <TextField variant='outlined' sx={{ mt:3, mr:1 }} {...params} />}
                                                     />
                                                 </LocalizationProvider>
+
+                                                <TextField value={contract_time} onChange={e => setContractTime(e.target.value)} variant='outlined' disabled label='Lama Kontrak' sx={{ mt:3, mr:1 }}  />
 
                                             </Box>
 
