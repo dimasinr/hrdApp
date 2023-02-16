@@ -93,7 +93,7 @@ function NotesHrd() {
   // const ca = merge(dataCharts, list_pengajuan, 'index');
 
      const getListPengajuan = () => {
-      axios.get(`${BASE_URL}/notes/list/?employee_name=${employees_name}&date_note=${note_dates}&month=${month}&year=${year}`,{
+      axios.get(`${BASE_URL}/notes/list/?employee_name=${employees_name}&date_note=${note_dates}&bulan=${month}&tahun=${year}`,{
         headers: {
           "Authorization" : 'Token ' + USER_TOKEN
         }
