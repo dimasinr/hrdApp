@@ -60,7 +60,7 @@ return (
                             currentTableRef={tableRef.current}
                         >
                           <Tooltip title='Export to excel'>
-                          <button className='btn'> <GetApp /> </button>
+                              <button className='btn'> <GetApp /> </button>
                           </Tooltip>
 
                         </DownloadTableExcel>
