@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { ArrowBackIos, GetApp } from '@mui/icons-material'
 import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch'
 import axios from 'axios'
-import Table from 'react-bootstrap/Table';
+// import Table from 'react-bootstrap/Table';
 import { CircularProgress, Tooltip } from '@mui/material'
 // import { DownloadTableExcel } from 'react-export-table-to-excel';
 import { useDownloadExcel } from 'react-export-table-to-excel';
