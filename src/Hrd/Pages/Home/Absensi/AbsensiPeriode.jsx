@@ -7,6 +7,7 @@ import axios from 'axios'
 import Table from 'react-bootstrap/Table';
 import { CircularProgress, Tooltip } from '@mui/material'
 import { DownloadTableExcel } from 'react-export-table-to-excel';
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
 function AbsensiPeriode() {
   const navigate = useNavigate();
@@ -64,12 +65,19 @@ return (
                           </Tooltip>
 
                         </DownloadTableExcel>
+                        <ReactHTMLTableToExcel
+                          id="test-table-xls-button"
+                          className="btn"
+                          table="table-to-xls"
+                          filename="tablexls"
+                          sheet="tablexls"
+                          buttonText="Download as XLS"/>
                     </div>
                       <div className="col-md-12">
                         {loading && loading ? 
                         <CircularProgress />
                         : 
-                        <Table ref={tableRef} bordered hover>
+                        <Table ref={tableRef} id="table-to-xls" bordered hover>
                         <thead>
                             <tr>
                             <th>id</th>
