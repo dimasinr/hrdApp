@@ -77,7 +77,7 @@ return (
                         {loading && loading ? 
                         <CircularProgress />
                         : 
-                        <Table ref={tableRef} id="table-to-xls" bordered hover>
+                        <table ref={tableRef} className="table table-hover" bordered hover>
                         <thead>
                             <tr>
                             <th>id</th>
@@ -177,7 +177,7 @@ return (
              
                             
                         </tbody>
-                        </Table>
+                        </table>
 
                         }
                       </div>
