@@ -6,7 +6,8 @@ import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch'
 import axios from 'axios'
 import Table from 'react-bootstrap/Table';
 import { CircularProgress, Tooltip } from '@mui/material'
-import { DownloadTableExcel } from 'react-export-table-to-excel';
+// import { DownloadTableExcel } from 'react-export-table-to-excel';
+import { useDownloadExcel } from 'react-export-table-to-excel';
 
 function AbsensiPeriode() {
   const navigate = useNavigate();
@@ -40,6 +41,12 @@ function AbsensiPeriode() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => getListPengajuan(), [name_id, start_date, end_date])
 
+  const { onDownload } = useDownloadExcel({
+    currentTableRef: tableRef.current,
+    filename: `Absensi ${name_id && name_id.replace(/%20/g, " ")} Periode ${start_date && start_date} sampai ${end_date && end_date} `,
+    sheet: `Absensi ${name_id && name_id.replace(/%20/g, " ")} Periode ${start_date && start_date} sampai ${end_date && end_date} `,
+})
+
 return (
     <div className='d-flex'>
         <SideBar />
@@ -54,16 +61,16 @@ return (
                             <h4 style={{ marginTop:'8px' }}>Absensi {name_id && name_id.replace(/%20/g, " ")} Periode {start_date && start_date} sampai {end_date && end_date} </h4>
                           </span>
                         </button>
-                        <DownloadTableExcel
+                        {/* <DownloadTableExcel
                             filename={`Absensi ${name_id && name_id.replace(/%20/g, " ")} Periode ${start_date && start_date} sampai ${end_date && end_date} `}
                             sheet={`Absensi ${name_id && name_id.replace(/%20/g, " ")} Periode ${start_date && start_date} sampai ${end_date && end_date} `}
                             currentTableRef={tableRef.current}
-                        >
+                        > */}
                           <Tooltip title='Export to excel'>
-                              <button className='btn'> <GetApp /> </button>
+                              <button onClick={onDownload} className='btn'> <GetApp /> </button>
                           </Tooltip>
 
-                        </DownloadTableExcel>
+                        {/* </DownloadTableExcel> */}
               
                     </div>
                       <div className="col-md-12">
