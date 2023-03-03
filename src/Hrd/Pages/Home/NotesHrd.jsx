@@ -198,7 +198,7 @@ function NotesHrd() {
     },
     {
       'id' : 2,
-      'name' : 'masuk',
+      'name' : 'Dinas Luar(Masuk)',
       'value' : 'masuk'
     },
     {
@@ -451,7 +451,7 @@ function NotesHrd() {
                               >
                                   {dataNotes && dataNotes.map((rol, index) => {
                                       return(
-                                          <MenuItem key={index} value={rol.name}>{rol.name.charAt(0).toUpperCase() + rol.name.slice(1)}</MenuItem>
+                                          <MenuItem key={index} value={rol.value}>{rol.name.charAt(0).toUpperCase() + rol.name.slice(1)}</MenuItem>
                                       )
                                   })}
                               
