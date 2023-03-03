@@ -19,7 +19,7 @@ function PengajuanKaryawan() {
     const [jumlah_hari, setJumlahHari] = useState('')
     const [bagian, setBagian] = useState('')
     const [alasan, setAlasan] = useState('')
-    const [jenis, setJenis] = useState('ijin');
+    const [jenis, setJenis] = useState('izin');
     const [start_date, setStartDate] = useState(new Date());
     const [end_date, setEndDate] = useState(new Date());
     const [back_date, setBackDate] = useState(new Date());
@@ -199,7 +199,7 @@ function PengajuanKaryawan() {
                         onChange={handleChange}
                     >
                         <Col md={8}>
-                            <FormControlLabel value="ijin" control={<Radio />} label="Ijin" />
+                            <FormControlLabel value="izin" control={<Radio />} label="Izin" />
                             <FormControlLabel value="cuti" control={<Radio />} label="Cuti" />
                             <FormControlLabel value="lembur" control={<Radio />} label="Lembur" />
                             <FormControlLabel value="sakit" control={<Radio />} label="Sakit" />

@@ -193,23 +193,28 @@ function NotesHrd() {
   const dataNotes = [
     {
       'id' : 1,
-      'name' : 'catatan'
+      'name' : 'catatan',
+      'value' : 'catatan'
     },
     {
       'id' : 2,
-      'name' : 'masuk'
+      'name' : 'masuk',
+      'value' : 'masuk'
     },
     {
       'id' : 3,
-      'name' : 'tidak masuk'
+      'name' : 'tidak masuk',
+      'value' : 'tidak masuk'
     },
     {
       'id' : 4,
-      'name' : 'cuti'
+      'name' : 'cuti',
+      'value' : 'cuti'
     },
     {
       'id' : 5,
-      'name' : 'izin'
+      'name' : 'izin',
+      'value' : 'ijin'
     },
     {
       'id' : 6,

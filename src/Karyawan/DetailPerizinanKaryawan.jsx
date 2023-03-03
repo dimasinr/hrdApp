@@ -18,7 +18,7 @@ function DetailPerizinanKaryawan() {
     const [jumlah_hari, setJumlahHari] = useState('')
     const [bagian, setBagian] = useState('')
     const [alasan, setAlasan] = useState('')
-    const [jenis, setJenis] = useState('ijin');
+    const [jenis, setJenis] = useState('izin');
     const [start_date, setStartDate] = useState(new Date());
     const [end_date, setEndDate] = useState(new Date());
     const [back_date, setBackDate] = useState(new Date());
@@ -154,7 +154,7 @@ function DetailPerizinanKaryawan() {
                         onChange={handleChange}
                     >
                         <Col md={8}>
-                            <FormControlLabel value="ijin" disabled control={<Radio />} label="Ijin" />
+                            <FormControlLabel value="izin" disabled control={<Radio />} label="Izin" />
                             <FormControlLabel value="cuti" disabled control={<Radio />} label="Cuti" />
                             <FormControlLabel value="lembur" disabled control={<Radio />} label="Lembur" />
                             <FormControlLabel value="sakit" disabled control={<Radio />} label="Sakit" />

@@ -351,7 +351,7 @@ function DetailPerizinanAtasan() {
                         onChange={handleChange}
                     >
                         <Col md={8}>
-                            <FormControlLabel disabled value="ijin" control={<Radio />} label="Ijin" />
+                            <FormControlLabel disabled value="izin" control={<Radio />} label="Izin" />
                             <FormControlLabel disabled value="cuti" control={<Radio />} label="Cuti" />
                             <FormControlLabel disabled value="lembur" control={<Radio />} label="Lembur" />
                             <FormControlLabel disabled value="sakit" control={<Radio />} label="Sakit" />
