@@ -149,7 +149,7 @@ function AbsensiDetail() {
                       <div className="d-flex flex-wrap">
                         {bulan.map((bul, index) => {
                           return(
-                            <div className="col-md-3 m-2">
+                            <div className="col-md-3 m-2" key={index}>
                               <Link to={`/employee/absensi/${name_id}/${bul.value}/${year}`} style={{ textDecoration:'none', color:'#0B305A' }}>
                                   <div className="card shadow-card" style={{ border:'none', borderRadius:'10px' }} key={index}>
                                     <div className="card-body text-center">

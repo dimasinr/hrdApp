@@ -1,4 +1,4 @@
-import React,{useState, useEffect, useRef} from 'react'
+import React,{useState, useEffect} from 'react'
 import SideBar from '../../../Components/SideBar'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { ArrowBackIos, GetApp } from '@mui/icons-material'
@@ -6,10 +6,11 @@ import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch'
 import axios from 'axios'
 import Table from 'react-bootstrap/Table';
 import { CircularProgress, Tooltip } from '@mui/material'
-import { DownloadTableExcel } from 'react-export-table-to-excel';
+// import { DownloadTableExcel } from 'react-export-table-to-excel';
+import { useDownloadExcel } from 'react-export-table-to-excel'
 
 function AnalisaAbsensi() {
-  const tableRef = useRef(null);
+  const tableRef = React.useRef("");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -198,7 +199,7 @@ function dividDed(x, y){
     })
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => getListPengajuan(), [name_id, month_id])
+  useEffect(() => getListPengajuan(), [name_id, month_id, loading])
 
   const getTotalDay = () => {
     axios.get(`${BASE_URL}/attendance/total-day/?employee_name=${name_id}&months=${month_id}`,{
@@ -341,6 +342,12 @@ function dividDed(x, y){
     console.log("aktual lem : ", aktualLembur(jamKerjaA, lemburTotal))
     console.log("lembur total : ", lemburTotal  )
 
+    const { onDownload } = useDownloadExcel({
+      currentTableRef: tableRef.current,
+      filename: `Analisa Absensi ${name_id && name_id.replace(/%20/g, " ")} Bulan ${bulan[month_a].month}`,
+      sheet: `Analisa Absensi ${name_id && name_id.replace(/%20/g, " ")} Bulan ${bulan[month_a].month}`,
+  })
+
   return (
     <div className='d-flex'>
         <SideBar />
@@ -355,16 +362,16 @@ function dividDed(x, y){
                             <h4 style={{ marginTop:'8px' }}>Analisa Absensi {name_id && name_id.replace(/%20/g, " ")} Bulan {bulan[month_a].month} </h4>
                           </span>
                         </button>
-                        <DownloadTableExcel
+                        {/* <DownloadTableExcel
                             filename={`Analisa Absensi ${name_id && name_id.replace(/%20/g, " ")} Bulan ${bulan[month_a].month}`}
                             sheet={`Analisa Absensi ${name_id && name_id.replace(/%20/g, " ")} Bulan ${bulan[month_a].month}`}
                             currentTableRef={tableRef.current}
-                        >
+                        > */}
                           <Tooltip title='Export to excel'>
-                          <button className='btn'> <GetApp /> </button>
+                            <button onClick={onDownload} className='btn'> <GetApp /> </button>
                           </Tooltip>
 
-                        </DownloadTableExcel>
+                        {/* </DownloadTableExcel> */}
 
                     </div>
                       <div className="col-md-12">

@@ -1,10 +1,10 @@
-import React,{useState, useEffect, useRef} from 'react'
+import React,{useState, useEffect} from 'react'
 import SideBar from '../../../Components/SideBar'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { ArrowBackIos, GetApp } from '@mui/icons-material'
 import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch'
 import axios from 'axios'
-// import Table from 'react-bootstrap/Table';
+import Table from 'react-bootstrap/Table';
 import { CircularProgress, Tooltip } from '@mui/material'
 // import { DownloadTableExcel } from 'react-export-table-to-excel';
 import { useDownloadExcel } from 'react-export-table-to-excel';
@@ -12,7 +12,7 @@ import { useDownloadExcel } from 'react-export-table-to-excel';
 function AbsensiPeriode() {
   const navigate = useNavigate();
   const location = useLocation();
-  const tableRef = useRef(null);
+  const tableRef = React.useRef([]);
   
   const name_id = location.pathname.split('/')[4]
   const start_date = location.pathname.split('/')[5]
@@ -39,7 +39,7 @@ function AbsensiPeriode() {
     })
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => getListPengajuan(), [name_id, start_date, end_date])
+  useEffect(() => getListPengajuan(), [name_id, start_date, end_date, loading])
 
   const { onDownload } = useDownloadExcel({
     currentTableRef: tableRef.current,
@@ -77,7 +77,7 @@ return (
                         {loading && loading ? 
                         <CircularProgress />
                         : 
-                        <table ref={tableRef} className="table table-hover" bordered hover>
+                        <Table ref={tableRef} bordered hover>
                         <thead>
                             <tr>
                             <th>id</th>
@@ -177,7 +177,7 @@ return (
              
                             
                         </tbody>
-                        </table>
+                        </Table>
 
                         }
                       </div>
