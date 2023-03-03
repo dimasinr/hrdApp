@@ -167,7 +167,7 @@ function NotesHrd() {
 
   const [employees, setEmployees] = React.useState([])
   const getEmployees = () => {
-    axios.get(`${BASE_URL}/users/employees/`,{
+    axios.get(`${BASE_URL}/users/employee/name/`,{
       headers: {
         "Authorization" : 'Token ' + USER_TOKEN
       }
