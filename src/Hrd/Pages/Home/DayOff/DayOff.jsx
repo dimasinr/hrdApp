@@ -70,7 +70,7 @@ function DayOff() {
         })
         .then((response) => {
           const res = response.data
-          setOffDay(res)
+          setOffDay(res.results)
           console.log(res)
           setLoading(false)
         })

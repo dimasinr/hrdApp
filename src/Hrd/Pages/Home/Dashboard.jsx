@@ -39,7 +39,7 @@ function Dashboard() {
           }
         })
         .then((response) => {
-          const res = response.data
+          const res = response.data.results
           setOffDay(res)
           console.log(res)
         })

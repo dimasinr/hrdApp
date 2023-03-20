@@ -218,11 +218,13 @@ function NotesHrd() {
     },
     {
       'id' : 6,
-      'name' : 'sakit'
+      'name' : 'sakit',
+      'value': 'sakit'
     },
     {
       'id' : 7,
-      'name' : 'lembur'
+      'name' : 'lembur',
+      'value': 'lembur'
     },
   ]
 
