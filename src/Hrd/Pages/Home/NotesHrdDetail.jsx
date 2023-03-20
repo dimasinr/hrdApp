@@ -168,14 +168,14 @@ function NotesHrdDetail() {
 
   const [employees, setEmployees] = React.useState([])
   const getEmployees = () => {
-    axios.get(`${BASE_URL}/users/employees/`,{
+    axios.get(`${BASE_URL}/users/employees/?limit=50&offset=0`,{
       headers: {
         "Authorization" : 'Token ' + USER_TOKEN
       }
     })
     .then((response) => {
       const res = response.data
-      setEmployees(res)
+      setEmployees(res.results)
       console.log(res)
     })
   }
