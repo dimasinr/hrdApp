@@ -25,13 +25,13 @@ function DetailEmployee() {
     const [username, setUsername] = React.useState([])
     const [nama_depan, setNamaDepan] = React.useState([])
     const [nama_belakang, setNamaBelakang] = React.useState([])
-    const [roles, setRoles] = React.useState('')
+    const [roles, setRoles] = React.useState("")
     const [roles2, setRoles2] = React.useState([])
-    const [division, setDivision] = React.useState('')
+    const [division, setDivision] = React.useState("")
     const [division2, setDivision2] = React.useState([])
     const [sisa_cuti, setSisaCuti] = React.useState([])
     const [religion, setReligion] = React.useState([])
-    const [gender, setGender] = React.useState([])
+    const [gender, setGender] = React.useState('Laki-Laki')
     const [date_join, setDateJoin] = React.useState(new Date().toISOString().slice(0,10))
     const [birth_date, setBirthDate] = React.useState(new Date().toISOString().slice(0,10))
     const [awal_kontrak, setAwalKontrak] = React.useState(new Date().toISOString().slice(0,10))
@@ -78,7 +78,7 @@ function DetailEmployee() {
         })
         .then((response) => {
           const res = response.data
-          setRoles2(res)
+          setRoles2(res.results)
           console.log(res)
         })
       }
@@ -93,7 +93,7 @@ function DetailEmployee() {
         })
         .then((response) => {
           const res = response.data
-          setDivision2(res)
+          setDivision2(res.results)
           console.log(res)
         })
       }
@@ -438,7 +438,7 @@ const postNewPassword = async e => {
                                                     />
                                                 </LocalizationProvider>
 
-                                                <TextField value={contract_time} onChange={e => setContractTime(e.target.value)} variant='outlined' disabled label='Lama Kontrak' sx={{ mt:3, mr:1 }}  />
+                                                <TextField value={contract_time} variant='outlined' label='Lama Kontrak' sx={{ mt:3, mr:1 }}  />
 
                                             </Box>
 

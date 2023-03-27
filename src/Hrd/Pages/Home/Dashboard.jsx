@@ -33,7 +33,7 @@ function Dashboard() {
       useEffect(() => getDates(), [])
 
       const getOffDay = () => {
-        axios.get(`${BASE_URL}/dashboard/employee-dashboard/`,{
+        axios.get(`${BASE_URL}/api/dashboard/employee-dashboard/`,{
           headers: {
             "Authorization" : `Token ${USER_TOKEN}`
           }
@@ -48,7 +48,7 @@ function Dashboard() {
       useEffect(() => getOffDay(), [])
 
       const getWeekOf = () => {
-        axios.get(`${BASE_URL}/dashboard/week-of`,{
+        axios.get(`${BASE_URL}/api/dashboard/week-of`,{
           headers: {
             "Authorization" : `Token ${USER_TOKEN}`
           }
