@@ -1,10 +1,13 @@
 import React,{useContext} from 'react'
 import { AuthContext } from '../Context/AuthContext'
 import { useNavigate } from 'react-router-dom';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function AuthenticationPages() {
 
   const navigate = useNavigate()
+  const backdrop_active = true
   const user = useContext(AuthContext);
   const roles = user.user.roles
   console.log(roles)
@@ -16,7 +19,14 @@ function AuthenticationPages() {
   })
 
   return (
-    <div>AuthenticationPages</div>
+    <div>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={backdrop_active}
+      >
+      <CircularProgress color="inherit" />
+      </Backdrop>
+    </div>
   )
 }
 

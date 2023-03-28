@@ -1,0 +1,9 @@
+.img_maintenance{
+    height: 348px;
+    width: 526px;
+}
+.text_center_maintenance{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}

@@ -6,11 +6,12 @@ import {
 import { ROLES } from "../fetch/fetch";
 import AuthenticationPages from "../Components/AuthenticationPages";
 import AccountSettings from "../Components/AccountSettings";
+import Maintenance from "../Components/Maintenance/Maintenance";
 
   // Hrd
 import LoginHrd from "../Hrd/Pages/Auth/LoginHrd";
 import HomeHrd from "../Hrd/Pages/Home/HomeHrd";
-import NotesHrd from "../Hrd/Pages/Home/NotesHrd";
+// import NotesHrd from "../Hrd/Pages/Home/NotesHrd";
 import NotesHrdDetail from "../Hrd/Pages/Home/NotesHrdDetail";
 import DetailPerizinan from "../Hrd/Pages/Home/DetailPerizinan";
 import CalendarCuti from "../Hrd/Pages/Home/CalendarCuti";
@@ -18,7 +19,7 @@ import ListKaryawan from "../Hrd/Pages/Home/ListKaryawan";
 import DetailEmployee from "../Hrd/Pages/Home/DetailEmployee"; 
 import EmployeeContract from "../Hrd/Pages/Home/Employee/EmployeeContract";
 import Dashboard from "../Hrd/Pages/Home/Dashboard";
-import AbsensiKaryawan from "../Hrd/Pages/Home/Absensi/AbsensiKaryawan";
+// import AbsensiKaryawan from "../Hrd/Pages/Home/Absensi/AbsensiKaryawan";
 import DetailAbsensi from "../Hrd/Pages/Home/Absensi/DetailAbsensi";
 import AnalisaAbsensi from "../Hrd/Pages/Home/Absensi/AnalisaAbsensi";
 import AbsensiDetail from "../Hrd/Pages/Home/Absensi/AbsensiDetail";
@@ -59,7 +60,7 @@ export const AppRouter = () => {
             <React.Fragment>
                 <Route path='/home' element={<Dashboard />} />
                 <Route path='/list-pengajuan' element={<HomeHrd />} />
-                <Route path='/notes' element={<NotesHrd />} />
+                <Route path='/notes' element={<Maintenance />} />
                 <Route path='/calendar-cuti' element={<CalendarCuti />} />
                 <Route path='/list-karyawan' element={<ListKaryawan />} />
                 <Route path='/detail-notes/:id' element={<NotesHrdDetail />} />
@@ -67,7 +68,7 @@ export const AppRouter = () => {
                 <Route path='/pengajuan' element={<PengajuanKaryawan />} />
                 <Route path='/pengajuan/me' element={<PerizinanKaryawan />} />
                 <Route path='/employee/detail/:id' element={<DetailEmployee />} />
-                <Route path='/employee/absensi' element={<AbsensiKaryawan />} />
+                <Route path='/employee/absensi' element={<Maintenance />} />
                 <Route path='/employee/absensi/:id' element={<DetailAbsensi />} />
                 <Route path='/employee/contract/' element={<EmployeeContract />} />
                 <Route path='/employee/contract/:id' element={<EmployeeContract />} />

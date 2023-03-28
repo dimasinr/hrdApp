@@ -42,7 +42,7 @@ function PerizinanKaryawan() {
       headers: {
         "Authorization" : 'Token ' + USER_TOKEN
       }
-    })
+    })  
     .then((response) => {
       const res = response.data
       setListPengajuan(res)
