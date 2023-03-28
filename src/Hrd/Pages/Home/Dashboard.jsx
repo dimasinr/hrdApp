@@ -5,6 +5,7 @@ import axios from 'axios'
 import { USER_TOKEN, BASE_URL } from '../../../fetch/fetch'
 import multiColors from "react-multi-date-picker/plugins/colors"
 import { Add } from '@mui/icons-material'
+import { datesUpt } from '../../../Components/utilsFunction/functionUtils'
 
 import { useNavigate } from 'react-router-dom'
 
@@ -14,6 +15,8 @@ function Dashboard() {
     const casc = new Date().toISOString().slice(0,4)
     const [topDash , setTopDash] = useState([])
     const [offDay , setOffDay] = useState([])
+    const [top_emp, setTopEmp ] = useState([])
+    const [low_emp, setLowEmp ] = useState([])
     // const [weekOffs, setWeekOffs] = useState([])
     const [weekdays, setWeekdays] = useState([])
 
@@ -46,6 +49,23 @@ function Dashboard() {
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
       useEffect(() => getOffDay(), [])
+
+    const getTopFive = () => {
+        axios.get(`${BASE_URL}/api/employee/best_of/?start_date=2023-01-01&end_date=2023-04-01`,{
+          headers: {
+            "Authorization" : `Token ${USER_TOKEN}`
+          }
+        })
+        .then((response) => {
+          const res = response.data
+          setTopEmp(res.top_five)
+          setLowEmp(res.low_five)
+          console.log(res)
+        })
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => getTopFive(), [])
+
 
       const getWeekOf = () => {
         axios.get(`${BASE_URL}/api/dashboard/week-of`,{
@@ -81,9 +101,13 @@ function Dashboard() {
 
       const dayPerc = numOfDates*800
 
-      function percentage(perc){
-        return (perc/dayPerc*100)
+      function percentage(x, y){
+        return (x/y*100)
       }
+    
+    //   function percentageSyst(x, y){
+    //     return (x/dayPerc*100)
+    //   }
 
     const dateOff = off => {
         return new DateObject().setDay(off.days).setMonth(off.months).setYear(off.years)
@@ -135,7 +159,7 @@ function Dashboard() {
                             <div className="card shadow-card" style={{ border:'none' }}>
                                 <div className='card-title text-center' style={{ backgroundColor: '#0B305A', color:'white' }}>Attendance Percentage</div>
                                 <div className="card-body text-center">
-                                    <span><h4>{percentage(topDash.total_work_hour_all && topDash.total_work_hour_all.working_hour__sum ).toString().slice(0,6)}%</h4></span>
+                                    <span><h4>{percentage(topDash.total_work_hour_all && topDash.total_work_hour_all.working_hour__sum, dayPerc ).toString().slice(0,6)}%</h4></span>
                                 </div>
                             </div>
                         </div>
@@ -195,27 +219,35 @@ function Dashboard() {
                                 <div className="card-title text-center" style={{ backgroundColor: '#0B305A', color:'white' }}>Top 5 Employee</div>
                                 <div className="card-body">
                                     <ol>
-                                        <li>
-                                            <div className='d-flex justify-content-between'>
-                                                <span className='text-secondary'>Fitur Belum Tersedia</span>
-                                                {/* <span>94.23 %</span> */}
-                                            </div>
-                                        </li>
+                                        {top_emp.map((topEmp, index) =>{
+                                            return(
+                                                <li>
+                                                    <div className='d-flex justify-content-between'>
+                                                        <span>{topEmp.name}</span>
+                                                        <span style={{ color:'#91E57B' }}>{percentage(topEmp.working_hour, dayPerc).toString().slice(0,5)}%</span>
+                                                    </div>
+                                                </li>
+                                            )
+                                        })}
                                     </ol>
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-12 mb-2">
                             <div className="card shadow-card" style={{ border:'none' }}>
-                                <div className="card-title text-center" style={{ backgroundColor: '#0B305A', color:'white' }}>Bottom 5 Employee</div>
+                                <div className="card-title text-center" style={{ backgroundColor: '#0B305A', color:'white' }}>5 Bottom Presence</div>
                                 <div className="card-body">
                                     <ol>
-                                        <li>
-                                            <div className='d-flex justify-content-between'>
-                                                <span className='text-secondary'>Fitur Belum Tersedia</span>
-                                                {/* <span>94.23 %</span> */}
-                                            </div>
-                                        </li>
+                                        {low_emp.map((lowEmp, index) =>{
+                                            return(
+                                                <li>
+                                                    <div className='d-flex justify-content-between'>
+                                                        <span>{lowEmp.name}</span>
+                                                        <span className='text-danger'>{percentage(lowEmp.working_hour, dayPerc).toString().slice(0,5)}%</span>
+                                                    </div>
+                                                </li>
+                                            )
+                                        })}
                                     </ol>
                                 </div>
                             </div>
@@ -240,8 +272,8 @@ function Dashboard() {
                                             return(
                                                 <li key={index}>
                                                     <div className='d-flex justify-content-between'>
-                                                        <span>{dayO.title_day}</span>
-                                                        <span>{dayO.date}</span>
+                                                        <span style={{ fontSize:'14px' }}>{dayO.title_day}</span>
+                                                        <span style={{ fontSize:'14px' }}>{datesUpt(dayO.date)}</span>
                                                     </div>
                                                 </li>
                                             )

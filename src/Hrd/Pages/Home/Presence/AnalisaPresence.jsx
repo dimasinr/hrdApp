@@ -9,15 +9,19 @@ import { CircularProgress, Tooltip } from '@mui/material'
 // import { DownloadTableExcel } from 'react-export-table-to-excel';
 import { useDownloadExcel } from 'react-export-table-to-excel'
 import { bulan } from '../../../../Components/utilsFunction/arrayFunction'
+import { sumTotal, sumHE, totalAtt, aktualLembur, leb, asce, ascr, dividDed } from './utlis/utlis'
+import { changeDayName, datesUpt, workHour } from '../../../../Components/utilsFunction/functionUtils'
 
-function AnalisaAbsensi() {
+function AnalisaPresence() {
   const tableRef = React.useRef("");
   const navigate = useNavigate();
   const location = useLocation();
 
-  const name_id = location.pathname.split('/')[3]
+  const name_id = location.pathname.split('/')[2]
+  const user_id = location.pathname.split('/')[3]
   const month_id = location.pathname.split('/')[4]
   const year_id = location.pathname.split('/')[5]
+  console.log(name_id)
   const month_a = month_id-1
 
   const [loading, setLoading] = useState(true)
@@ -33,83 +37,8 @@ function AnalisaAbsensi() {
   console.log(asce(minutes_working))
   console.log(ascr(hour_working))
 
-
-  function asce(a){
-    if(a === null ){
-      a = 0
-      var str = a.toString()
-    }else{
-      // eslint-disable-next-line no-redeclare
-      var str = a.toString()
-    }
-    // console.log(str)
-    let leng = str.length
-    if(leng === 1){
-        var val = 1
-    }else if(leng > 1){
-        // eslint-disable-next-line no-redeclare
-        var val = 2
-    }
-    const val2 = leng-val
-    const slic = str.slice(val2, leng)
-    const pars = parseInt(slic)
-    return pars
-}
-
-function ascr(a){
-  if(a === null ){
-    a = 0
-    var str = a.toString()
-  }else{
-    // eslint-disable-next-line no-redeclare
-    var str = a.toString()
-  }
-  let leng = str.length
-  if(leng === 1 || leng === 2){
-      var val = 0
-  }else if(leng > 2){
-        // eslint-disable-next-line no-redeclare
-      var val = leng - 2
-  }
-  const val2 = val
-  var slic = str.slice(0, val2)
-  if(slic === null){
-      // eslint-disable-next-line no-redeclare, no-const-assign
-      slic = 0
-  }else{
-      slic = str.slice(0, val2)
-  }
-  if(slic === ''){
-    return 0
-  }else{
-    const pars = parseInt(slic)
-    return pars
-  }
-}
-
-function dividDed(x, y){
-  const removedDecimal = Math.trunc(x); // 2
-  console.log(removedDecimal)
-  const dataX = parseInt(y)
-  console.log(dataX)
-  const dataY = removedDecimal+dataX
-  console.log(dataY)
-  const minDec = x-removedDecimal // 0.93
-  console.log(minDec)
-  var data = minDec*60 // 56
-  var fixedNum = Math.round(data)
-  if(fixedNum === 0){
-    fixedNum = '00'
-  }else{
-    fixedNum = Math.round(data)
-  }
-  const varXY =  dataY+''+fixedNum
-  console.log(varXY)
-  return parseInt(varXY)
-}
-
   const getListPengajuan = () => {
-    axios.get(`${BASE_URL}/attendance/employee-analysis/?employee_name=${name_id}&months=${month_id}&years=${year_id}`,{
+    axios.get(`${BASE_URL}/api/presence/employee/analysis/?employee=${user_id}&months=${month_id}&years=${year_id}`,{
       headers: {
         "Authorization" : 'Token ' + USER_TOKEN
       }
@@ -139,12 +68,11 @@ function dividDed(x, y){
         return(asce(ab.lembur_hour))
         }))
 
-
       console.log(res)
     })
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => getListPengajuan(), [name_id, month_id, loading])
+  useEffect(() => getListPengajuan(), [user_id, month_id, loading])
 
   const getTotalDay = () => {
     axios.get(`${BASE_URL}/attendance/total-day/?employee_name=${name_id}&months=${month_id}`,{
@@ -160,107 +88,6 @@ function dividDed(x, y){
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => getTotalDay(), [name_id, month_id])
-
-    function totalAtt(x,y){
-      return x-y
-    }
-
-    function aktualLembur(x,y){
-      const varD = x-y
-      const varX = varD.toString()
-      const len = varX.length
-      const data1 =len-2
-      const slics = varX.slice(data1, len)
-      if(slics > 59){
-        return varD-100+60
-      }else if(len > 1){
-        if(slics > 59){
-          return varD-40
-        }else{
-          console.log("hi", slics)
-          return varD
-        }
-      }else if(len === 2){
-        return varD-40
-      }else{
-        return varD
-      }
-    }
-
-    function leb(x,y){
-      const varD = x-y
-      const varX = varD.toString()
-      const len = varX.length
-      const data1 =len-2
-      const slics = varX.slice(data1, len)
-      if(slics > 59){
-        return varD-100+60
-      }else if(len > 1){
-        if(slics > 59){
-          return varD-40
-        }else{
-          console.log("hi", slics)
-          return varD
-        }
-      }else if(len === 2){
-        return varD-40
-      }else{
-        return varD
-      }
-  
-    }
-
-
-    // function sumTotaled(arr){
-    //     let results = arr.reduce((a, b) => {
-    //         return a+b;
-    //     }, 0);
-    //     const lent = results.toString().length 
-    //     console.log(results)
-    //     var ce = lent-2
-    //     const sliced = results.toString().slice(ce, lent)
-    //     const ac = results+70
-    //     console.log(sliced)
-    //     console.log(ce)
-    //     console.log(lent)
-    //     // if(sliced < 60 ){
-    //     //   return results
-    //     // }else{
-    //     //   return results-100+60
-    //     // }
-    //     if(sliced > 59){
-    //       return ac-100+60
-    //     }else if(lent > 1){
-    //       if(sliced > 59){
-    //         return ac-40
-    //       }else{
-    //         const av = ac-40
-    //         console.log(av)
-    //         return av
-    //       }
-    //     }else if(lent === 2){
-    //       return ac-40
-    //     }else{
-    //       return ac + 0
-    //     }
-
-    // }
-
-    function sumTotal(arr){
-       const results = arr.reduce((a, b) => {
-          return a+b
-        }, 0);
-        return results
-    }
-
-    function sumHE(he){
-      if(name_id.replace(/%20/g, " ") === 'Kunut C'){
-        return he*900
-      }else{
-        return he*800
-      }
-    }
-
   
     const sumData = sumTotal(minutes_working)/60
     const sumDataLembur = sumTotal(minutes_lembur)/60
@@ -276,7 +103,7 @@ function dividDed(x, y){
     const lemburTotal = dividDed(sumDataLembur, sumHourLembur)
     const jamKerjaA = dividDed(sumData, sumDataWork)
 
-    const jamKerjaS = sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur))
+    const jamKerjaS = sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur))
 
     const aktualLem = aktualLembur(jamKerjaA, lemburTotal)
     
@@ -323,17 +150,17 @@ function dividDed(x, y){
                         {loading && loading ? 
                         <CircularProgress />
                         : 
-                        <Table ref={tableRef} bordered hover>
+                        <Table ref={tableRef} bordered hover responsive>
                         <thead>
                             <tr>
-                            <th>Id</th>
-                            <th>Nama Karyawan</th>
-                            <th>Tanggal Hari Kerja</th>
+                            <th>Pid</th>
+                            <th>Nama</th>
+                            <th>Tanggal</th>
                             <th>Hari</th>
                             <th>Masuk</th>
                             <th>Pulang</th>
-                            <th>Lembur Masuk</th>
-                            <th>Lembur Pulang</th>
+                            <th>LemburS</th>
+                            <th>LemburE</th>
                             <th>Keterangan</th>
                             <th>Total Jam Kerja</th>
                             <th>Total Jam Lembur</th>
@@ -344,75 +171,14 @@ function dividDed(x, y){
                                 return(
                                     <tr key={index}>
                                     <td>{att.id}</td>
-                                    <td>{att.employee_name}</td>
-                                    <td>{att.working_date ? att.working_date : '-'}</td>
-                                    <td>
-                                      {att.days ? att.days : "-"}
-                                    </td>
-                                    <td>
-                                      {/* Masuk */}
-                                      {att.start_from !== null ? att.start_from.toString().length === 4 ?
-                                        att.start_from.toString().slice(0,2) + ':' + att.start_from.toString().slice(2,4)
-                                        : null : ''
-                                      }
-                                      {att.start_from !== null ? att.start_from.toString().length === 3 ?
-                                        '0'+att.start_from.toString().slice(0,1) + ':' + att.start_from.toString().slice(1,3)
-                                        : null : '-'
-                                      }
-                                       {att.start_from !== null ? att.start_from.toString().length === 2 ?
-                                         '00:' + att.start_from.toString().slice(0,2)
-                                        : null : '-'
-                                      }
-                                    </td>
-                                    <td>
-                                      {/* Pulang */}
-
-                                      {att.end_from !== null ?
-                                      att.end_from.toString().length === 4 ?
-                                      att.end_from.toString().slice(0,2) + ':' + att.end_from.toString().slice(2,4)
-                                      : null : ''
-                                      }
-                                      {att.end_from !== null ? 
-                                      att.end_from.toString().length === 3 ?
-                                      att.end_from.toString().slice(0,1) + ':' + att.end_from.toString().slice(1,3)
-                                      : null : '-'
-                                      }
-                                    </td>
-                                    
-                                    <td>
-                                      {/* Lembur Start */}
-
-                                      {att.lembur_start !== null ? att.lembur_start.toString().length === 4 ?
-                                        att.lembur_start.toString().slice(0,2) + ':' + att.lembur_start.toString().slice(2,4)
-                                        : null
-                                        : null 
-                                      }
-                                       {att.lembur_start !== null ? att.lembur_start.toString().length === 3 ?
-                                        att.lembur_start.toString().slice(0,1) + ':' + att.lembur_start.toString().slice(1,3)
-                                        : null
-                                        : null 
-                                      }
-                                    </td>
-                                    <td>
-                                      {/* Lembur End */}
-
-                                      {att.lembur_end !== null ? att.lembur_end.toString().length === 4 ?
-                                        att.lembur_end.toString().slice(0,2) + ':' + att.lembur_end.toString().slice(2,4)
-                                        : null
-                                        : null 
-                                      }
-                                       {att.lembur_end !== null ? att.lembur_end.toString().length === 3 ?
-                                        att.lembur_end.toString().slice(0,1) + ':' + att.lembur_end.toString().slice(1,3)
-                                        : null
-                                        : null 
-                                      }
-                                    </td>
-
-                                    <td>
-                                      {/* Keterangan */}
-                                      {att.ket ? att.ket : null
-                                      }
-                                    </td>
+                                    <td>{att.employee && att.employee.name ? att.employee.name : "Nawastra Employee" }</td>
+                                    <td>{att.working_date ? datesUpt(att.working_date) : '-'}</td>
+                                    <td>{att.days ? changeDayName(att.days) : "-"}</td>
+                                    <td>{att.start_from ? workHour(att.start_from) : "-"}</td>
+                                    <td>{att.end_from ? workHour(att.end_from) : "-"}</td>
+                                    <td>{att.lembur_start ? workHour(att.lembur_start) : "-"}</td>
+                                    <td>{att.lembur_end ? workHour(att.lembur_end) : "-"}</td>
+                                    <td>{att.ket ? att.ket : null}</td>
                                    
                                     <td>
                                       {/* Total Jam Kerja */}
@@ -531,29 +297,29 @@ function dividDed(x, y){
                             </tr> 
                             <tr>
                                 <td colSpan={8}>Jumlah Jam Kerja Efektif</td>
-                                  {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)) === 0 ?
+                                  {sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur)) === 0 ?
                                   <td colSpan={3}></td> : null
                                 }
-                                {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().length === 3 ?
+                                {sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().length === 3 ?
                                 <td colSpan={3}>
-                                  {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,1)}: 
-                                  {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(1,3)} Jam
+                                  {sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,1)}: 
+                                  {sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(1,3)} Jam
                                   </td>
                                   : null
                                 }
 
-                                {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().length === 4 ?
+                                {sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().length === 4 ?
                                 <td colSpan={3}>
-                                  {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,2)}: 
-                                  {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(2,4)} Jam
+                                  {sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,2)}: 
+                                  {sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(2,4)} Jam
                                   </td>
                                   : null
                                 }
 
-                              {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().length === 5 ?
+                              {sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().length === 5 ?
                                 <td colSpan={3}>
-                                  {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,3)}: 
-                                  {sumHE(totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(3,5)} Jam
+                                  {sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,3)}: 
+                                  {sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(3,5)} Jam
                                   </td>
                                   : null
                                 }                                
@@ -731,4 +497,4 @@ function dividDed(x, y){
   )
 }
 
-export default AnalisaAbsensi
+export default AnalisaPresence

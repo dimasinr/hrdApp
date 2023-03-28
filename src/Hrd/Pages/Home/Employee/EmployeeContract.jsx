@@ -43,7 +43,6 @@ const columns = [
     return `${day}-${monthName}-${year}`;  
 }
 
-
 function EmployeeContract() {
 
     const navigate = useNavigate()
@@ -113,7 +112,7 @@ function EmployeeContract() {
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row) => {
                                 return (
-                                <TableRow hover role="checkbox" onClick={() => navigate(`/employee/detail/${row.pk}`)} tabIndex={-1} key={row.code}>
+                                <TableRow hover role="checkbox" onClick={() => navigate(`/list-karyawan/detail/${row.pk}`)} tabIndex={-1} key={row.code}>
                                     {columns.map((column) => {
                                     const value = row[column.id];
                                     return (

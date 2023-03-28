@@ -78,7 +78,7 @@ function NotesHrd() {
   
 
     const handleRowClick = (params) => {
-      navigate(`/employee/detail/${params.row.pk}`)
+      navigate(`/list-karyawan/detail/${params.row.pk}`)
     };
 
 

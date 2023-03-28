@@ -49,7 +49,6 @@ function AbsensiKaryawan() {
   const [open, setOpen] = React.useState(false);
   const [loadingBut, setLoadingBut] = useState('Tambah')
 
-
   const [employee_names, setEmployeeName] = React.useState('')
   const [working_hour, setWorkingHour] = React.useState('')
   const [lembur_hour, setLemburHour] = React.useState('')
@@ -122,7 +121,6 @@ function AbsensiKaryawan() {
         return data.replace(':', '')
       }
   }
-
 
   const jam_masuk = delta(working_hour)
   const jam_keluar = zeta(working_hour)

@@ -29,7 +29,7 @@ const columns = [
     </Box>
   );
 
-function ListAbsensi() {
+function ListEmployeePresence() {
 
     const navigate = useNavigate()
     const [list_pengajuan, setListPengajuan] = React.useState([])
@@ -55,7 +55,7 @@ function ListAbsensi() {
   
 
     const handleRowClick = (params) => {
-      navigate(`/absensi/${params.row.pk}/${params.row.name}`)
+      navigate(`/absensi/${params.row.name}/${params.row.pk}`)
     };
 
   return (
@@ -70,7 +70,7 @@ function ListAbsensi() {
                             <div className="card-body">
 
                             <div className="card-title">
-                                  <h4>List Absensi Karyawan</h4>
+                                  <h4>Analisa Absensi Karyawan</h4>
                                   <small className='text-secondary'>klik nama karyawan untuk detail absensinya.</small>
                                 </div>
                                
@@ -108,4 +108,4 @@ function ListAbsensi() {
   )
 }
 
-export default ListAbsensi
+export default ListEmployeePresence

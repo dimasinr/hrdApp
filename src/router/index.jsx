@@ -7,6 +7,7 @@ import { ROLES } from "../fetch/fetch";
 import AuthenticationPages from "../Components/AuthenticationPages";
 import AccountSettings from "../Components/AccountSettings";
 import Maintenance from "../Components/Maintenance/Maintenance";
+import Test from "../Hrd/Pages/Home/Test/Test";
 
   // Hrd
 import LoginHrd from "../Hrd/Pages/Auth/LoginHrd";
@@ -19,12 +20,19 @@ import ListKaryawan from "../Hrd/Pages/Home/ListKaryawan";
 import DetailEmployee from "../Hrd/Pages/Home/DetailEmployee"; 
 import EmployeeContract from "../Hrd/Pages/Home/Employee/EmployeeContract";
 import Dashboard from "../Hrd/Pages/Home/Dashboard";
-// import AbsensiKaryawan from "../Hrd/Pages/Home/Absensi/AbsensiKaryawan";
-import DetailAbsensi from "../Hrd/Pages/Home/Absensi/DetailAbsensi";
-import AnalisaAbsensi from "../Hrd/Pages/Home/Absensi/AnalisaAbsensi";
-import AbsensiDetail from "../Hrd/Pages/Home/Absensi/AbsensiDetail";
+
+import ListPresence from "../Hrd/Pages/Home/Presence/ListPresence";
+import DetailPresence from "../Hrd/Pages/Home/Presence/DetailPresence";
+import EmployeePresence from "../Hrd/Pages/Home/Presence/EmployeePresence";
+import ListEmployeePresence from "../Hrd/Pages/Home/Presence/ListEmployeePresence";
+import AnalisaPresence from "../Hrd/Pages/Home/Presence/AnalisaPresence";
+
 import AbsensiPeriode from "../Hrd/Pages/Home/Absensi/AbsensiPeriode";
-import ListAbsensi from "../Hrd/Pages/Home/Absensi/ListAbsensi";
+// import DetailAbsensi from "../Hrd/Pages/Home/Absensi/DetailAbsensi";
+// import AbsensiKaryawan from "../Hrd/Pages/Home/Absensi/AbsensiKaryawan";
+// import AnalisaAbsensi from "../Hrd/Pages/Home/Absensi/AnalisaAbsensi";
+// import AbsensiDetail from "../Hrd/Pages/Home/Absensi/AbsensiDetail";
+// import ListAbsensi from "../Hrd/Pages/Home/Absensi/ListAbsensi";
 import DayOff from "../Hrd/Pages/Home/DayOff/DayOff";
 import DayOffDetail from "../Hrd/Pages/Home/DayOff/DayOffDetail";
 
@@ -59,23 +67,24 @@ export const AppRouter = () => {
            ROLES === 'hrd' ?
             <React.Fragment>
                 <Route path='/home' element={<Dashboard />} />
+                <Route path='/my/test' element={<Test />} />
                 <Route path='/list-pengajuan' element={<HomeHrd />} />
                 <Route path='/notes' element={<Maintenance />} />
                 <Route path='/calendar-cuti' element={<CalendarCuti />} />
-                <Route path='/list-karyawan' element={<ListKaryawan />} />
                 <Route path='/detail-notes/:id' element={<NotesHrdDetail />} />
                 <Route path='/perizinan/detail/:id' element={<DetailPerizinan />} />
                 <Route path='/pengajuan' element={<PengajuanKaryawan />} />
                 <Route path='/pengajuan/me' element={<PerizinanKaryawan />} />
-                <Route path='/employee/detail/:id' element={<DetailEmployee />} />
-                <Route path='/employee/absensi' element={<Maintenance />} />
-                <Route path='/employee/absensi/:id' element={<DetailAbsensi />} />
-                <Route path='/employee/contract/' element={<EmployeeContract />} />
+                <Route path='/list-karyawan' element={<ListKaryawan />} />
+                <Route path='/list-karyawan/detail/:id' element={<DetailEmployee />} />
+                <Route path='/employee/absensi' element={<ListPresence />} />
+                <Route path='/employee/absensi/:id' element={<DetailPresence />} />
+                <Route path='/contract/employee' element={<EmployeeContract />} />
                 <Route path='/employee/contract/:id' element={<EmployeeContract />} />
-                <Route path='/absensi/' element={<ListAbsensi />} />
-                <Route path='/absensi/:name_id' element={<AbsensiDetail />} />
-                <Route path='/employee/absensi/:id/:month_id/:year_id' element={<AnalisaAbsensi />} />
-                <Route path='/employee/absensi/periode/:name_id/:start_date/:end_date' element={<AbsensiPeriode />} />
+                <Route path='/absensi/' element={<ListEmployeePresence />} />
+                <Route path='/absensi/:name_id/:id' element={<EmployeePresence />} />
+                <Route path='/absensi/:name_id/:id/:month_id/:year_id' element={<AnalisaPresence />} />
+                <Route path='/absensi/periode/:name_id/:start_date/:end_date' element={<AbsensiPeriode />} />
 
                 <Route path='/dashboard/day-off/' element={<DayOff />} />
                 <Route path='/dashboard/day-off/:id' element={<DayOffDetail />} />

@@ -6,18 +6,18 @@ import { FormControl, InputLabel, Select, MenuItem } from '@mui/material'
 import { Slide, Dialog, DialogTitle, DialogContent, DialogContentText, Box, TextField, DialogActions, Button } from '@mui/material'
 import { MobileDatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { bulan, tahun } from '../../../../Components/utilsFunction/arrayFunction'
+import { tahun, bulan } from '../../../../Components/utilsFunction/arrayFunction'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function AbsensiDetail() {
+function EmployeePresence() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const user_id = location.pathname.split('/')[2]
-  const name_id = location.pathname.split('/')[3]
+  const user_id = location.pathname.split('/')[3]
+  const name_id = location.pathname.split('/')[2]
 
   const [year, setYear] = useState(new Date().getFullYear())
 
@@ -86,7 +86,7 @@ function AbsensiDetail() {
                         {bulan.map((bul, index) => {
                           return(
                             <div className="col-md-3 m-2" key={index}>
-                              <Link to={`/employee/absensi/${name_id}/${bul.value}/${year}`} style={{ textDecoration:'none', color:'#0B305A' }}>
+                              <Link to={`/absensi/${name_id}/${user_id}/${bul.value}/${year}`} style={{ textDecoration:'none', color:'#0B305A' }}>
                                   <div className="card shadow-card" style={{ border:'none', borderRadius:'10px' }} key={index}>
                                     <div className="card-body text-center">
                                         <h5>{bul.month}</h5>
@@ -154,4 +154,4 @@ function AbsensiDetail() {
   )
 }
 
-export default AbsensiDetail
+export default EmployeePresence
