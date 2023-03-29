@@ -78,7 +78,7 @@ function DetailPresence() {
   const saveAttendance = async e => {
     try{
         const formData = new FormData();
-        formData.append("employee_name", employeeName);
+        formData.append("employee", employeeName);
         formData.append("working_date", working_date);
         if(jam_masuk !== null & jam_keluar !== null){
           formData.append("start_from", jam_masuk);
