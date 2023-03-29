@@ -224,7 +224,7 @@ export default function ListPresence() {
                 <hr />
                   {loading && loading ?
                     <CircularProgress /> : 
-                    <Table hover bordered responsive>
+                    <Table bordered hover responsive>
                     <thead className='head_color_presence'>
                       <tr>
                         <th>Pid</th>

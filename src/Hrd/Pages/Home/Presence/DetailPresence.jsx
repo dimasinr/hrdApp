@@ -59,21 +59,6 @@ function DetailPresence() {
   
   console.log(lembur_start)
   console.log(keterangan)
-  
-  // const savedAttendace = () =>{
-  //   if(lembur_start !== null & lembur_end !== null){
-  //     if(lembur_start < lembur_end & lembur_start < jam_keluar){
-  //       Swal.fire({
-  //         icon: 'error',
-  //         text: 'Jam awal lembur tidak boleh kurang dari jam keluar atau Jam awal Lembur tidak boleh kurang dari jam akhir lembur',
-  //   })
-  //     }else{
-  //       saveAttendance()
-  //     }
-  //   }else{
-  //     saveAttendance()
-  //   }
-  // }
 
   const saveAttendance = async e => {
     try{

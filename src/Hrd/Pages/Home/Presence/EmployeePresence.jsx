@@ -46,7 +46,7 @@ function EmployeePresence() {
   }
   
   const PeriodeAbsensi = () => {
-    navigate(`/employee/absensi/periode/${user_id}/${start_date}/${end_date}`)
+    navigate(`/absensi/periode/${name_id}/${user_id}/${start_date}/${end_date}`)
   }
 
   return (

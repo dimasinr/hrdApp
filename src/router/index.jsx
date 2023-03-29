@@ -28,7 +28,6 @@ import EmployeePresence from "../Hrd/Pages/Home/Presence/EmployeePresence";
 import ListEmployeePresence from "../Hrd/Pages/Home/Presence/ListEmployeePresence";
 import AnalisaPresence from "../Hrd/Pages/Home/Presence/AnalisaPresence";
 
-import AbsensiPeriode from "../Hrd/Pages/Home/Absensi/AbsensiPeriode";
 import DayOff from "../Hrd/Pages/Home/DayOff/DayOff";
 import DayOffDetail from "../Hrd/Pages/Home/DayOff/DayOffDetail";
 
@@ -44,6 +43,7 @@ import PerizinanKaryawan from "../Karyawan/PerizinanKaryawan";
 import PengajuanKaryawan from "../Karyawan/PengajuanKaryawan";
 
 import { AuthContext } from "../Context/AuthContext";
+import PresencePeriode from "../Hrd/Pages/Home/Presence/PresencePeriode";
 
 export const AppRouter = () => {
 
@@ -80,7 +80,7 @@ export const AppRouter = () => {
                 <Route path='/absensi/' element={<ListEmployeePresence />} />
                 <Route path='/absensi/:name_id/:id' element={<EmployeePresence />} />
                 <Route path='/absensi/:name_id/:id/:month_id/:year_id' element={<AnalisaPresence />} />
-                <Route path='/absensi/periode/:name_id/:start_date/:end_date' element={<AbsensiPeriode />} />
+                <Route path='/absensi/periode/:name_id/:emp_id/:start_date/:end_date' element={<PresencePeriode />} />
 
                 <Route path='/dashboard/day-off/' element={<DayOff />} />
                 <Route path='/dashboard/day-off/:id' element={<DayOffDetail />} />
