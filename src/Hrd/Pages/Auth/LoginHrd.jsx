@@ -6,6 +6,8 @@ import { BASE_URL, API_KEY } from '../../../fetch/fetch'
 import axios from 'axios'
 import { AuthContext } from '../../../Context/AuthContext'
 import { VisibilityOff, Visibility } from '@mui/icons-material'
+import { nawastraIcon } from '../../../Components/images/images'
+import './login.css'
 
 function LoginHrd() {
 
@@ -61,34 +63,44 @@ function LoginHrd() {
 
   
   return (
-    <div style={{ height:'100vh', backgroundColor:'rgb(21, 36, 105)', display:'flex', justifyContent:'center', alignItems:'center' }}>
-       <Col md={4}>
-       <Form onSubmit={LoginUser}>
-          <div className="card shadow-card" style={{ border:'none', borderRadius:'12px' }}>
-            <div className="card-body">
-              <div className="card-title"><h5>Login</h5></div>
-              <Box sx={{ mt:1, mb:2 }}>
-                <TextField fullWidth type='text' onChange={handleChange} id='username' variant='standard' label='Username' />
-                <TextField fullWidth type={visib} onChange={handleChange} id='password' variant='standard' label='Password' />
-                <span onClick={visib === "password" ? showPassword : hiddenPassword} className="field-icon">
-                  {visib === "password" ?
-                      <Visibility style={{ color: "#80848C"}} /> : (
-                          <VisibilityOff style={{ color: "#80848C"}} />
-                      )
-                  }
-                  </span>
-              </Box>
-              <small className='text-danger'>{errors && errors}</small>
-              <div className="d-flex justify-content-end mb-3">
-                <button className='btn btn-primary' onClick={LoginUser}>Login</button>
-                {/* <button className='btn btn-primary' onClick={da}>das</button> */}
-                
-              </div>
-            </div>
-          </div>
-       </Form>
-       </Col>
-    </div>  )
+    <React.Fragment>
+        <div className='background_login'>
+          <Col md={4}>
+            <Form onSubmit={LoginUser}>
+                <div className="card shadow-card h-login-card" style={{ border:'none', borderRadius:'12px' }}>
+                  <div className="card-body">
+                    <div className="d-flex justify-content-center">
+                        <img src={nawastraIcon} className='image_login' alt="" />
+                    </div>
+                    <div className="card-title"><h5>Login</h5>
+                    <small className="text-secondary">
+                      Login dengan username & password yang sudah diberikan
+                    </small>
+                    </div>
+                    <Box sx={{ mb:2 }}>
+                      <TextField sx={{ }} fullWidth type='text' onChange={handleChange} id='username' variant='standard' label='Username' />
+                      <TextField sx={{ mt:1, mb:2 }} fullWidth type={visib} onChange={handleChange} id='password' variant='standard' label='Password' />
+                      <span onClick={visib === "password" ? showPassword : hiddenPassword} className="field-icon">
+                        {visib === "password" ?
+                            <Visibility style={{ color: "#80848C"}} /> : (
+                                <VisibilityOff style={{ color: "#80848C"}} />
+                            )
+                        }
+                        </span>
+                    </Box>
+                    <small className='text-danger'>{errors && errors}</small>
+                    <div className="d-flex justify-content-end mb-3">
+                      <button className='button_login' onClick={LoginUser}>Login</button>
+                      {/* <button className='btn btn-primary' onClick={da}>das</button> */}
+                      
+                    </div>
+                  </div>
+                </div>
+            </Form>
+          </Col>
+        </div>
+    </React.Fragment>  
+  )
 }
 
 export default LoginHrd

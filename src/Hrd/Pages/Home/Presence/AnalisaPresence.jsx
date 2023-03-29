@@ -34,9 +34,6 @@ function AnalisaPresence() {
   const [hour_lembur, setHourLembur] = useState([])
   const [minutes_lembur, setMinutesLembur] = useState([])
 
-  console.log(asce(minutes_working))
-  console.log(ascr(hour_working))
-
   const getListPengajuan = () => {
     axios.get(`${BASE_URL}/api/presence/employee/analysis/?employee=${user_id}&months=${month_id}&years=${year_id}`,{
       headers: {
@@ -68,6 +65,8 @@ function AnalisaPresence() {
         return(asce(ab.lembur_hour))
         }))
 
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
       console.log(res)
     })
   }
@@ -75,7 +74,7 @@ function AnalisaPresence() {
   useEffect(() => getListPengajuan(), [user_id, month_id, loading])
 
   const getTotalDay = () => {
-    axios.get(`${BASE_URL}/attendance/total-day/?employee_name=${name_id}&months=${month_id}`,{
+    axios.get(`${BASE_URL}/api/presence/total-day/?employee=${user_id}&months=${month_id}`,{
       headers: {
         "Authorization" : 'Token ' + USER_TOKEN
       }
@@ -87,7 +86,7 @@ function AnalisaPresence() {
     })
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => getTotalDay(), [name_id, month_id])
+  useEffect(() => getTotalDay(), [user_id, month_id])
   
     const sumData = sumTotal(minutes_working)/60
     const sumDataLembur = sumTotal(minutes_lembur)/60
@@ -98,7 +97,6 @@ function AnalisaPresence() {
     console.log(sumTotal(hour_working))
     console.log("func baru : ",dividDed(sumData, sumDataWork))
     console.log(sumTotal(minutes_working))
-    // console.log(dividDe(sumData, sumDataWork))
 
     const lemburTotal = dividDed(sumDataLembur, sumHourLembur)
     const jamKerjaA = dividDed(sumData, sumDataWork)
@@ -108,11 +106,6 @@ function AnalisaPresence() {
     const aktualLem = aktualLembur(jamKerjaA, lemburTotal)
     
     const kurangLeb = leb(aktualLem, jamKerjaS)
-
-    console.log("aktual - lembur : ", aktualLem)
-    console.log("kurang lebih : ", kurangLeb)
-    console.log("aktual lem : ", aktualLembur(jamKerjaA, lemburTotal))
-    console.log("lembur total : ", lemburTotal  )
 
     const { onDownload } = useDownloadExcel({
       currentTableRef: tableRef.current,

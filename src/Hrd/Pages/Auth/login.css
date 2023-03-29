@@ -1,0 +1,33 @@
+.image_login{
+    height: 90px;
+    width: 90px;
+}
+.background_login{
+    height: 100vh;
+    background-color: rgb(200, 201, 255);
+    background-image: url("https://images.unsplash.com/photo-1554034483-04fda0d3507b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8N3x8fGVufDB8fHx8&w=1620&q=80");
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+}
+.button_login{
+    border: none;
+    font-weight: 500;
+    background-color: rgb(56, 14, 184);   
+    color: white;
+    border-radius: 15px;
+    width: 100px;
+    height: 40px;
+}
+.button_login:hover{
+    border: none;
+    font-weight: 500;
+    background-color: rgb(35, 1, 138);   
+    color: white;
+    border-radius: 15px;
+    width: 100px;
+    height: 40px;
+}
+.h-login-card{
+    min-height: 300px;
+}

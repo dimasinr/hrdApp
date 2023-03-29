@@ -48,6 +48,8 @@ function ListEmployeePresence() {
         setListPengajuan(res)
         setLoading(false)
         console.log(res)
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

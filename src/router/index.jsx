@@ -6,20 +6,21 @@ import {
 import { ROLES } from "../fetch/fetch";
 import AuthenticationPages from "../Components/AuthenticationPages";
 import AccountSettings from "../Components/AccountSettings";
-import Maintenance from "../Components/Maintenance/Maintenance";
+// import Maintenance from "../Components/Maintenance/Maintenance";
 import Test from "../Hrd/Pages/Home/Test/Test";
 
   // Hrd
 import LoginHrd from "../Hrd/Pages/Auth/LoginHrd";
+import Dashboard from "../Hrd/Pages/Home/Dashboard";
 import HomeHrd from "../Hrd/Pages/Home/HomeHrd";
-// import NotesHrd from "../Hrd/Pages/Home/NotesHrd";
-import NotesHrdDetail from "../Hrd/Pages/Home/NotesHrdDetail";
 import DetailPerizinan from "../Hrd/Pages/Home/DetailPerizinan";
 import CalendarCuti from "../Hrd/Pages/Home/CalendarCuti";
 import ListKaryawan from "../Hrd/Pages/Home/ListKaryawan";
 import DetailEmployee from "../Hrd/Pages/Home/DetailEmployee"; 
 import EmployeeContract from "../Hrd/Pages/Home/Employee/EmployeeContract";
-import Dashboard from "../Hrd/Pages/Home/Dashboard";
+
+import Note from "../Hrd/Pages/Home/Notes/Note";
+import NoteDetail from "../Hrd/Pages/Home/Notes/NoteDetail";
 
 import ListPresence from "../Hrd/Pages/Home/Presence/ListPresence";
 import DetailPresence from "../Hrd/Pages/Home/Presence/DetailPresence";
@@ -28,11 +29,6 @@ import ListEmployeePresence from "../Hrd/Pages/Home/Presence/ListEmployeePresenc
 import AnalisaPresence from "../Hrd/Pages/Home/Presence/AnalisaPresence";
 
 import AbsensiPeriode from "../Hrd/Pages/Home/Absensi/AbsensiPeriode";
-// import DetailAbsensi from "../Hrd/Pages/Home/Absensi/DetailAbsensi";
-// import AbsensiKaryawan from "../Hrd/Pages/Home/Absensi/AbsensiKaryawan";
-// import AnalisaAbsensi from "../Hrd/Pages/Home/Absensi/AnalisaAbsensi";
-// import AbsensiDetail from "../Hrd/Pages/Home/Absensi/AbsensiDetail";
-// import ListAbsensi from "../Hrd/Pages/Home/Absensi/ListAbsensi";
 import DayOff from "../Hrd/Pages/Home/DayOff/DayOff";
 import DayOffDetail from "../Hrd/Pages/Home/DayOff/DayOffDetail";
 
@@ -69,9 +65,9 @@ export const AppRouter = () => {
                 <Route path='/home' element={<Dashboard />} />
                 <Route path='/my/test' element={<Test />} />
                 <Route path='/list-pengajuan' element={<HomeHrd />} />
-                <Route path='/notes' element={<Maintenance />} />
                 <Route path='/calendar-cuti' element={<CalendarCuti />} />
-                <Route path='/detail-notes/:id' element={<NotesHrdDetail />} />
+                <Route path='/notes' element={<Note />} />
+                <Route path='/notes/detail/:id' element={<NoteDetail />} />
                 <Route path='/perizinan/detail/:id' element={<DetailPerizinan />} />
                 <Route path='/pengajuan' element={<PengajuanKaryawan />} />
                 <Route path='/pengajuan/me' element={<PerizinanKaryawan />} />

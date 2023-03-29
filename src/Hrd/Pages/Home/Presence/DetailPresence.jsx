@@ -23,8 +23,10 @@ function DetailPresence() {
   const [lembur_total, setLemburTotal] = useState('')
   const [lembur_start, setLemburStart] = useState('')
   const [lembur_end, setLemburEnd] = useState('')
+  const [keterangan, setKeterangan] = useState('')
   const [working_date, setWorkingDate] = useState(new Date())
 
+  
   const convDate = (newdate) => {
     let event = new Date(newdate);
     let dated = JSON.stringify(event);
@@ -47,27 +49,31 @@ function DetailPresence() {
       setLemburTotal(res.lembur_hour)
       setTotalJam(res.working_hour)
       setWorkingDate(res.working_date)
+      setKeterangan(res.ket)
       console.log(res)
       window.scrollTo({ top: 0, behavior: 'smooth' });
     })
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => getAttendanceEmp(), [id_att])
-
-  const savedAttendace = () =>{
-    if(lembur_start !== null & lembur_end !== null){
-      if(lembur_start < lembur_end & lembur_start < jam_keluar){
-        Swal.fire({
-          icon: 'error',
-          text: 'Jam awal lembur tidak boleh kurang dari jam keluar atau Jam awal Lembur tidak boleh kurang dari jam akhir lembur',
-    })
-      }else{
-        saveAttendance()
-      }
-    }else{
-      saveAttendance()
-    }
-  }
+  
+  console.log(lembur_start)
+  console.log(keterangan)
+  
+  // const savedAttendace = () =>{
+  //   if(lembur_start !== null & lembur_end !== null){
+  //     if(lembur_start < lembur_end & lembur_start < jam_keluar){
+  //       Swal.fire({
+  //         icon: 'error',
+  //         text: 'Jam awal lembur tidak boleh kurang dari jam keluar atau Jam awal Lembur tidak boleh kurang dari jam akhir lembur',
+  //   })
+  //     }else{
+  //       saveAttendance()
+  //     }
+  //   }else{
+  //     saveAttendance()
+  //   }
+  // }
 
   const saveAttendance = async e => {
     try{
@@ -79,11 +85,11 @@ function DetailPresence() {
           formData.append("end_from", jam_keluar);
         }
         if(lembur_start !== null & lembur_end !== null){
-          // if(lembur_start <= lembur_end & lembur_start > jam_keluar){
           formData.append("lembur_start", lembur_start);
           formData.append("lembur_end", lembur_end);
-          // }
         }
+        formData.append("ket", keterangan)
+
        await axios({
             method: 'put',
             url:`${BASE_URL}/api/presence/employees/${id_att}/`,
@@ -94,7 +100,7 @@ function DetailPresence() {
         })
         Swal.fire({
             icon: 'success',
-            title: `Data Berhasil dibuat`,
+            text: `Berhasil di perbaharui`,
             showConfirmButton: false,
             timer: 1500
           })
@@ -107,7 +113,7 @@ function DetailPresence() {
                 ){
                     Swal.fire({
                       icon: 'error',
-                      title: 'Gagal',
+                      text: `Gagal diperbaharui`,
                   // text: `${error.response.data.detail}`
                 })
                 console.log(error)
@@ -126,7 +132,7 @@ function DetailPresence() {
             })
             Swal.fire({
                 icon: 'success',
-                title: `Data Berhasil dihapus`,
+                text: `Berhasil dihapus`,
                 showConfirmButton: false,
                 timer: 1500
               })
@@ -139,9 +145,10 @@ function DetailPresence() {
                     ){
                         Swal.fire({
                           icon: 'error',
-                          title: 'Gagal',
+                          text: 'Gagal',
                       // text: `${error.response.data.detail}`
                     })
+                    console.log(error)
                 }
             }
           };
@@ -217,7 +224,7 @@ function DetailPresence() {
                             </LocalizationProvider>
                          </Box>
                       <div className="d-flex justify-content-end">
-                            <button onClick={savedAttendace} className="btn text-primary" style={{ marginRight:'20px' }}>Simpan</button>
+                            <button onClick={saveAttendance} className="btn text-primary" style={{ marginRight:'20px' }}>Simpan</button>
                             <button onClick={deleteAttendance} className="btn text-danger"><Delete /></button>
                       </div>
                       <Box>

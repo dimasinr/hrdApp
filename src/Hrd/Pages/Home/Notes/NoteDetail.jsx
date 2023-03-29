@@ -8,15 +8,15 @@ import { ArrowBackIos, Delete, Edit } from '@mui/icons-material';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { BASE_URL, USER_TOKEN } from '../../../fetch/fetch';
+import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch';
 import Swal from 'sweetalert2';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import SideBar from '../../Components/SideBar';
+import SideBar from '../../../Components/SideBar';
+import { dataNotes } from './array';
 
 const columns = [
   { field: 'id', headerName: 'Id', width: 70 },
-  { field: 'employee_name', headerName: 'Nama Karyawan', width: 190 },
   { field: 'date_note', headerName: 'Tanggal Catatan', width: 180 },
   { field: 'type_notes', headerName: 'Type', width: 120 },
   { field: 'notes', headerName: 'Notes', width: 520 },
@@ -35,38 +35,39 @@ const LoadingSkeleton = () => (
     </Box>
   );
 
-function NotesHrdDetail() {
+function NoteDetail() {
 
     const navigate = useNavigate()
     const location = useLocation()
-    const ids = location.pathname.split('/')[2]
-    const [name, setName] = React.useState([])
-    const [date_note, setDates] = React.useState([])
-    const [notes, setNotes] = React.useState([])
-    const [type_notes, setTypeNotes] = React.useState([])
+    const ids = location.pathname.split('/')[3]
+    const [employee, setEmployee] = React.useState('')
+    const [date_note, setDates] = React.useState('')
+    const [notes, setNotes] = React.useState('')
+    const [type_notes, setTypeNotes] = React.useState('')
     const [listNotes, setListNotes] = React.useState([])
     const [loading, setLoading] = React.useState(true)
 
     const getEmployee = () => {
-        axios.get(`${BASE_URL}/notes/employee/${ids}/`,{
+        axios.get(`${BASE_URL}/api/note/employee-notes/${ids}/`,{
           headers: {
             "Authorization" : 'Token ' + USER_TOKEN
           }
         })
         .then((response) => {
           const res = response.data
-          setName(res.employee_name)
+          setEmployee(res.employee.pk)
           setDates(res.date_note)
           setTypeNotes(res.type_notes)
           setNotes(res.notes)
           console.log(res)
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         })
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
       React.useEffect(() => getEmployee(), [ids])
 
     const getListNotesEmployee = () => {
-        axios.get(`${BASE_URL}/notes/list/?employee_name=${name}`,{
+        axios.get(`${BASE_URL}/api/note/list-notes/?employee_id=${employee}`,{
           headers: {
             "Authorization" : 'Token ' + USER_TOKEN
           }
@@ -79,22 +80,22 @@ function NotesHrdDetail() {
         })
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      React.useEffect(() => getListNotesEmployee(), [name])
+      React.useEffect(() => getListNotesEmployee(), [employee])
     
       const handleRowClick = (params) => {
-        navigate(`/detail-perizinan/${params.row.id}`)
+        navigate(`/notes/detail/${params.row.id}`)
       };
 
       const editNotes = async e => {
         try{
             const formData = new FormData();
-            formData.append("employee_name", name);
+            formData.append("employee", employee);
             formData.append("date_note", date_note);
             formData.append("notes", notes);
             formData.append("type_notes", type_notes);
            await axios({
                 method: 'put',
-                url:`${BASE_URL}/notes/employee/${ids}/`,
+                url:`${BASE_URL}/api/note/employee-notes/${ids}/`,
                 data: formData,
                 headers: {
                     "Authorization" : `Token ${USER_TOKEN}`
@@ -126,7 +127,7 @@ function NotesHrdDetail() {
       try{
          await axios({
               method: 'delete',
-              url:`${BASE_URL}/notes/employee/${ids}/`,
+              url:`${BASE_URL}/api/note/employee-notes/${ids}/`,
               headers: {
                   "Authorization" : `Token ${USER_TOKEN}`
                 }
@@ -154,14 +155,14 @@ function NotesHrdDetail() {
 
   const [employees, setEmployees] = React.useState([])
   const getEmployees = () => {
-    axios.get(`${BASE_URL}/users/employees/?limit=50&offset=0`,{
+    axios.get(`${BASE_URL}/users/employee/search/`,{
       headers: {
         "Authorization" : 'Token ' + USER_TOKEN
       }
     })
     .then((response) => {
       const res = response.data
-      setEmployees(res.results)
+      setEmployees(res)
       console.log(res)
     })
   }
@@ -175,43 +176,14 @@ function NotesHrdDetail() {
   }
 
   const handleChange = (event) => {
-    setName(event.target.value);
+    setEmployee(event.target.value);
   };
 
   const changeNotes = (event) => {
     setTypeNotes(event.target.value);
   };
 
-  const dataNotes = [
-    {
-      'id' : 1,
-      'name' : 'catatan'
-    },
-    {
-      'id' : 2,
-      'name' : 'masuk'
-    },
-    {
-      'id' : 3,
-      'name' : 'tidak masuk'
-    },
-    {
-      'id' : 4,
-      'name' : 'cuti'
-    },
-    {
-      'id' : 5,
-      'name' : 'izin'
-    },
-    {
-      'id' : 6,
-      'name' : 'sakit'
-    },
-    {
-      'id' : 7,
-      'name' : 'lembur'
-    },
-  ]
+  console.log(employees)
 
   return (
     <React.Fragment>
@@ -219,47 +191,43 @@ function NotesHrdDetail() {
         <div className="d-flex">
         <SideBar />
           <div id="image__background" style={{ marginTop:'62px' }}>
+            <div className='color_bar'>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
               <main className="p-3 ">
                   <div className='d-flex justify-content-center'>
                       <Col md={12} sm={12}>
                           <div className="card shadow_card" style={{ border:'none', borderRadius:'12px' }}>
                               <div className="card-body">
-                                  {/* <div className="card-title"> */}
                                       <button onClick={() => navigate('/notes')} className="d-flex align-items-center btn">
                                           <ArrowBackIos />
-                                          <h5>Detail Karyawan</h5>
+                                          <h5 style={{ marginTop:'5px'}}>Detail Karyawan</h5>
                                       </button>
-                                      {/* </div> */}
-                                      {/* <Col md={3}>
-                                          <div className="d-flex justify-content-between">
-                                            <button onClick={() => navigate('/home')} className={ids === 'home' ? 'btn btn-secondary' : 'btn btn-primary'}>List Pengajuan Karyawan</button>
-                                            <button onClick={() => navigate('/notes')}  className={ids !== 'home' ? 'btn btn-secondary' : 'btn btn-primary'}>Notes HRD</button>
-                                          </div>
-                                      </Col> */}
 
                                       <Col md={12} className='mb-2 text-secondary d-flex'>
                                         <Col md={12} className="mt-2">
                                           <div className="d-flex justify-content-between">
                                             <Box sx={{ mr:2 }}>
-                                                {/* <TextField value={name} disabled label='Nama karyawan' sx={{ mt:3, mr:1 }}  /> */}
-                                                <FormControl fullWidth sx={{ mt: 3, maxWidth: 650}}>
-                                                    <InputLabel id="role-label">Nama Karyawan</InputLabel>
+                                                <FormControl fullWidth sx={{ mt: 2, mr:2, maxWidth: 190}}>
+                                                    <InputLabel id="employee-label">Nama Karyawan</InputLabel>
                                                     <Select
-                                                    labelId="role"
-                                                    id="role"
-                                                    value={name}
+                                                    labelId="employee"
+                                                    id="employee"
+                                                    value={employee}
                                                     onChange={handleChange}
-                                                    label="Roles"
+                                                    label="Employee"
                                                     >
-                                                        {employees && employees.map((rol, index) => {
+                                                        {employees && employees.map((emp, index) => {
                                                             return(
-                                                                <MenuItem key={index} value={rol.name}>{rol.name}</MenuItem>
+                                                                <MenuItem key={index} value={emp.pk}>{emp.name}</MenuItem>
                                                             )
                                                         })}
                                                     
                                                     </Select>
                                                 </FormControl>
-                                                <FormControl fullWidth sx={{ mt: 3, maxWidth: 190, mr:1 }}>
+                                                <FormControl fullWidth sx={{ mt: 2, maxWidth: 190, mr:1 }}>
                                                     <InputLabel id="type-notes-label">Tipe Notes</InputLabel>
                                                     <Select
                                                     labelId="type-notes"
@@ -283,7 +251,7 @@ function NotesHrdDetail() {
                                                     onChange={(newValue) => {
                                                         convDate(newValue);
                                                     }}
-                                                    renderInput={(params) => <TextField variant='outlined' sx={{ mt:3 }} {...params} />}
+                                                    renderInput={(params) => <TextField variant='outlined' sx={{ mt:2 }} {...params} />}
                                                     />
                                                 </LocalizationProvider>
                                                 {/* <TextField value={date_note} onChange={e => setDates(e.target.value)} label='Tanggal Catatan' sx={{ mt:3, mr:1 }}  /> */}
@@ -338,4 +306,4 @@ function NotesHrdDetail() {
   )
 }
 
-export default NotesHrdDetail
+export default NoteDetail

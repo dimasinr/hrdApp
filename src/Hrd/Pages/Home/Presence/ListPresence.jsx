@@ -37,7 +37,6 @@ const StyledPagination = styled(Pagination)({
   },
 });
 
-
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -51,10 +50,11 @@ export default function ListPresence() {
   const [open, setOpen] = useState(false)
   const [loadingBut, setLoadingBut] = useState('Tambah')
 
-  const [employee_names, setEmployeeName] = React.useState('')
+  const [employee_id, setEmployeeName] = React.useState('')
   const [working_hour, setWorkingHour] = React.useState('')
   const [lembur_hour, setLemburHour] = React.useState('')
   const [dates, setDates] = React.useState(new Date().toISOString().slice(0,10))
+  const keterangan = ""
 
   const [employeeS, setEmployeeS] = useState([])
   const [list_presence, setListPresence] = useState([])
@@ -74,6 +74,8 @@ export default function ListPresence() {
       setListPresence(res.results)
       setLoading(false)
       console.log(res)
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
     })
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -110,7 +112,7 @@ export default function ListPresence() {
   const addNewAttendance = async e => {
   try{
       const formData = new FormData();
-      formData.append("employee_name", employee_names);
+      formData.append("employee", employee_id);
       formData.append("working_date", dates);
       if(working_hour !== ''){
         formData.append("start_from", jam_masuk);
@@ -120,9 +122,10 @@ export default function ListPresence() {
         formData.append("lembur_start", lembur_start);
         formData.append("lembur_end", lembur_end);
       }
-     await axios({
+      formData.append("ket", keterangan)
+     const res = await axios({
           method: 'post',
-          url:`${BASE_URL}/attendance/employees/`,
+          url:`${BASE_URL}/api/presence/employees/`,
           data: formData,
           headers: {
               "Authorization" : `Token ${USER_TOKEN}`
@@ -131,12 +134,13 @@ export default function ListPresence() {
       setOpen(false)
       Swal.fire({
           icon: 'success',
-          title: `Data Berhasil dibuat`,
+          text: `${res.data.message}`,
           showConfirmButton: false,
           timer: 1500
         })
         setLoadingBut('simpan')
         getListPresence()
+      console.log(res)
       }catch(error){
           if( error.response &&
               error.response.status >= 400 &&
@@ -144,12 +148,13 @@ export default function ListPresence() {
               ){
                   Swal.fire({
                     icon: 'error',
-                    title: 'Gagal',
+                    text: `${error.response.data.message}`,
                 // text: `${error.response.data.detail}`
               })
               setLoadingBut('Tambah')
               setOpen(false)
               getListPresence()
+              console.log(error)
           }
       }
     };
@@ -293,7 +298,7 @@ export default function ListPresence() {
                         <Select
                         labelId="division"
                         id="division"
-                        value={employee_names}
+                        value={employee_id}
                         onChange={handleChanged}
                         label="Divisi"
                         >
@@ -305,7 +310,7 @@ export default function ListPresence() {
                         
                         </Select>
                     </FormControl>
-                    {/* <TextField value={employee_names} fullWidth onChange={e => setEmployeeName(e.target.value)} sx={{ mr:1 }} label='Nama Karyawan' /> */}
+                    {/* <TextField value={employee_id} fullWidth onChange={e => setEmployeeName(e.target.value)} sx={{ mr:1 }} label='Nama Karyawan' /> */}
                     
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <MobileDatePicker

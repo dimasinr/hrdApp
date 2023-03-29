@@ -14,7 +14,6 @@ export function aktualLembur(x,y){
       if(slics > 59){
         return varD-40
       }else{
-        console.log("hi", slics)
         return varD
       }
     }else if(len === 2){
@@ -36,7 +35,6 @@ export function leb(x,y){
       if(slics > 59){
         return varD-40
       }else{
-        console.log("hi", slics)
         return varD
       }
     }else if(len === 2){
@@ -53,13 +51,9 @@ export function leb(x,y){
   //         return a+b;
   //     }, 0);
   //     const lent = results.toString().length 
-  //     console.log(results)
   //     var ce = lent-2
   //     const sliced = results.toString().slice(ce, lent)
   //     const ac = results+70
-  //     console.log(sliced)
-  //     console.log(ce)
-  //     console.log(lent)
   //     // if(sliced < 60 ){
   //     //   return results
   //     // }else{
@@ -72,7 +66,6 @@ export function leb(x,y){
   //         return ac-40
   //       }else{
   //         const av = ac-40
-  //         console.log(av)
   //         return av
   //       }
   //     }else if(lent === 2){
@@ -106,7 +99,6 @@ export function asce(a){
       // eslint-disable-next-line no-redeclare
       var str = a.toString()
     }
-    // console.log(str)
     let leng = str.length
     if(leng === 1){
         var val = 1
@@ -153,13 +145,9 @@ export function ascr(a){
 
 export function dividDed(x, y){
   const removedDecimal = Math.trunc(x); // 2
-  console.log(removedDecimal)
   const dataX = parseInt(y)
-  console.log(dataX)
   const dataY = removedDecimal+dataX
-  console.log(dataY)
   const minDec = x-removedDecimal // 0.93
-  console.log(minDec)
   var data = minDec*60 // 56
   var fixedNum = Math.round(data)
   if(fixedNum === 0){
@@ -168,7 +156,6 @@ export function dividDed(x, y){
     fixedNum = Math.round(data)
   }
   const varXY =  dataY+''+fixedNum
-  console.log(varXY)
   return parseInt(varXY)
 }
 
