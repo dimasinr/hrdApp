@@ -71,7 +71,7 @@ function DayOff() {
     }
 
     const getOffDay = () => {
-        axios.get(`${BASE_URL}/api/dashboard/employee-dashboard/`,{
+        axios.get(`${BASE_URL}/api/dashboard/employee-dashboard/?limit=100`,{
           headers: {
             "Authorization" : `Token ${USER_TOKEN}`
           }

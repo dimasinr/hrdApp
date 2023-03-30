@@ -36,7 +36,7 @@ function Dashboard() {
       useEffect(() => getDates(), [])
 
       const getOffDay = () => {
-        axios.get(`${BASE_URL}/api/dashboard/employee-dashboard/`,{
+        axios.get(`${BASE_URL}/api/dashboard/employee-dashboard/?limit=15`,{
           headers: {
             "Authorization" : `Token ${USER_TOKEN}`
           }
@@ -51,7 +51,7 @@ function Dashboard() {
       useEffect(() => getOffDay(), [])
 
     const getTopFive = () => {
-        axios.get(`${BASE_URL}/api/employee/best_of/?start_date=2023-01-01&end_date=2023-04-01`,{
+        axios.get(`${BASE_URL}/api/employee/best_of/?start_date=2023-01-01&end_date=2024-01-01`,{
           headers: {
             "Authorization" : `Token ${USER_TOKEN}`
           }
@@ -272,7 +272,7 @@ function Dashboard() {
                                             return(
                                                 <li key={index}>
                                                     <div className='d-flex justify-content-between'>
-                                                        <span style={{ fontSize:'14px' }}>{dayO.title_day}</span>
+                                                        <span style={{ fontSize:'14px' }}>{dayO.title_day.length > 10 ? dayO.title_day.slice(0,13) + '...' : dayO.title_day }</span>
                                                         <span style={{ fontSize:'14px' }}>{datesUpt(dayO.date)}</span>
                                                     </div>
                                                 </li>
