@@ -11,16 +11,10 @@ import { MobileDatePicker } from '@mui/x-date-pickers';
 import { useState, useEffect } from 'react';
 import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch';
 import axios from 'axios';
-import Swal from 'sweetalert2';
 import { Col, Row } from 'react-bootstrap';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowBackIos } from '@mui/icons-material';
-import {CircularProgress} from '@mui/material';
-
-
-// const Transition = React.forwardRef(function Transition(props, ref) {
-//     return <Slide direction="up" ref={ref} {...props} />;
-//   });
+import {CircularProgress, Snackbar, Alert} from '@mui/material';
 
 function DayOffDetail() {
 
@@ -39,6 +33,14 @@ function DayOffDetail() {
 
     const type_day = 'national'
 
+    // snackbar
+    const [snack, setSnack] = React.useState(false);
+    const [status, setStatus] = React.useState('info');
+    const [message, setMessage] = React.useState('');
+
+    const handleClose = () => {
+    setSnack(false)
+    };
 
     const getOffDay = () => {
         axios.get(`${BASE_URL}/dashboard/employee-dashboard/${off_id}/`,{
@@ -76,24 +78,19 @@ function DayOffDetail() {
                     "Authorization" : `Token ${USER_TOKEN}`
                   }
             })
-            Swal.fire({
-                icon: 'success',
-                title: `Data Berhasil di update`,
-                showConfirmButton: false,
-                timer: 1500
-              })
-              getOffDay()
-              navigate(-1)
+            setSnack(true)
+            setStatus('info')
+            setMessage('Data Berhasil di ubah')
+            getOffDay()
+            navigate(-1)
         }catch(error){
             if( error.response &&
                 error.response.status >= 400 &&
                 error.response.status <= 500
                 ){
-                    Swal.fire({
-                        icon: 'error',
-                  title: 'Oops...',
-                  text: `${error.response.data.detail}`
-                })
+                setSnack(true)
+                setStatus('error')
+                setMessage(`${error.response.data.detail}`)
             }
         }
     };
@@ -107,23 +104,18 @@ function DayOffDetail() {
                     "Authorization" : `Token ${USER_TOKEN}`
                   }
             })
-            Swal.fire({
-                icon: 'success',
-                title: `Data Berhasil di hapus`,
-                showConfirmButton: false,
-                timer: 1500
-              })
+            setSnack(true)
+            setStatus('success')
+            setMessage('Data Berhasil dihapus')
               getOffDay()
         }catch(error){
             if( error.response &&
                 error.response.status >= 400 &&
                 error.response.status <= 500
                 ){
-                    Swal.fire({
-                        icon: 'error',
-                  title: 'Oops...',
-                  text: `${error.response.data.detail}`
-                })
+                setSnack(true)
+                setStatus('error')
+                setMessage(`${error.response.data.detail}`)
             }
         }
     };
@@ -236,6 +228,18 @@ function DayOffDetail() {
                     </div>
                 </div>
             </Col>
+
+            <Snackbar
+              anchorOrigin={{ vertical : 'top', horizontal: 'right' }}
+              open={snack}
+              onClose={handleClose}
+              autoHideDuration={6000}
+              // key={vertical + horizontal}
+            >
+              <Alert onClose={handleClose} severity={status} sx={{ width: '100%' }}>
+              {message && message}
+            </Alert>
+            </Snackbar>
 
         </main>
     </div>

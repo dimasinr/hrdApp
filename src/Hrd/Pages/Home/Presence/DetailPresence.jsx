@@ -2,10 +2,9 @@ import React,{useState, useEffect} from 'react'
 import SideBar from '../../../Components/SideBar'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { ArrowBackIos, Delete } from '@mui/icons-material'
-import { Box, TextField, InputLabel, Select, FormControl, MenuItem } from '@mui/material'
+import { Box, TextField, InputLabel, Select, FormControl, MenuItem, Snackbar, Alert } from '@mui/material'
 import axios from 'axios'
 import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch'
-import Swal from 'sweetalert2'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
@@ -26,6 +25,14 @@ function DetailPresence() {
   const [keterangan, setKeterangan] = useState('')
   const [working_date, setWorkingDate] = useState(new Date())
 
+    // snackbar
+    const [snack, setSnack] = React.useState(false);
+    const [status, setStatus] = React.useState('info');
+    const [message, setMessage] = React.useState('');
+  
+    const handleClose = () => {
+      setSnack(false)
+    };
   
   const convDate = (newdate) => {
     let event = new Date(newdate);
@@ -83,24 +90,18 @@ function DetailPresence() {
                 "Authorization" : `Token ${USER_TOKEN}`
               }
         })
-        Swal.fire({
-            icon: 'success',
-            text: `Berhasil di perbaharui`,
-            showConfirmButton: false,
-            timer: 1500
-          })
+          setSnack(true)
+          setStatus('success')
+          setMessage('data berhasil di perbaharui')
           getEmployeeData()
-          navigate(-1)
         }catch(error){
             if( error.response &&
                 error.response.status >= 400 &&
                 error.response.status <= 500
                 ){
-                    Swal.fire({
-                      icon: 'error',
-                      text: `Gagal diperbaharui`,
-                  // text: `${error.response.data.detail}`
-                })
+                setSnack(true)
+                setStatus('error')
+                setMessage('data gagal di perbaharui')
                 console.log(error)
             }
         }
@@ -115,24 +116,19 @@ function DetailPresence() {
                     "Authorization" : `Token ${USER_TOKEN}`
                   }
             })
-            Swal.fire({
-                icon: 'success',
-                text: `Berhasil dihapus`,
-                showConfirmButton: false,
-                timer: 1500
-              })
-              console.log(res)
-              navigate(-1)
+            setSnack(true)
+            setStatus('info')
+            setMessage('Absensi berhasil dihapus')
+            console.log(res)
+            navigate(-1)
             }catch(error){
                 if( error.response &&
                     error.response.status >= 400 &&
                     error.response.status <= 500
                     ){
-                        Swal.fire({
-                          icon: 'error',
-                          text: 'Gagal',
-                      // text: `${error.response.data.detail}`
-                    })
+                    setSnack(true)
+                    setStatus('error')
+                    setMessage('Absensi gagal di perbaharui')
                     console.log(error)
                 }
             }
@@ -224,6 +220,17 @@ function DetailPresence() {
                       </Box>
                   </div>
                 </div>
+                <Snackbar
+              anchorOrigin={{ vertical : 'top', horizontal: 'right' }}
+              open={snack}
+              onClose={handleClose}
+              autoHideDuration={6000}
+              // key={vertical + horizontal}
+            >
+              <Alert onClose={handleClose} severity={status} sx={{ width: '100%' }}>
+              {message && message}
+            </Alert>
+            </Snackbar>
             </main>
         </div>
     </div>

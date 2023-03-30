@@ -11,10 +11,9 @@ import { MobileDatePicker } from '@mui/x-date-pickers';
 import { useState, useEffect } from 'react';
 import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch';
 import axios from 'axios';
-import Swal from 'sweetalert2';
 import { Col } from 'react-bootstrap';
 import { DataGrid } from '@mui/x-data-grid';
-import {Skeleton} from '@mui/material';
+import {Skeleton, Snackbar, Alert} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { ArrowBackIos } from '@mui/icons-material';
 
@@ -58,12 +57,21 @@ function DayOff() {
     const dated = tanggal.toISOString().slice(0,10)
     const type_day = 'national'
 
+    // snackbar
+    const [snack, setSnack] = React.useState(false);
+    const [status, setStatus] = React.useState('info');
+    const [message, setMessage] = React.useState('');
+  
+    const handleClose = () => {
+      setSnack(false)
+    };
+
     const handleClick = () => {
         setOpen(!open)
     }
 
     const getOffDay = () => {
-        axios.get(`${BASE_URL}/dashboard/employee-dashboard/`,{
+        axios.get(`${BASE_URL}/api/dashboard/employee-dashboard/`,{
           headers: {
             "Authorization" : `Token ${USER_TOKEN}`
           }
@@ -87,29 +95,25 @@ function DayOff() {
             formData.append("type_day", type_day);
            await axios({
                 method: 'post',
-                url:`${BASE_URL}/dashboard/employee-dashboard/`,
+                url:`${BASE_URL}/api/dashboard/employee-dashboard/`,
                 data: formData,
                 headers: {
                     "Authorization" : `Token ${USER_TOKEN}`
                   }
             })
-            Swal.fire({
-                icon: 'success',
-                title: `Data Berhasil ditambah`,
-                showConfirmButton: false,
-                timer: 1500
-              })
-              getOffDay()
+            setOpen(false)
+            setSnack(true)
+            setStatus('info')
+            setMessage('Hari Libur berhasil di tambah')
+            getOffDay()
         }catch(error){
             if( error.response &&
                 error.response.status >= 400 &&
                 error.response.status <= 500
                 ){
-                    Swal.fire({
-                        icon: 'error',
-                  title: 'Oops...',
-                  text: `${error.response.data.detail}`
-                })
+                setSnack(true)
+                setStatus('error')
+                setMessage(`${error.response.data.detail}`)
             }
         }
     };
@@ -118,28 +122,23 @@ function DayOff() {
         try{
            await axios({
                 method: 'delete',
-                url:`${BASE_URL}/dashboard/employee-dashboard/${searchFirst}/`,
+                url:`${BASE_URL}/api/dashboard/employee-dashboard/${searchFirst}/`,
                 headers: {
                     "Authorization" : `Token ${USER_TOKEN}`
                   }
             })
-            Swal.fire({
-                icon: 'success',
-                title: `Data Berhasil di hapus`,
-                showConfirmButton: false,
-                timer: 1500
-              })
-              getOffDay()
+            setSnack(true)
+            setStatus('info')
+            setMessage(`Data berhasil dihapus`)
+            getOffDay()
         }catch(error){
             if( error.response &&
                 error.response.status >= 400 &&
                 error.response.status <= 500
                 ){
-                    Swal.fire({
-                        icon: 'error',
-                  title: 'Oops...',
-                  text: `${error.response.data.detail}`
-                })
+                setSnack(true)
+                setStatus('error')
+                setMessage(`${error.response.data.detail}`)
             }
         }
     };
@@ -273,6 +272,17 @@ function DayOff() {
                     </DialogActions>
                 </Dialog>
 
+                <Snackbar
+              anchorOrigin={{ vertical : 'top', horizontal: 'right' }}
+              open={snack}
+              onClose={handleClose}
+              autoHideDuration={6000}
+              // key={vertical + horizontal}
+            >
+              <Alert onClose={handleClose} severity={status} sx={{ width: '100%' }}>
+              {message && message}
+            </Alert>
+            </Snackbar>
         
         </main>
     </div>

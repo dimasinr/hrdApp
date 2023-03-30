@@ -87,18 +87,10 @@ function PengajuanKaryawan() {
     const tanggal_akhir = end_date.toISOString().slice(0,10)
     const masuk_kembali = back_date.toISOString().slice(0,10)
 
-    // console.log(tanggal_awal.slice(0,4)+tanggal_awal.slice(8,10)+tanggal_awal.slice(5,7))
-
-    // console.log(cy(total(tanggal_awal.slice(0,4),tanggal_awal.slice(8,10),tanggal_awal.slice(5,7)),total(tanggal_akhir.slice(0,4),tanggal_akhir.slice(8,10),tanggal_akhir.slice(5,7))))
-
-    // console.log(total(tanggal_awal.slice(0,4),tanggal_awal.slice(8,10),tanggal_awal.slice(5,7)))
-
     const submitPetitions = async e => {
         try{
             const formData = new FormData();
-            formData.append("employee_name", NAMES);
-            formData.append("employee_id", USER_ID);
-            formData.append("division", bagian);
+            formData.append("employee", USER_ID);
             formData.append("permission_type", jenis);
             if(jenis === 'lembur'){
                 formData.append("from_hour", lembur_str);

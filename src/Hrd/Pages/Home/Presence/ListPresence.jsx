@@ -6,7 +6,7 @@ import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch'
 import { CircularProgress } from '@mui/material'
 import { workHour, totalWorkHour, datesUpt, totalWorking, changeDayName } from '../../../../Components/utilsFunction/functionUtils'
 import { TextField, Box, FormControl, Select, InputLabel, MenuItem } from '@mui/material'
-import {Slide, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
+import {Slide, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, Alert} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Pagination from '@mui/material/Pagination';
 import SideBar from '../../../Components/SideBar'
@@ -14,7 +14,6 @@ import { Visibility } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 import { bulan } from './utlis/arrayfuc'
 import { zeta, delta } from './utlis/utlis'
-import Swal from 'sweetalert2'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
@@ -61,6 +60,15 @@ export default function ListPresence() {
   const [presence_paginate, setPresencePaginate] = useState([])
   const [currentPage, setCurrentPage] = useState(0);
   const [offSet, setOffSet] = useState(0)
+
+  // snackbar
+  const [snack, setSnack] = React.useState(false);
+  const [status, setStatus] = React.useState(false);
+  const [message, setMessage] = React.useState(false);
+
+  const handleClose = () => {
+    setSnack(false)
+  };
 
   const getListPresence = () => {
     axios.get(`${BASE_URL}/api/presence/employees/?limit=15&offset=${offSet}&employee=${search_name}&months=${search_month}`,{
@@ -132,27 +140,22 @@ export default function ListPresence() {
             }
       })
       setOpen(false)
-      Swal.fire({
-          icon: 'success',
-          text: `${res.data.message}`,
-          showConfirmButton: false,
-          timer: 1500
-        })
-        setLoadingBut('simpan')
-        getListPresence()
+      setMessage(`${res.data.message}`)
+      setStatus('info')
+      setSnack(true)
+      setLoadingBut('simpan')
+      getListPresence()
       console.log(res)
       }catch(error){
           if( error.response &&
               error.response.status >= 400 &&
               error.response.status <= 500
               ){
-                  Swal.fire({
-                    icon: 'error',
-                    text: `${error.response.data.message}`,
-                // text: `${error.response.data.detail}`
-              })
               setLoadingBut('Tambah')
               setOpen(false)
+              setMessage(`${error.response.data.message}`)
+              setStatus('info')
+              setSnack(true)
               getListPresence()
               console.log(error)
           }
@@ -340,6 +343,18 @@ export default function ListPresence() {
                 <Button onClick={loadAttendance}>{loadingBut && loadingBut}</Button>
               </DialogActions>
             </Dialog>
+
+            <Snackbar
+              anchorOrigin={{ vertical : 'top', horizontal: 'right' }}
+              open={snack}
+              onClose={handleClose}
+              autoHideDuration={6000}
+              // key={vertical + horizontal}
+            >
+              <Alert onClose={handleClose} severity={status} sx={{ width: '100%' }}>
+              {message && message}
+            </Alert>
+            </Snackbar>
              
           </main>
       </div>

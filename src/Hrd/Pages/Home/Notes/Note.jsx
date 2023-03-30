@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 import axios from 'axios'
 import styled from '@emotion/styled'
-import Swal from 'sweetalert2'
 import SideBar from '../../../Components/SideBar'
 import { Col } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
@@ -15,6 +14,7 @@ import { tahun, dataNotes } from './array'
 import { Table } from 'react-bootstrap'
 import { Visibility } from '@mui/icons-material'
 import { datesUpt } from '../../../../Components/utilsFunction/functionUtils'
+import {Snackbar, Alert} from '@mui/material'
 
 const StyledPagination = styled(Pagination)({
     display: 'flex',
@@ -70,6 +70,15 @@ function Note() {
       setSearchMonth(event.target.value);
     };
 
+    // snackbar
+    const [snack, setSnack] = React.useState(false);
+    const [status, setStatus] = React.useState('');
+    const [message, setMessage] = React.useState('');
+
+    const handleClose = () => {
+      setSnack(false)
+    };
+
      const getListPengajuan = () => {
       axios.get(`${BASE_URL}/api/note/employee-notes/?limit=10&offset=${offSet}&employee_name=${employees_name}&date_note=${note_dates}&bulan=${month}&tahun=${year}`,{
         headers: {
@@ -115,13 +124,10 @@ function Note() {
               }
         })
         setOpen(false)
-        Swal.fire({
-            icon: 'success',
-            title: `Data Berhasil dibuat`,
-            showConfirmButton: false,
-            timer: 1500
-          })
         setEmployee('')
+        setSnack(true)
+        setStatus('info')
+        setMessage('Berhasil membuat notes')
         setTanggal(new Date().toISOString().slice(0,10))
         setNotesEmployee('')
         getListPengajuan()
@@ -130,11 +136,9 @@ function Note() {
             error.response.status >= 400 &&
             error.response.status <= 500
             ){
-                Swal.fire({
-                    icon: 'error',
-              title: 'Oops...',
-              text: `${error.response.data.detail}`
-            })
+            setStatus('error')
+            setMessage(`${error.response.data.detail}`)
+            setSnack(true)
             setOpen(false)
         }
     }
@@ -289,6 +293,17 @@ function Note() {
                             </div>
                         </div>
                     </Col>
+                    <Snackbar
+                      anchorOrigin={{ vertical : 'top', horizontal: 'right' }}
+                      open={snack}
+                      onClose={handleClose}
+                      autoHideDuration={6000}
+                      // key={vertical + horizontal}
+                    >
+                      <Alert onClose={handleClose} severity={status} sx={{ width: '100%' }}>
+                      {message && message}
+                    </Alert>
+                    </Snackbar>
                     <Dialog
                     open={open}
                     TransitionComponent={Transition}

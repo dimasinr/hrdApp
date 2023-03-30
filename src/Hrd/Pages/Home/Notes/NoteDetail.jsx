@@ -9,11 +9,11 @@ import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch';
-import Swal from 'sweetalert2';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import SideBar from '../../../Components/SideBar';
 import { dataNotes } from './array';
+import {Snackbar, Alert} from '@mui/material';
 
 const columns = [
   { field: 'id', headerName: 'Id', width: 70 },
@@ -46,6 +46,15 @@ function NoteDetail() {
     const [type_notes, setTypeNotes] = React.useState('')
     const [listNotes, setListNotes] = React.useState([])
     const [loading, setLoading] = React.useState(true)
+
+     // snackbar
+    const [snack, setSnack] = React.useState(false);
+    const [status, setStatus] = React.useState(false);
+    const [message, setMessage] = React.useState(false);
+
+    const handleClose = () => {
+      setSnack(false)
+    };
 
     const getEmployee = () => {
         axios.get(`${BASE_URL}/api/note/employee-notes/${ids}/`,{
@@ -101,24 +110,19 @@ function NoteDetail() {
                     "Authorization" : `Token ${USER_TOKEN}`
                   }
             })
-            Swal.fire({
-                icon: 'success',
-                title: `Data Berhasil diubah`,
-                showConfirmButton: false,
-                timer: 1500
-              })
+         
+           setStatus("info")
+           setMessage("Data Berhasil diubah")
            getListNotesEmployee()
            getEmployee()
+           setSnack(true)
         }catch(error){
             if( error.response &&
                 error.response.status >= 400 &&
                 error.response.status <= 500
                 ){
-                    Swal.fire({
-                        icon: 'error',
-                  title: 'Oops...',
-                  text: `${error.response.data.detail}`
-                })
+                setStatus("error")
+                setMessage("Data Gagal diubah")
             }
         }
     };
@@ -132,23 +136,18 @@ function NoteDetail() {
                   "Authorization" : `Token ${USER_TOKEN}`
                 }
           })
-          Swal.fire({
-              icon: 'success',
-              title: `Data Berhasil dihapus`,
-              showConfirmButton: false,
-              timer: 1500
-            })
          navigate('/notes')
+         setSnack(true)
+         setStatus("info")
+         setMessage("Data Berhasil dihapus")
       }catch(error){
           if( error.response &&
               error.response.status >= 400 &&
               error.response.status <= 500
               ){
-                  Swal.fire({
-                      icon: 'error',
-                title: 'Oops...',
-                text: `${error.response.data.detail}`
-              })
+              setSnack(true)
+              setStatus("error")
+              setMessage("Data Berhasil dihapus")
           }
       }
   };
@@ -297,6 +296,17 @@ function NoteDetail() {
                               </div>
                           </div>
                       </Col>
+                      <Snackbar
+                        anchorOrigin={{ vertical : 'top', horizontal: 'right' }}
+                        open={snack}
+                        onClose={handleClose}
+                        autoHideDuration={6000}
+                        // key={vertical + horizontal}
+                      >
+                       <Alert onClose={handleClose} severity={status} sx={{ width: '100%' }}>
+                        {message && message}
+                      </Alert>
+                      </Snackbar>
                   </div>
               </main>
           </div>
