@@ -14,7 +14,6 @@ import Swal from 'sweetalert2';
 
 function DetailPerizinan() {
 
-    console.log(ROLES)
     const location = useLocation()
     const navigate = useNavigate()
     const id = location.pathname.split('/')[3]

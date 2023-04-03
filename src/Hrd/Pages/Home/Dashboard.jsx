@@ -6,8 +6,27 @@ import { USER_TOKEN, BASE_URL } from '../../../fetch/fetch'
 import multiColors from "react-multi-date-picker/plugins/colors"
 import { Add } from '@mui/icons-material'
 import { datesUpt } from '../../../Components/utilsFunction/functionUtils'
-
+import styled from '@emotion/styled'
 import { useNavigate } from 'react-router-dom'
+import { Pagination } from '@mui/material'
+
+const StyledPagination = styled(Pagination)({
+  display: 'flex',
+  justifyContent: 'end',
+  borderRadius: '50%',
+  marginTop: '1rem',
+  borderColor: '#84B5E7',
+  '& .MuiPaginationItem-root': {
+    color: '#2C3E50',
+    borderRadius: '50%',
+    borderColor: '#84B5E7',
+
+  },
+  '& .Mui-selected': {
+    backgroundColor: '#E3EEFA',
+    color: '#1976D5',
+  },
+});
 
 function Dashboard() {
 
@@ -19,6 +38,13 @@ function Dashboard() {
     const [low_emp, setLowEmp ] = useState([])
     // const [weekOffs, setWeekOffs] = useState([])
     const [weekdays, setWeekdays] = useState([])
+
+    const [presence_paginate, setPresencePaginate] = useState([])
+    const [currentPage, setCurrentPage] = useState(0);
+    const [offSet, setOffSet] = useState(0)
+
+    const itemsPerPage = 50;
+    const pageCount = Math.ceil(presence_paginate.count / itemsPerPage);
 
       const getDates = () => {
         axios.get(`${BASE_URL}/users/employee-total/`,{
@@ -36,19 +62,20 @@ function Dashboard() {
       useEffect(() => getDates(), [])
 
       const getOffDay = () => {
-        axios.get(`${BASE_URL}/api/dashboard/employee-dashboard/?limit=15`,{
+        axios.get(`${BASE_URL}/api/dashboard/employee-dashboard/?limit=50&offset=${offSet}`,{
           headers: {
             "Authorization" : `Token ${USER_TOKEN}`
           }
         })
         .then((response) => {
-          const res = response.data.results
-          setOffDay(res)
+          const res = response.data
+          setOffDay(res.results)
+          setPresencePaginate(res)
           console.log(res)
         })
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      useEffect(() => getOffDay(), [])
+      useEffect(() => getOffDay(), [offSet])
 
     const getTopFive = () => {
         axios.get(`${BASE_URL}/api/employee/best_of/?start_date=2023-01-01&end_date=2024-01-01`,{
@@ -279,6 +306,20 @@ function Dashboard() {
                                             )
                                         })}
                                     </ol>
+                                    {presence_paginate.count > 50 ?
+                                    <StyledPagination
+                                      count={pageCount}
+                                      page={currentPage + 1}
+                                      onChange={(event, page) => {
+                                        setCurrentPage(page - 1)
+                                        setOffSet(page*itemsPerPage-50)
+                                      }}
+                                      variant="outlined"
+                                      shape="rounded"
+                                      size="small"
+                                    />:
+                                    null
+                                    }
                                 </div>
                                
                             </div>

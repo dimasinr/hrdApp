@@ -272,7 +272,6 @@ export default function ListPresence() {
                         page={currentPage + 1}
                         onChange={(event, page) => {
                           setCurrentPage(page - 1)
-
                           setOffSet(page*itemsPerPage-15)
                         }}
                         variant="outlined"
