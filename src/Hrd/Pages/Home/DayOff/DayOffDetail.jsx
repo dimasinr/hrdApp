@@ -43,7 +43,7 @@ function DayOffDetail() {
     };
 
     const getOffDay = () => {
-        axios.get(`${BASE_URL}/dashboard/employee-dashboard/${off_id}/`,{
+        axios.get(`${BASE_URL}/api/dashboard/employee-dashboard/${off_id}/`,{
           headers: {
             "Authorization" : `Token ${USER_TOKEN}`
           }
@@ -72,7 +72,7 @@ function DayOffDetail() {
             formData.append("type_day", type_day);
            await axios({
                 method: 'put',
-                url:`${BASE_URL}/dashboard/employee-dashboard/${off_id}/`,
+                url:`${BASE_URL}/api/dashboard/employee-dashboard/${off_id}/`,
                 data: formData,
                 headers: {
                     "Authorization" : `Token ${USER_TOKEN}`
@@ -99,7 +99,7 @@ function DayOffDetail() {
         try{
            await axios({
                 method: 'delete',
-                url:`${BASE_URL}/dashboard/employee-dashboard/${off_id}/`,
+                url:`${BASE_URL}/api/dashboard/employee-dashboard/${off_id}/`,
                 headers: {
                     "Authorization" : `Token ${USER_TOKEN}`
                   }
