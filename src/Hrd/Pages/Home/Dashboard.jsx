@@ -299,7 +299,11 @@ function Dashboard() {
                                             return(
                                                 <li key={index}>
                                                     <div className='d-flex justify-content-between'>
-                                                        <span style={{ fontSize:'14px' }}>{dayO.title_day.length > 10 ? dayO.title_day.slice(0,13) + '...' : dayO.title_day }</span>
+                                                        <span style={{ fontSize:'14px' }}>{
+                                                          dayO.title_day?
+                                                          dayO.title_day.length > 10 ? dayO.title_day.slice(0,13) + '...' : dayO.title_day 
+                                                          : "tidak ada hari"
+                                                        }</span>
                                                         <span style={{ fontSize:'14px' }}>{datesUpt(dayO.date)}</span>
                                                     </div>
                                                 </li>
