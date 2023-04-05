@@ -90,7 +90,9 @@ function PengajuanKaryawan() {
     const submitPetitions = async e => {
         try{
             const formData = new FormData();
-            formData.append("employee", USER_ID);
+            formData.append("employee_id", USER_ID);
+            formData.append("employee_name", NAMES);
+            formData.append("division", bagian);
             formData.append("permission_type", jenis);
             if(jenis === 'lembur'){
                 formData.append("from_hour", lembur_str);
