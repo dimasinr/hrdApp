@@ -11,14 +11,14 @@ function ListKaryawan() {
     // const [dataIzin , setDataIzin] = React.useState([])
 
     const getDates = () => {
-      axios.get(`${BASE_URL}/petitions/employee-calendar/`,{
+      axios.get(`${BASE_URL}/petitions/employee-calendar/?limit=50`,{
         headers: {
           "Authorization" : `Token ${USER_TOKEN}`
         }
       })
       .then((response) => {
         const res = response.data
-        setListPengajuan(res)
+        setListPengajuan(res.results)
         console.log(res)
       })
     }
