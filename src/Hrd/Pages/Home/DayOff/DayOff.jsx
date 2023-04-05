@@ -198,8 +198,8 @@ function DayOff() {
                                 <DataGrid
                                 rows={offDay}
                                 columns={columns}
-                                pageSize={10}
-                                rowsPerPageOptions={[10]}
+                                // pageSize={50}
+                                // rowsPerPageOptions={[10, 25, 50]}
                                 getRowId={(row) => row.id}
                                 onRowClick={handleRowClick}
                                 components={{
