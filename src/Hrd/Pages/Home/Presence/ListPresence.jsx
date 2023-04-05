@@ -6,7 +6,7 @@ import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch'
 import { CircularProgress } from '@mui/material'
 import { workHour, totalWorkHour, datesUpt, totalWorking, changeDayName } from '../../../../Components/utilsFunction/functionUtils'
 import { TextField, Box, FormControl, Select, InputLabel, MenuItem } from '@mui/material'
-import {Slide, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, Alert} from '@mui/material';
+import {Slide, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, Alert, Backdrop} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Pagination from '@mui/material/Pagination';
 import SideBar from '../../../Components/SideBar'
@@ -226,7 +226,11 @@ export default function ListPresence() {
                  
                 <hr />
                   {loading && loading ?
-                    <CircularProgress /> : 
+                    <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={loading}
+                  >
+                  <CircularProgress color="inherit" /></Backdrop> : 
                     <Table bordered hover responsive>
                     <thead className='head_color_presence'>
                       <tr>

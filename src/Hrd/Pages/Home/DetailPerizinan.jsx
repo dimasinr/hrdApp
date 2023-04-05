@@ -480,12 +480,12 @@ function DetailPerizinan() {
                                     :
                                     <Col md={8}>
                                             <FormControlLabel value="disetujui" control={<Radio />} label="Disetujui" />
-                                            <FormControlLabel disabled value="ditangguhkan" control={<Radio />} label="Ditangguhkan menjadi Tanggal" />
+                                            <FormControlLabel value="ditangguhkan" control={<Radio />} label="Ditangguhkan menjadi Tanggal" />
                                             {permission_pi === 'ditolak' || permission_pi === 'bersyarat'  ? 
                                             <FormControlLabel value="bersyarat" control={<Radio />} label="Disetujui Dengan Bersyarat" />
                                             : null    
                                             }
-                                            <FormControlLabel disabled value="ditolak" control={<Radio />} label="Ditolak" />
+                                            <FormControlLabel value="ditolak" control={<Radio />} label="Ditolak" />
                                         </Col>
                                         
                                         }
@@ -493,7 +493,7 @@ function DetailPerizinan() {
                                     </FormControl>
                                 </Box>
                                 {permission_pil === 'ditolak' ?
-                                <TextField value={reason_rejected} disabled onChange={e => setReasonRejected(e.target.value)} fullWidth variant='filled' label='Alasan' />
+                                <TextField value={reason_rejected} onChange={e => setReasonRejected(e.target.value)} fullWidth variant='filled' label='Alasan' />
                                 : null
                                 }
                                 {permission_pil === 'bersyarat' ?

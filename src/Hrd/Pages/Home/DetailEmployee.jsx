@@ -7,10 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { BASE_URL, USER_TOKEN } from '../../../fetch/fetch';
 import Swal from 'sweetalert2';
 import SideBar from '../../Components/SideBar';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import {InputLabel, MenuItem, Select,FormControl, FormControlLabel, Checkbox} from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
@@ -37,6 +34,7 @@ function DetailEmployee() {
     const [awal_kontrak, setAwalKontrak] = React.useState(new Date().toISOString().slice(0,10))
     const [akhir_kontrak, setAkhirKontrak] = React.useState(new Date().toISOString().slice(0,10))
     const [contract_time, setContractTime] = React.useState([])
+    const [active_user, setActiveUser] = React.useState(true)
 
     const [visib, setVisib] = useState("password");
     const [rest, setRest] = useState(false)
@@ -64,6 +62,7 @@ function DetailEmployee() {
           setAwalKontrak(res.contract_start)
           setAkhirKontrak(res.contract_end)
           setContractTime(res.contract_time)
+          setActiveUser(res.is_active)
           console.log(res)
         })
       }
@@ -104,6 +103,10 @@ function DetailEmployee() {
         setRoles(event.target.value);
       };
 
+      const handleChangeActive = () => {
+        setActiveUser(!active_user);
+      };
+
       const handleChanged = (event) => {
         setDivision(event.target.value);
       };
@@ -111,9 +114,7 @@ function DetailEmployee() {
       const handleGend = (event) => {
         setGender(event.target.value);
       };
-    
-      const actv = true
-      
+          
       const editEmployee = async e => {
         try{
             const formData = new FormData();
@@ -122,7 +123,7 @@ function DetailEmployee() {
             formData.append("username", username);
             formData.append("first_name", nama_depan);
             formData.append("last_name", nama_belakang);
-            formData.append("is_active", actv);
+            formData.append("is_active", active_user);
             formData.append("roles", roles);
             formData.append("sisa_cuti", sisa_cuti);
             formData.append("employee_joined", date_join);
@@ -296,7 +297,7 @@ const postNewPassword = async e => {
       setVisib("password")
   }
 
-
+console.log(active_user)
 
   return (
     <React.Fragment>
@@ -315,7 +316,7 @@ const postNewPassword = async e => {
                                       </button>
 
                                       <Col md={12} className='mb-2 text-secondary d-flex'>
-                                        <Col md={12} className="mt-2">
+                                        <Col md={12}>
                                           <div className="row">
                                             <Box sx={{ mr:2 }}>
                                                 {/* <TextField value={name ? name : names} disabled id='name' label='Nama karyawan' sx={{ mt:3, mr:1 }}  /> */}
@@ -439,7 +440,7 @@ const postNewPassword = async e => {
                                                 </LocalizationProvider>
 
                                                 <TextField value={contract_time} variant='outlined' label='Lama Kontrak' sx={{ mt:3, mr:1 }}  />
-
+                                                <FormControlLabel sx={{ mt:4, ml:1 }} onChange={handleChangeActive} control={active_user ? <Checkbox checked /> : <Checkbox />} label={active_user ? "Karyawan aktif" : "Karyawan tidak aktif"} />
                                             </Box>
 
                                             <Box sx={{ mt:2}}>
