@@ -4,19 +4,21 @@ import { TextField, Box } from '@mui/material'
 import { ArrowBackIos, Delete, VisibilityOff, Visibility } from '@mui/icons-material';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { BASE_URL, USER_TOKEN } from '../../../fetch/fetch';
+import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch';
 import Swal from 'sweetalert2';
-import SideBar from '../../Components/SideBar';
+import SideBar from '../../../Components/SideBar';
 import {InputLabel, MenuItem, Select,FormControl, FormControlLabel, Checkbox} from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import {Snackbar, Alert} from '@mui/material';
 
 function DetailEmployee() {
 
     const navigate = useNavigate()
     const location = useLocation()
     const ids = location.pathname.split('/')[3]
+
     const [employee_code, setEmployeeCode] = React.useState([])
     const [email, setEmail] = React.useState([])
     const [username, setUsername] = React.useState([])
@@ -38,6 +40,9 @@ function DetailEmployee() {
 
     const [visib, setVisib] = useState("password");
     const [rest, setRest] = useState(false)
+    const [snack, setSnack] = React.useState(false);
+    const [status, setStatus] = React.useState(false);
+    const [message, setMessage] = React.useState(false);
 
     const getEmployee = () => {
         axios.get(`${BASE_URL}/users/employees/${ids}/`,{
@@ -141,29 +146,39 @@ function DetailEmployee() {
                     "Authorization" : `Token ${USER_TOKEN}`
                   }
             })
-            Swal.fire({
-                icon: 'success',
-                title: `Data Berhasil diubah`,
-                showConfirmButton: false,
-                timer: 1500
-              })
-            navigate(-1)
+            setStatus("info")
+            setMessage("Data Karyawan Berhasil diubah")
+            setSnack(true)
             getEmployee()
         }catch(error){
             if( error.response &&
                 error.response.status >= 400 &&
                 error.response.status <= 500
                 ){
-                    Swal.fire({
-                        icon: 'error',
-                  title: 'Oops...',
-                  text: `${error.response.data.detail}`
-                })
+                setStatus("info")
+                setMessage( `${error.response.data.detail}`)
+                setSnack(true)
             }
         }
     };
 
-    const delEmployee = async e => {
+    const delEmployee = () =>{
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          deleteEmployee()
+        }
+      })
+    }
+
+    const deleteEmployee = async e => {
       try{
          await axios({
               method: 'delete',
@@ -172,23 +187,18 @@ function DetailEmployee() {
                   "Authorization" : `Token ${USER_TOKEN}`
                 }
           })
-          Swal.fire({
-              icon: 'success',
-              title: `Data Karyawan Berhasil dihapus`,
-              showConfirmButton: false,
-              timer: 1500
-            })
+        Swal.fire({
+          icon: 'success',
+          text: "Data Karyawan Berhasil dihapus"})
          navigate('/list-karyawan')
       }catch(error){
           if( error.response &&
               error.response.status >= 400 &&
               error.response.status <= 500
               ){
-                  Swal.fire({
-                      icon: 'error',
-                title: 'Oops...',
-                text: `${error.response.data.detail}`
-              })
+                setStatus("info")
+                setMessage(`${error.response.data.detail}`)
+                setSnack(true)
           }
       }
   };
@@ -206,7 +216,9 @@ function DetailEmployee() {
                 "Authorization" : `Token ${USER_TOKEN}`
               }
         })
-        console.log(res)
+        setStatus("info")
+        setMessage("Password Karyawan Berhasil reset silahkan input password baru")
+        setSnack(true)
         setUrlData(res.data.Message)
         setRest(true)
     }catch(error){
@@ -214,11 +226,9 @@ function DetailEmployee() {
             error.response.status >= 400 &&
             error.response.status <= 500
             ){
-                Swal.fire({
-                    icon: 'error',
-              title: 'Oops...',
-              text: `${error.response.data.detail}`
-            })
+              setStatus("info")
+              setMessage(`${error.response.data.detail}`)
+              setSnack(true)
         }
     }
 };
@@ -238,21 +248,18 @@ const postNewPassword = async e => {
       })
 
       console.log(res)
-      Swal.fire({
-        icon: 'success',
-        text: `${res.data.Message}`})
-        setRest(false)
-  
+      setStatus("info")
+      setMessage("Password Karyawan Berhasil diubah")
+      setSnack(true)
+      setRest(false)
   }catch(error){
       if( error.response &&
           error.response.status >= 400 &&
           error.response.status <= 500
           ){
-              Swal.fire({
-                  icon: 'error',
-            title: 'Oops...',
-            // text: `${error.response.data.detail}`
-          })
+            setStatus("error")
+            setMessage("Error")
+            setSnack(true)
       }
   }
 };
@@ -281,6 +288,10 @@ const postNewPassword = async e => {
     setAkhirKontrak(dated.slice(1, 11))
   }
 
+  const handleClose = () => {
+    setSnack(false)
+  };
+
   const gende = [
     {'id': 1,
     'name' : 'Laki-Laki'
@@ -297,7 +308,6 @@ const postNewPassword = async e => {
       setVisib("password")
   }
 
-console.log(active_user)
 
   return (
     <React.Fragment>
@@ -475,6 +485,17 @@ console.log(active_user)
 
                               </div>
                           </div>
+                          <Snackbar
+                            anchorOrigin={{ vertical : 'top', horizontal: 'right' }}
+                            open={snack}
+                            onClose={handleClose}
+                            autoHideDuration={6000}
+                            // key={vertical + horizontal}
+                          >
+                          <Alert onClose={handleClose} severity={status} sx={{ width: '100%' }}>
+                            {message && message}
+                          </Alert>
+                        </Snackbar>
                       </Col>
                   </div>
               </main>
