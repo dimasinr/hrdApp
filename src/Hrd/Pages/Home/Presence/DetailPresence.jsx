@@ -91,11 +91,11 @@ function DetailPresence() {
                 "Authorization" : `Token ${USER_TOKEN}`
               }
         })
-         getAttendanceEmp()
-          setSnack(true)
-          setStatus('success')
-          setMessage('data berhasil di perbaharui')
-          getEmployeeData()
+        window.location.reload()
+        setSnack(true)
+        setStatus('success')
+        setMessage('data berhasil di perbaharui')
+        getEmployeeData()
         }catch(error){
             if( error.response &&
                 error.response.status >= 400 &&

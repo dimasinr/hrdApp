@@ -7,6 +7,8 @@ import { ArrowBackIos } from '@mui/icons-material';
 import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Col } from 'react-bootstrap';
+import {Box, TextField} from '@mui/material';
 
 const columns = [
     { id: 'pk', label: 'Emp Id', align: 'center', minWidth: 60 },
@@ -50,9 +52,10 @@ function EmployeeContract() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [employee, setEmployee] = React.useState([])
+    const [searchEmployee, setSearchEmployee] = React.useState('')
 
     const getListPengajuan = () => {
-        axios.get(`${BASE_URL}/users/employee/contract/?active_user=True`,{
+        axios.get(`${BASE_URL}/users/employee/contract/?active_user=True&name=${searchEmployee}`,{
           headers: {
             "Authorization" : 'Token ' + USER_TOKEN
           }
@@ -66,7 +69,7 @@ function EmployeeContract() {
         })
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      React.useEffect(() => getListPengajuan(), [])
+      React.useEffect(() => getListPengajuan(), [searchEmployee])
     
   
     const handleChangePage = (event, newPage) => {
@@ -90,6 +93,11 @@ function EmployeeContract() {
                             <h4>Kontrak Karyawan</h4>
                         </button>
                         <small className="text-secondary">List kontrak karyawan nawastra</small>
+                        <Col md={12} className='mb-2 text-secondary d-flex justify-content-between'>
+                            <Box>
+                              <TextField placeholder='Nama Karyawan' sx={{ mt:1, mr:2 }} value={searchEmployee} onChange={e => setSearchEmployee(e.target.value)} />
+                            </Box>
+                          </Col>
                     </div>
                     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                     <TableContainer sx={{ maxHeight: 440 }}>
