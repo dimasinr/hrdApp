@@ -15,8 +15,8 @@ import Dashboard from "../Hrd/Pages/Home/Dashboard";
 import HomeHrd from "../Hrd/Pages/Home/HomeHrd";
 import DetailPerizinan from "../Hrd/Pages/Home/DetailPerizinan";
 import CalendarCuti from "../Hrd/Pages/Home/CalendarCuti";
-import ListKaryawan from "../Hrd/Pages/Home/ListKaryawan";
-import DetailEmployee from "../Hrd/Pages/Home/DetailEmployee"; 
+import ListKaryawan from "../Hrd/Pages/Home/Employee/ListKaryawan";
+import DetailEmployee from "../Hrd/Pages/Home/Employee/DetailEmployee"; 
 import EmployeeContract from "../Hrd/Pages/Home/Employee/EmployeeContract";
 
 import Note from "../Hrd/Pages/Home/Notes/Note";
