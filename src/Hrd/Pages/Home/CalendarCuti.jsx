@@ -41,7 +41,6 @@ function ListKaryawan() {
   //   React.useEffect(() => getCalendar(), [])
 
   //   console.log(dataIzin.length)
-  
 
     // const newArrayOfObj = listPengajuan.map(({
     //   employee_name: title,
@@ -66,7 +65,7 @@ function ListKaryawan() {
                 plugins={[ dayGridPlugin ]}
                 initialView="dayGridMonth"
                 //   weekends={false}
-                eventBackgroundColor='#2C3E50'
+                eventBackgroundColor={listPengajuan.color}
                 // eventContent={renderEventContent(listPengajuan)}
                 // dateClick={handleDateClick}
                 // events={newArrayOfObj}
