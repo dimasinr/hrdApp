@@ -29,8 +29,6 @@ function AuthenticationPages() {
       >
         <div className="row">
           <CircularProgress color="inherit" />
-          <br />
-          <hr />
           User Authentication
         </div>
       </Backdrop>
