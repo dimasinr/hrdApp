@@ -8,6 +8,7 @@ import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import Swal from 'sweetalert2';
 
 function DetailPresence() {
   const navigate = useNavigate()
@@ -90,6 +91,7 @@ function DetailPresence() {
                 "Authorization" : `Token ${USER_TOKEN}`
               }
         })
+         getAttendanceEmp()
           setSnack(true)
           setStatus('success')
           setMessage('data berhasil di perbaharui')
@@ -107,7 +109,23 @@ function DetailPresence() {
         }
       };
 
-      const deleteAttendance = async e => {
+      const deleteAttendance = () =>{
+        Swal.fire({
+          title: 'Apakah Kamu yakin untuk menghapus data ini?',
+          text: "data ini tidak bisa dikembalikan lagi",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            deletePresences()
+          }
+        })
+      }
+
+      const deletePresences = async e => {
         try{
            const res = await axios({
                 method: 'delete',

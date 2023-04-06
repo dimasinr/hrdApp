@@ -164,8 +164,8 @@ function DetailEmployee() {
 
     const delEmployee = () =>{
       Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: 'Apakah Kamu yakin untuk menghapus data ini?',
+        text: "data ini tidak bisa dikembalikan lagi",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
