@@ -52,7 +52,7 @@ function EmployeeContract() {
     const [employee, setEmployee] = React.useState([])
 
     const getListPengajuan = () => {
-        axios.get(`${BASE_URL}/users/employee/contract/?user_active=true`,{
+        axios.get(`${BASE_URL}/users/employee/contract/?active_user=true`,{
           headers: {
             "Authorization" : 'Token ' + USER_TOKEN
           }
