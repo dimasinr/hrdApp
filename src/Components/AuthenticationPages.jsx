@@ -14,7 +14,10 @@ function AuthenticationPages() {
 
   React.useEffect(() => {
       if(user !== null){
-        navigate('/home')
+        const interval = setInterval(() => {
+          navigate('/home')
+        }, 4000);
+        return () => clearInterval(interval);
       }
   })
 
@@ -24,7 +27,10 @@ function AuthenticationPages() {
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={backdrop_active}
       >
-      <CircularProgress color="inherit" />
+        <div className="row">
+          <CircularProgress color="inherit" />
+          User Authentication
+        </div>
       </Backdrop>
     </div>
   )
