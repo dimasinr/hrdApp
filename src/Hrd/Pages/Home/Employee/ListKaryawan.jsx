@@ -157,8 +157,8 @@ const handlePas = () => {
                                       <Box>
                                         <TextField placeholder='Nama Karyawan' sx={{ mt:1, mr:2 }} value={searchEmployee} onChange={e => setSearchEmployee(e.target.value)} />
                                       </Box>
-                                      <Tooltip title='Tambah Karyawan'>
-                                        <button onClick={handleClickOpen} className='btn btn-primary' style={{ height:'35px' }}><PersonAddAlt1 /></button>
+                                      <Tooltip sx={{ mt:1 }} title='Tambah Karyawan'>
+                                        <button onClick={handleClickOpen} className='btn btn-primary' style={{ height:'35px', borderRadius:'50%' }}><PersonAddAlt1 /></button>
                                       </Tooltip>
                                     </Col>
                                     
