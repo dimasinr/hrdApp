@@ -43,7 +43,7 @@ function NotesHrd() {
     const [loading, setLoading] = React.useState(true)
     const [open, setOpen] = React.useState(false);
     const [loadingBut, setLoadingBut] = useState('simpan')
-
+    const [searchEmployee, setSearchEmployee] = React.useState('')
 
     const [firstName, setFirstName] = React.useState('')
     const [lastName, setLastName] = React.useState('')
@@ -61,7 +61,7 @@ function NotesHrd() {
 
 
     const getListPengajuan = () => {
-      axios.get(`${BASE_URL}/users/employee/search/`,{
+      axios.get(`${BASE_URL}/users/employee/search/?name=${searchEmployee}`,{
         headers: {
           "Authorization" : 'Token ' + USER_TOKEN
         }
@@ -149,6 +149,12 @@ const handlePas = () => {
 
                             <div className="card-title">
                                   <h4>List Karyawan</h4>
+                                  <small className="text-secondary">List kontrak karyawan nawastra</small>
+                                <Col md={12} className='mb-2 text-secondary d-flex justify-content-between'>
+                                    <Box>
+                                      <TextField placeholder='Nama Karyawan' sx={{ mt:1, mr:2 }} value={searchEmployee} onChange={e => setSearchEmployee(e.target.value)} />
+                                    </Box>
+                                  </Col>
                                 </div>
                                
                                     <Col md={12} className='mb-2 text-secondary d-flex justify-content-between'>
