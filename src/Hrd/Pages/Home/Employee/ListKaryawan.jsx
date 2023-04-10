@@ -3,11 +3,12 @@ import { Col } from 'react-bootstrap'
 import axios from 'axios'
 import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch'
 import { DataGrid } from '@mui/x-data-grid';
-import { Box, Skeleton, TextField } from '@mui/material';
+import { Box, Skeleton, TextField, Tooltip } from '@mui/material';
 import {Slide, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
 import Swal from 'sweetalert2'
 import SideBar from '../../../Components/SideBar'
 import { useNavigate } from 'react-router-dom';
+import { PersonAddAlt1 } from '@mui/icons-material';
 
 const columns = [
       { field: 'pk', headerName: 'UId', width: 50 },
@@ -149,20 +150,16 @@ const handlePas = () => {
 
                             <div className="card-title">
                                   <h4>List Karyawan</h4>
-                                  <small className="text-secondary">List kontrak karyawan nawastra</small>
-                                <Col md={12} className='mb-2 text-secondary d-flex justify-content-between'>
-                                    <Box>
-                                      <TextField placeholder='Nama Karyawan' sx={{ mt:1, mr:2 }} value={searchEmployee} onChange={e => setSearchEmployee(e.target.value)} />
-                                    </Box>
-                                  </Col>
+                                  <small className="text-secondary">List karyawan nawastra</small>
                                 </div>
                                
                                     <Col md={12} className='mb-2 text-secondary d-flex justify-content-between'>
                                       <Box>
-                                        {/* <TextField placeholder='Cari Nama Karyawan berdasarkan Nama Depan' sx={{ mt:3, mr:2 }} value={searchFist} onChange={e => setSearchFirst(e.target.value)} /> */}
-                                        {/* <TextField placeholder='Cari Roles' sx={{ mt:3 }} value={searchRoles} onChange={e => setSearchRoles(e.target.value)} /> */}
+                                        <TextField placeholder='Nama Karyawan' sx={{ mt:1, mr:2 }} value={searchEmployee} onChange={e => setSearchEmployee(e.target.value)} />
                                       </Box>
-                                      <button onClick={handleClickOpen} className='btn btn-primary' style={{ height:'35px' }}>Tambah Karyawan</button>
+                                      <Tooltip title='Tambah Karyawan'>
+                                        <button onClick={handleClickOpen} className='btn btn-primary' style={{ height:'35px' }}><PersonAddAlt1 /></button>
+                                      </Tooltip>
                                     </Col>
                                     
                                     <Col md={12}>
