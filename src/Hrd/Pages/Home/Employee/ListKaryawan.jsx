@@ -75,7 +75,7 @@ function NotesHrd() {
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    React.useEffect(() => getListPengajuan(), [])
+    React.useEffect(() => getListPengajuan(), [searchEmployee])
   
 
     const handleRowClick = (params) => {
