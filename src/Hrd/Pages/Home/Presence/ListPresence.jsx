@@ -114,8 +114,8 @@ export default function ListPresence() {
   const jam_masuk = delta(working_hour)
   const jam_keluar = zeta(working_hour)
 
-  const lembur_start = delta(working_hour)
-  const lembur_end = delta(working_hour)
+  const lembur_start = delta(lembur_hour)
+  const lembur_end = zeta(lembur_hour)
 
   const addNewAttendance = async e => {
   try{
@@ -335,7 +335,7 @@ export default function ListPresence() {
                   </Box>
                   <small className='text-secondary mt-2'>(opsional jika ingin input lembur manual)</small>
                   <Box sx={{ display:'flex' }}>
-                    <TextField disabled value={lembur_hour} fullWidth onChange={e => setLemburHour(e.target.value)} sx={{ mr:1 }} label='Jam Lembur' />
+                    <TextField value={lembur_hour} fullWidth onChange={e => setLemburHour(e.target.value)} sx={{ mr:1 }} label='Jam Lembur' />
                   </Box>
                 
                   
