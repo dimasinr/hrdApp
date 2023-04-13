@@ -44,7 +44,7 @@ function NotesHrd() {
     const [loading, setLoading] = React.useState(true)
     const [open, setOpen] = React.useState(false);
     const [loadingBut, setLoadingBut] = useState('simpan')
-    const [searchEmployee, setSearchEmployee] = React.useState('')
+    // const [searchEmployee, setSearchEmployee] = React.useState('')
 
     const [firstName, setFirstName] = React.useState('')
     const [lastName, setLastName] = React.useState('')
@@ -62,7 +62,7 @@ function NotesHrd() {
 
 
     const getListPengajuan = () => {
-      axios.get(`${BASE_URL}/users/employee/search/?name=${searchEmployee}`,{
+      axios.get(`${BASE_URL}/users/employee/search/`,{
         headers: {
           "Authorization" : 'Token ' + USER_TOKEN
         }
@@ -75,7 +75,7 @@ function NotesHrd() {
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    React.useEffect(() => getListPengajuan(), [searchEmployee])
+    React.useEffect(() => getListPengajuan(), [])
   
 
     const handleRowClick = (params) => {
@@ -155,7 +155,7 @@ const handlePas = () => {
                                
                                     <Col md={12} className='mb-2 text-secondary d-flex justify-content-between'>
                                       <Box>
-                                        <TextField placeholder='Nama Karyawan' sx={{ mt:1, mr:2 }} value={searchEmployee} onChange={e => setSearchEmployee(e.target.value)} />
+                                        {/* <TextField placeholder='Nama Karyawan' sx={{ mt:1, mr:2 }} value={searchEmployee} onChange={e => setSearchEmployee(e.target.value)} /> */}
                                       </Box>
                                       <Tooltip sx={{ mt:1 }} title='Tambah Karyawan'>
                                         <button onClick={handleClickOpen} className='btn btn-primary' style={{ height:'35px', borderRadius:'50%' }}><PersonAddAlt1 /></button>
