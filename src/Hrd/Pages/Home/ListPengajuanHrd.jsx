@@ -3,38 +3,14 @@ import { Col } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL, USER_TOKEN, ROLES } from '../../../fetch/fetch'
-import { DataGrid } from '@mui/x-data-grid';
-import { Box, Skeleton, FormControl, InputLabel, Select, MenuItem, TextField } from '@mui/material';
+import {  FormControl, InputLabel, Select, MenuItem, TextField, Backdrop, CircularProgress } from '@mui/material';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import runOneSignal from '../../../oneSignal/oneSignal'
 import SideBar from '../../Components/SideBar'
+import { SubmissionTableComponents } from '../../../Karyawan/Components/Table/EmployeeTableComponents'
 
-const columns = [
-      { field: 'id', headerName: 'Id', width: 70 },
-      { field: 'employee_name', headerName: 'Nama', width: 130 },
-      { field: 'division', headerName: 'Bagian', width: 130 },
-      { field: 'permission_type', headerName: 'Jenis Ijin', width: 130 },
-      { field: 'reason', headerName: 'Alasan', width: 130 },
-      { field: 'start_date', headerName: 'Tanggal Awal', width: 130 },
-      { field: 'end_date', headerName: 'Tanggal Akhir', width: 130 },
-      { field: 'return_date', headerName: 'Masuk Kembali', width: 130 },
-      { field: 'permission_pil', headerName: 'Izin Atasan', width: 130 },
-  ];
-  
-  const LoadingSkeleton = () => (
-    <Box
-      sx={{
-        height: 'max-content',
-      }}
-    >
-      {[...Array(1)].map((_, index) => (
-        <Skeleton variant="rectangular" sx={{ my: 4, mx: 1 }} key={index} />
-      ))}
-    </Box>
-  );
-
-function HomeHrd() {
+function ListPengajuanHrd() {
 
     const navigate = useNavigate()
     const [open, setOpen] = React.useState(false)
@@ -46,14 +22,14 @@ function HomeHrd() {
     const [loading, setLoading] = React.useState(true)
     
     const getListPengajuan = () => {
-      axios.get(`${BASE_URL}/petitions/pengajuan/?permission_type=${perizinan}&start_date=${start_dates}&end_date=${end_dates}&employee_name=${employees}`,{
+      axios.get(`${BASE_URL}/api/submission/employees/?permission_type=${perizinan}&start_date=${start_dates}&end_date=${end_dates}&employee_name=${employees}`,{
         headers: {
           "Authorization" : 'Token ' + USER_TOKEN
         }
       })
       .then((response) => {
         const res = response.data
-        setListPengajuan(res)
+        setListPengajuan(res.results)
         setLoading(false)
         console.log(res)
       })
@@ -61,10 +37,6 @@ function HomeHrd() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     React.useEffect(() => getListPengajuan(), [perizinan, start_dates, end_dates, employees])
   
-    const handleRowClick = (params) => {
-      navigate(`/perizinan/detail/${params.row.id}`)
-    };
-
     const handleChange = (event) => {
       setPerizinan(event.target.value);
   };
@@ -158,25 +130,17 @@ function HomeHrd() {
                                             <TextField placeholder='Cari Nama Karyawan' sx={{ mt:3 }} value={employees} onChange={e => setEmployess(e.target.value)} />
                                           </Col>
 
-
-
                                         </Col>
 
                                         <Col md={12}>
-                                          <div style={{ height: 400, width: '100%' }}>
-                                            <DataGrid
-                                            rows={list_pengajuan}
-                                            columns={columns}
-                                            pageSize={7}
-                                            rowsPerPageOptions={[7]}
-                                            getRowId={(row) => row.id}
-                                            onRowClick={handleRowClick}
-                                            components={{
-                                                LoadingOverlay: LoadingSkeleton,
-                                              }}
-                                              loading={loading}
-                                            />
-                                            </div>
+                                          {loading && loading ? 
+                                             <Backdrop
+                                             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                                             open={loading}
+                                           >
+                                           <CircularProgress color="inherit" /></Backdrop> :
+                                        <SubmissionTableComponents tableData={list_pengajuan} link='/perizinan/detail' />
+                                        }
                                         </Col>
                                     </React.Fragment>
                                     :
@@ -194,4 +158,4 @@ function HomeHrd() {
   )
 }
 
-export default HomeHrd
+export default ListPengajuanHrd

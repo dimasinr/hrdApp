@@ -3,6 +3,7 @@ import SideBar from '../Hrd/Components/SideBar'
 import { Col } from 'react-bootstrap'
 import axios from 'axios'
 import { BASE_URL, USER_TOKEN, NAMES } from '../fetch/fetch'
+import StatistikUser from '../Karyawan/Components/StatistikUser'
 
 function DashboardAtasan() {
 
@@ -46,6 +47,8 @@ function DashboardAtasan() {
               </Col>
           </div>
         </div>
+
+        <StatistikUser />
       </main>
     </div>
   )

@@ -143,36 +143,58 @@ return (
       }
       {ROLES === 'karyawan' ? 
       <List>
-        <Link to="/home" style={{ textDecoration:'none', color:'black' }}>
-        <ListItem disablePadding>
+        <Link to='/home' style={{ textDecoration:'none', color:'black' }}>
+          <ListItem disablePadding className={side_name === 'home' ? "side_col" : "side_no_col" }>
             <ListItemButton>
               <ListItemIcon>
-                <Dashboard sx={{ color:'#0B305A' }} />
+                <Dashboard sx={side_name === 'home' ? {color: '#ffffff'} : { color:'#0B305A' }} />
               </ListItemIcon>
               <ListItemText primary='Dashboard' />
             </ListItemButton>
           </ListItem>
         </Link>
-        <Link to="/list-pengajuan" style={{ textDecoration:'none', color:'black' }}>
-        <Link to="/pengajuan" style={{ textDecoration:'none', color:'black' }}>
-        <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <Feed sx={{ color:'#0B305A' }} />
-              </ListItemIcon>
-              <ListItemText primary='Pengajuan' />
-            </ListItemButton>
-          </ListItem>
-        </Link>
-        <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <FactCheck sx={{ color:'#0B305A' }} />
-              </ListItemIcon>
-              <ListItemText primary='List Pengajuan' />
-            </ListItemButton>
-          </ListItem>
-        </Link>
+        <Link to='/pengajuan' style={{ textDecoration:'none', color:'black' }}>
+        <ListItem disablePadding className={side_name === 'pengajuan' ? "side_col" : "side_no_col" }>
+          <ListItemButton>
+            <ListItemIcon>
+              <FactCheck sx={side_name === 'pengajuan' ? {color: '#ffffff'} : { color:'#0B305A' }} />
+            </ListItemIcon>
+            <ListItemText primary='Pengajuan' />
+          </ListItemButton>
+        </ListItem>
+      </Link>
+        <Link to='/list-pengajuan' style={{ textDecoration:'none', color:'black' }}>
+        <ListItem disablePadding className={side_name === 'list-pengajuan' ? "side_col" : "side_no_col" }>
+          <ListItemButton>
+            <ListItemIcon>
+              <Feed sx={side_name === 'list-pengajuan' ? {color: '#ffffff'} : { color:'#0B305A' }} />
+            </ListItemIcon>
+            <ListItemText primary='List Pengajuan' />
+          </ListItemButton>
+        </ListItem>
+      </Link>
+        <Divider />
+        <small className='text-secondary container'>Absensi</small>
+        <Link to='/presence/list' style={{ textDecoration:'none', color:'black' }}>
+        <ListItem disablePadding className={side_name === 'presence' ? "side_col" : "side_no_col" }>
+          <ListItemButton>
+            <ListItemIcon>
+              <Badge sx={side_name === 'presence' ? {color: '#ffffff'} : { color:'#0B305A' }} />
+            </ListItemIcon>
+            <ListItemText primary='Absensi Karyawan' />
+          </ListItemButton>
+        </ListItem>
+      </Link>
+      <Link to='/employee/presence' style={{ textDecoration:'none', color:'black' }}>
+        <ListItem disablePadding className={side_name === 'employee' ? "side_col" : "side_no_col" }>
+          <ListItemButton>
+            <ListItemIcon>
+              <Analytics sx={side_name === 'employee' ? {color: '#ffffff'} : { color:'#0B305A' }} />
+            </ListItemIcon>
+            <ListItemText primary='Analisa Absensi' />
+          </ListItemButton>
+        </ListItem>
+      </Link>
         <Divider />
         <small className='text-secondary container'>Pengaturan</small>
         {/* <Link to="/settings/" style={{ textDecoration:'none', color:'black' }}> */}
@@ -216,6 +238,28 @@ return (
                 <FactCheck sx={{ color:'#0B305A' }} />
               </ListItemIcon>
               <ListItemText primary='List Pengajuan' />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+        <Divider />
+        <small className='text-secondary container'>Absensi</small>
+        <Link to='/presence/list' style={{ textDecoration:'none', color:'black' }}>
+          <ListItem disablePadding className={side_name === 'presence' ? "side_col" : "side_no_col" }>
+            <ListItemButton>
+              <ListItemIcon>
+                <Badge sx={side_name === 'presence' ? {color: '#ffffff'} : { color:'#0B305A' }} />
+              </ListItemIcon>
+              <ListItemText primary='Absensi Karyawan' />
+            </ListItemButton>
+          </ListItem>
+        </Link>
+        <Link to='/employee/presence' style={{ textDecoration:'none', color:'black' }}>
+          <ListItem disablePadding className={side_name === 'employee' ? "side_col" : "side_no_col" }>
+            <ListItemButton>
+              <ListItemIcon>
+                <Analytics sx={side_name === 'employee' ? {color: '#ffffff'} : { color:'#0B305A' }} />
+              </ListItemIcon>
+              <ListItemText primary='Analisa Absensi' />
             </ListItemButton>
           </ListItem>
         </Link>

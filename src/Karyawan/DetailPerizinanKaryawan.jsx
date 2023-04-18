@@ -67,7 +67,7 @@ function DetailPerizinanKaryawan() {
     };
 
     const getPerizinan = () => {
-      axios.get(`${BASE_URL}/petitions/employee/${pengajuan_id}/`,{
+      axios.get(`${BASE_URL}/api/submission/employees/${pengajuan_id}/`,{
         headers: {
           "Authorization" : 'Token ' + USER_TOKEN
         }
@@ -75,7 +75,7 @@ function DetailPerizinanKaryawan() {
       .then((response) => {
         const res = response.data
         setJumlahHari(res.jumlah_hari)
-        setBagian(res.division)
+        setBagian(res.employee.division)
         setAlasan(res.reason)
         setJenis(res.permission_type)
         setStartDate(res.start_date)
@@ -212,11 +212,12 @@ function DetailPerizinanKaryawan() {
                     <MobileDatePicker
                     label="Masuk Kembali Tanggal"
                     disablePast
+                    disabled
                     value={back_date}
                     onChange={(newValue) => {
                         setBackDate(newValue);
                     }}
-                    renderInput={(params) => <TextField variant='standard' fullWidth {...params} />}
+                    renderInput={(params) => <TextField disabled variant='filled' fullWidth {...params} />}
                     />
                 </LocalizationProvider>
                 </Box>

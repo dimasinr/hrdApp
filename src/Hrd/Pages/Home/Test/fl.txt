@@ -8,7 +8,7 @@ import { ArrowBackIos } from '@mui/icons-material';
 import { Tooltip } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { BASE_URL, USER_TOKEN } from '../../../fetch/fetch';
+import { BASE_URL, USER_TOKEN, ROLES } from '../../../fetch/fetch';
 import { useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
@@ -17,21 +17,24 @@ function DetailPerizinan() {
     const location = useLocation()
     const navigate = useNavigate()
     const id = location.pathname.split('/')[3]
-    const [loading, setLoading] = useState(true)
-
-    const [employee, setEmployee] = useState('');
-    const [permissionType, setPermissionType] = useState('izin');
+    const [employee_names, setEmployeeName] = useState('');
+    const [division, setDivision] = useState('');
+    const [jenis, setJenis] = useState('');
     const [reason, setReason] = useState('');
     const [start_date, setStartDate] = useState(new Date());
     const [end_date, setEndDate] = useState(new Date());
     const [return_date, setReturnDate] = useState(new Date());
     const [permission_pi, setPermissionPi] = useState('');
+    const [emp_id, setEmpId] = useState('');
+    const [sisaCut, setSisaCut] = useState('');
+    const [username, setUsername] = useState('');
     const [jumlah_hari, setJumlHari] = useState('');
     
     const [lembur_start, setLemburStart] = useState('');
     const [lembur_end, setLemburEnd] = useState('');
     const [work_hour, setWorkHour] = useState('');
 
+    const [email, setEmail] = useState('')
     const [permission_pil, setPermissionPil] = useState('');
     const [reason_rejected, setReasonRejected] = useState(null);
     const [conditional_reason, setConditionalReason] = useState(null);
@@ -54,17 +57,19 @@ function DetailPerizinan() {
         setPermissionPil(event.target.value);
     };
 
+    const [loading, setLoading] = React.useState(true)
     
-    const getSubmission = () => {
-      axios.get(`${BASE_URL}/api/submission/employees/${id}/`,{
+    const getListPengajuan = () => {
+      axios.get(`${BASE_URL}/petitions/employee/${id}/`,{
         headers: {
           "Authorization" : 'Token ' + USER_TOKEN
         }
       })
       .then((response) => {
         const res = response.data
-        setEmployee(res.employee)
-        setPermissionType(res.permission_type)
+        setEmployeeName(res.employee_name)
+        setDivision(res.division)
+        setJenis(res.permission_type)
         setStartDate(res.start_date)
         setConditionalReason(res.conditional_reasons)
         setEndDate(res.end_date)
@@ -78,39 +83,58 @@ function DetailPerizinan() {
         setLemburEnd(res.end_hour)
         setWorkHour(res.lembur_hour)
         setLoading(false)
+        setEmpId(res.employee_id)
         console.log(res)
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    React.useEffect(() => getSubmission(), [id])
+    React.useEffect(() => getListPengajuan(), [id])
 
-    const approvalSubmission = async e => {
+    const getEmployees = () => {
+        axios.get(`${BASE_URL}/users/employees/${emp_id}/`,{
+          headers: {
+            "Authorization" : 'Token ' + USER_TOKEN
+          }
+        })
+        .then((response) => {
+          const res = response.data
+          setLoading(false)
+          setSisaCut(res.sisa_cuti)
+          setUsername(res.username)
+          setEmail(res.email)
+          console.log(res)
+        })
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      React.useEffect(() => getEmployees(), [emp_id])
+
+    const perizinanAdm = async e => {
         try{
             const formData = new FormData();
-            formData.append("employee", employee.pk);
-            formData.append("start_date", start_date);
-            formData.append("end_date", end_date);
-            formData.append("permission_type", permissionType);
-            formData.append("reason", reason);
-            formData.append("return_date", return_date);
             formData.append("permission_pil", permission_pil);
             if(permission_pil === "ditangguhkan"){
                 formData.append("suspended_start", suspended_start);
                 formData.append("suspended_end", suspended_end);
             }else if(permission_pil === 'ditolak'){
                 formData.append("reason_rejected", reason_rejected);
+            }else if(permission_pil === 'disetujui' & jenis !== 'lembur' & jenis !== 'sakit'){
+                perizinanSisaCuti()
             }
-            if(permissionType !== 'lembur'){
-                formData.append("jumlah_hari", jumlah_hari);
-            }
+            formData.append("jumlah_hari", jumlah_hari);
             const res = await axios({
                 method: 'put',
-                url:`${BASE_URL}/api/submission/employees/${id}/`,
+                url:`${BASE_URL}/petitions/employee/${id}/`,
                 data: formData,
                 headers: {
                     "Authorization" : `Token ${USER_TOKEN}`
                   }
             })
+            if(jenis === 'cuti' & permission_pil === 'disetujui' ){
+                CalendarInput()
+            }
+            if(jenis === 'lembur'){
+                AttendanceInput()
+            }
             console.log(res)
             Swal.fire({
                 icon: 'success',
@@ -135,15 +159,135 @@ function DetailPerizinan() {
         }
       };
     
-      const pengajuanDelete = async e => {
+    const actv = true
+    function TotalCu(x,y){
+        return x-y
+    }
+    function TotalCuPlus(x,y){
+        return x+y
+    }
+    const cutiAkhir = TotalCu(sisaCut, jumlah_hari)
+    const cutiAkhirPlus = TotalCuPlus(sisaCut, jumlah_hari)
+
+    console.log("min cuti :", TotalCu(sisaCut, jumlah_hari))
+    console.log("plus cuti :", TotalCuPlus(sisaCut, jumlah_hari))
+
+    const perizinanSisaCuti = async e => {
         try{
+            const formData = new FormData();
+            if(permission_pi === 'disetujui'){
+                formData.append("sisa_cuti", cutiAkhirPlus);
+            }else{
+                formData.append("sisa_cuti", cutiAkhir);
+            }
+            formData.append("username", username);
+            formData.append("email", email);
+            formData.append("is_active", actv);
             const res = await axios({
-                method: 'delete',
-                url:`${BASE_URL}/api/submission/employees/${id}/`,
+                method: 'put',
+                url:`${BASE_URL}/users/employees/${emp_id}/`,
+                data: formData,
                 headers: {
                     "Authorization" : `Token ${USER_TOKEN}`
                   }
             })
+
+            console.log(res)
+        }catch(error){
+            if( error.response &&
+                error.response.status >= 400 &&
+                error.response.status <= 500
+                ){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Failed',
+                        showConfirmButton: false,
+                        timer: 1500
+                      })
+                    console.log(error)
+            }
+        }
+      };
+
+      const starts = new Date(start_date).toISOString()
+      const ends = new Date(end_date).toISOString()
+
+      const CalendarInput = async e => {
+        try{
+            const formData = new FormData();
+            formData.append("title", employee_names);
+            formData.append("division", division);
+            formData.append("permission_type", jenis);
+            formData.append("reason", reason);
+            formData.append("start", starts);
+            formData.append("end", ends);
+            const res = await axios({
+                method: 'post',
+                url:`${BASE_URL}/petitions/employee-calendar/`,
+                data: formData,
+                headers: {
+                    "Authorization" : `Token ${USER_TOKEN}`
+                  }
+            })
+            console.log(res)
+        }catch(error){
+            if( error.response &&
+                error.response.status >= 400 &&
+                error.response.status <= 500
+                ){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Failed',
+                        showConfirmButton: false,
+                        timer: 1500
+                      })
+                    console.log(error)
+            }
+        }
+      };
+
+      const AttendanceInput = async e => {
+        try{
+            const formData = new FormData();
+            formData.append("employee_name", employee_names);
+            formData.append("working_date", start_date);
+            formData.append("lembur_start", lembur_start);
+            formData.append("lembur_end", lembur_end);
+            const res = await axios({
+                method: 'post',
+                url:`${BASE_URL}/attendance/employees/`,
+                data: formData,
+                headers: {
+                    "Authorization" : `Token ${USER_TOKEN}`
+                  }
+            })
+            console.log(res)
+        }catch(error){
+            if( error.response &&
+                error.response.status >= 400 &&
+                error.response.status <= 500
+                ){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Failed',
+                        showConfirmButton: false,
+                        timer: 1500
+                      })
+                    console.log(error)
+            }
+        }
+      };
+
+      const pengajuanDelete = async e => {
+        try{
+            const res = await axios({
+                method: 'delete',
+                url:`${BASE_URL}/petitions/employee/${id}/`,
+                headers: {
+                    "Authorization" : `Token ${USER_TOKEN}`
+                  }
+            })
+            perizinanSisaCuti()
             console.log(res)
             Swal.fire({
                 icon: 'success',
@@ -169,47 +313,18 @@ function DetailPerizinan() {
       };
 
 
-      const handleApproval = () => {
-        Swal.fire({
-            title: 'Anda Menyetujui Ini?',
-            text: "Anda tidak dapat mengedit nya lagi",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes!'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              Swal.fire(
-                'Berhasil!',
-                `Berhasil Approval Perizinan`,
-                'success'
-              )
-              approvalSubmission()
-            }
-          })
-          }
-
-    const handlePenghapusan = () => {
+      const handleCli = () => {
+        if (ROLES === 'hrd' & cutiAkhir > '1') {
+            perizinanAdm()
+        }else{
             Swal.fire({
-                title: 'Anda Menyetujui Ini?',
-                text: "Anda tidak dapat mengembalikan data ini lagi",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes!'
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  Swal.fire(
-                    'Berhasil!',
-                    `Berhasil menghapus Perizinan`,
-                    'success'
-                  )
-                  pengajuanDelete()
-                }
+                icon: 'error',
+                title: 'Gagal',
+                showConfirmButton: false,
+                timer: 1500
               })
-              }
+        }
+      }
 
       function hours(x){
         if(x !== null){
@@ -263,16 +378,16 @@ function DetailPerizinan() {
                                 <span>.</span>
                                 </div>
                                 <Box sx={{ mt:2, display:'flex' }}>
-                                    <TextField fullWidth disabled sx={{ mr:2 }} value={employee && employee.name} type="text" label='Nama' variant='filled' />
-                                    <TextField fullWidth disabled value={employee && employee.division} type="text" label='Bagian' variant='filled' />
+                                    <TextField fullWidth disabled sx={{ mr:2 }} onChange={e => setEmployeeName(e.target.value)} value={employee_names} type="text" label='Nama' variant='filled' />
+                                    <TextField fullWidth disabled value={division} onChange={e => setDivision(e.target.value)} type="text" label='Bagian' variant='filled' />
                                 </Box>
                                 <Box sx={{ mt:2, display: 'flex' }}>
                                     <span>Jenis Cuti/Izin</span> : &nbsp;
                                     <FormControl>
                                     <RadioGroup
-                                        aria-labelledby="permissionType"
-                                        name="permissionType"
-                                        value={permissionType}
+                                        aria-labelledby="jenis"
+                                        name="jenis"
+                                        value={jenis}
                                         onChange={handleChange}
                                     >
                                         <Col md={8}>
@@ -293,7 +408,6 @@ function DetailPerizinan() {
                                     label="Tanggal Awal"
                                     disabled
                                     value={start_date}
-                                    inputFormat='DD MMM YYYY'
                                     onChange={(newparams) => {
                                         setStartDate(newparams)
                                     }}
@@ -303,7 +417,6 @@ function DetailPerizinan() {
                                     <MobileDatePicker
                                     label="Tanggal Berakhir"
                                     disabled
-                                    inputFormat='DD MMM YYYY'
                                     value={end_date}
                                     onChange={(params) => {
                                         setEndDate(params)
@@ -315,16 +428,15 @@ function DetailPerizinan() {
 
                                 <Box sx={{ mt:1 }}>
                                 {
-                                        permissionType !== 'lembur'?
+                                        permission_pi === 'disetujui'?
                                         <TextField value={jumlah_hari} onChange={e => setJumlHari(e.target.value)} disabled fullWidth type="number" label='Jumlah Hari Kerja' variant='filled' />
                                         : 
-                                        null
-                                        // <TextField value={jumlah_hari} onChange={e => setJumlHari(e.target.value)} fullWidth type="number" label='Jumlah Hari Kerja' variant='standard' />
+                                        <TextField value={jumlah_hari} onChange={e => setJumlHari(e.target.value)} fullWidth type="number" label='Jumlah Hari Kerja' variant='standard' />
                                         //  <TextField value={jumlah_hari && jumlah_hari.jumlah_hari} disabled fullWidth type="number" label='Jumlah Hari Kerja' variant='filled' />
                                     }
                                 </Box>
 
-                               {permissionType === 'lembur' ?
+                               {jenis === 'lembur' ?
                             <React.Fragment>
                                  <Box sx={{ mt:1, display:'flex' }}>
                              <TextField value={hours(lembur_start)} sx={{ mr:1 }} onChange={e => setLemburStart(e.target.value)} disabled fullWidth type="text" label='Dari Jam' variant='filled' />
@@ -333,12 +445,13 @@ function DetailPerizinan() {
 
                                 <TextField value={dateHours(work_hour)} sx={{ mt:2 }} onChange={e => setWorkHour(e.target.value)} disabled fullWidth type="text" label='Total Jam' variant='filled' />
                             </React.Fragment>
-                                : <Box sx={{ mt:2, mb:2 }}>
+                                : null
+                            }
+                                <Box sx={{ mt:2, mb:2 }}>
                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <MobileDatePicker
                                     label="Masuk Kembali Tanggal"
                                     disabled
-                                    inputFormat='DD MMM YYYY'
                                     value={return_date}
                                     onChange={(newparams) => {
                                         setReturnDate(newparams)
@@ -348,15 +461,13 @@ function DetailPerizinan() {
                                 </LocalizationProvider>
                                 
                                 </Box>
-                            }
-                                
-                                <span className='mt-4 mb-2'>Persetujuan Atasan</span>
+                                <span className='mt-2'>Persetujuan Atasan</span>
                                 <Box sx={{ mt:2, display: 'flex' }}>
                                     <span>Disetujui/Ditolak</span> : &nbsp;
                                     <FormControl style={{ marginTop:'-8px', marginLeft:'15px' }}>
                                     <RadioGroup
-                                        aria-labelledby="permissionType"
-                                        name="permissionType"
+                                        aria-labelledby="jenis"
+                                        name="jenis"
                                         value={permission_pil}
                                         onChange={handleChange}
                                     >
@@ -394,7 +505,6 @@ function DetailPerizinan() {
                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
                                      <MobileDatePicker
                                      label="Tanggal Awal"
-                                     inputFormat='DD MMM YYYY'
                                      disablePast
                                      value={new Date(suspended_start)}
                                      onChange={(newValue) => {
@@ -406,7 +516,6 @@ function DetailPerizinan() {
                                      <MobileDatePicker
                                      label="Tanggal Berakhir"
                                      disablePast
-                                     inputFormat='DD MMM YYYY'
                                      value={new Date(suspended_end)}
                                      onChange={(newValue) => {
                                         convDates(newValue);
@@ -419,15 +528,15 @@ function DetailPerizinan() {
                                 }
 
                                 <div className="d-flex justify-content-between mt-4 mb-4">
-                                    <small className="text-secondary">Sisa Cuti Karyawan Ini : {employee.sisa_cuti && employee.sisa_cuti} 
+                                    <small className="text-secondary">Sisa Cuti Karyawan Ini : {sisaCut && sisaCut} 
                                     </small>
                                     {
                                         permission_pi === 'disetujui'?
-                                        <button onClick={handlePenghapusan} className='btn text-danger'>
+                                        <button onClick={pengajuanDelete} className='btn text-danger'>
                                             Hapus Pengajuan
                                         </button>
                                         : 
-                                        <button onClick={handleApproval} className='btn btn-primary'>Submit</button>
+                                        <button onClick={handleCli} className='btn btn-primary'>Submit</button>
                                     }
                                 </div>
                                     <small>

@@ -12,7 +12,7 @@ import Test from "../Hrd/Pages/Home/Test/Test";
   // Hrd
 import LoginHrd from "../Hrd/Pages/Auth/LoginHrd";
 import Dashboard from "../Hrd/Pages/Home/Dashboard";
-import HomeHrd from "../Hrd/Pages/Home/HomeHrd";
+import ListPengajuanHrd from "../Hrd/Pages/Home/ListPengajuanHrd";
 import DetailPerizinan from "../Hrd/Pages/Home/DetailPerizinan";
 import CalendarCuti from "../Hrd/Pages/Home/CalendarCuti";
 import ListKaryawan from "../Hrd/Pages/Home/Employee/ListKaryawan";
@@ -39,8 +39,11 @@ import DetailPerizinanAtasan from "../Atasan/DetailPerizinanAtasan";
 // Karyawan
 import DashboardKaryawan from "../Karyawan/DashboardKaryawan";
 import DetailPerizinanKaryawan from "../Karyawan/DetailPerizinanKaryawan";
-import PerizinanKaryawan from "../Karyawan/PerizinanKaryawan";
+import ListPerizinanKaryawan from "../Karyawan/ListPerizinanKaryawan";
 import PengajuanKaryawan from "../Karyawan/PengajuanKaryawan";
+import SelfListPresence from "../Karyawan/Presence/ListPresence";
+import SelfEmployeePresence from "../Karyawan/Presence/EmployeePresenceAnalysis";
+import SelfEmployeeAnalisisPresence from "../Karyawan/Presence/AnalisaPresence";
 
 import { AuthContext } from "../Context/AuthContext";
 import PresencePeriode from "../Hrd/Pages/Home/Presence/PresencePeriode";
@@ -64,13 +67,13 @@ export const AppRouter = () => {
             <React.Fragment>
                 <Route path='/home' element={<Dashboard />} />
                 <Route path='/my/test' element={<Test />} />
-                <Route path='/list-pengajuan' element={<HomeHrd />} />
                 <Route path='/calendar-cuti' element={<CalendarCuti />} />
                 <Route path='/notes' element={<Note />} />
                 <Route path='/notes/detail/:id' element={<NoteDetail />} />
+                <Route path='/list-pengajuan' element={<ListPengajuanHrd />} />
                 <Route path='/perizinan/detail/:id' element={<DetailPerizinan />} />
                 <Route path='/pengajuan' element={<PengajuanKaryawan />} />
-                <Route path='/pengajuan/me' element={<PerizinanKaryawan />} />
+                <Route path='/pengajuan/me' element={<ListPerizinanKaryawan />} />
                 <Route path='/list-karyawan' element={<ListKaryawan />} />
                 <Route path='/list-karyawan/detail/:id' element={<DetailEmployee />} />
                 <Route path='/employee/absensi' element={<ListPresence />} />
@@ -93,6 +96,9 @@ export const AppRouter = () => {
                 <Route path='/home' element={<DashboardAtasan />} />
                 <Route path='/perizinan/detail/:id' element={<DetailPerizinanAtasan />} />
                 <Route path='/list-pengajuan/karyawan/' element={<ListPengajuan />} />
+                <Route path='/presence/list/' element={<SelfListPresence />} />
+                <Route path='/employee/presence/' element={<SelfEmployeePresence />} />
+                <Route path='/employee/presence/:month_id/:year_id' element={<SelfEmployeeAnalisisPresence />} />
             </React.Fragment>
             : null
        } 
@@ -101,8 +107,11 @@ export const AppRouter = () => {
             <React.Fragment>
                 <Route path='/home' element={<DashboardKaryawan />} />
                 <Route path='/pengajuan' element={<PengajuanKaryawan />} />
-                <Route path='/list-pengajuan' element={<PerizinanKaryawan />} />
+                <Route path='/list-pengajuan' element={<ListPerizinanKaryawan />} />
                 <Route path='/perizinan/detail/:id' element={<DetailPerizinanKaryawan />} />
+                <Route path='/presence/list/' element={<SelfListPresence />} />
+                <Route path='/employee/presence/' element={<SelfEmployeePresence />} />
+                <Route path='/employee/presence/:month_id/:year_id' element={<SelfEmployeeAnalisisPresence />} />
             </React.Fragment>
             : null
        } 

@@ -3,7 +3,6 @@ import axios from 'axios'
 import styled from '@emotion/styled'
 import SideBar from '../../../Components/SideBar'
 import { Col } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
 import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch'
 import { Box, TextField, FormControl, InputLabel, Select, MenuItem, CircularProgress } from '@mui/material';
 import {Slide, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Pagination} from '@mui/material';
@@ -11,10 +10,8 @@ import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { bulan } from '../Presence/utlis/arrayfuc'
 import { tahun, dataNotes } from './array'
-import { Table } from 'react-bootstrap'
-import { Visibility } from '@mui/icons-material'
-import { datesUpt } from '../../../../Components/utilsFunction/functionUtils'
 import {Snackbar, Alert} from '@mui/material'
+import { HRTableNotesComponents } from '../../../../Karyawan/Components/Table/EmployeeTableComponents'
 
 const StyledPagination = styled(Pagination)({
     display: 'flex',
@@ -40,7 +37,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function Note() {
 
-    const navigate = useNavigate()
     const [employees_name, setemployeesName] = useState('')
     const [note_dates, setNotesDate] = useState('')
     const [list_notes, setListNotes] = useState([])
@@ -247,32 +243,7 @@ function Note() {
                                     <CircularProgress /> :
                                     <Col md={12}>
                                     <hr />
-                                    <Table hover bordered responsive>
-                                        <thead className='head_color_presence'>
-                                        <tr>
-                                            <th>NoteId</th>
-                                            <th>Nama Karyawan</th>
-                                            <th>Tanggal</th>
-                                            <th>Tipe Catatan</th>
-                                            <th>Catatan</th>
-                                            <th>Action</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {list_notes.map((lnotes, index) => {
-                                            return(
-                                            <tr className='text_presence' key={index}>
-                                                <td className='text_presence'>{lnotes.id ? lnotes.id : 0}</td>
-                                                <td className='text_presence'>{lnotes.employee ? lnotes.employee && lnotes.employee.name : "ex karyawan"}</td>
-                                                <td>{lnotes.date_note ? datesUpt(lnotes.date_note) : "Tidak ada tanggal"}</td>
-                                                <td className='text_presence'>{lnotes.type_notes ? lnotes.type_notes : "Tidak ada"}</td>
-                                                <td className='text_presence'>{lnotes.notes ? lnotes.notes : "Tidak ada"}</td>
-                                                <td className='toOnc' onClick={() => {navigate(`/notes/detail/${lnotes.id}`)}}><Visibility /></td>
-                                                </tr>
-                                            )
-                                        })}
-                                        </tbody>
-                                    </Table>
+                                    <HRTableNotesComponents tableData={list_notes} link={`/notes/detail`} />
                                     <StyledPagination
                                         count={pageCount}
                                         page={currentPage + 1}

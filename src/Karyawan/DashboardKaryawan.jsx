@@ -4,12 +4,12 @@ import { Col } from 'react-bootstrap'
 // import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL, USER_TOKEN, NAMES } from '../fetch/fetch'
+import StatistikUser from './Components/StatistikUser'
+import { datesUpt } from '../Components/utilsFunction/functionUtils'
 
 function DashboardKaryawan() {
 
-  // const navigate = useNavigate()
   const [users, setUsers] = React.useState([])
-  // const [loading, setLoading] = React.useState(true)
   
   const getListPengajuan = () => {
     axios.get(`${BASE_URL}/users/employee/search/?name=${NAMES}`,{
@@ -39,10 +39,13 @@ function DashboardKaryawan() {
                 </div>
                   Sisa Cuti Anda : {users.sisa_cuti}
                   <br />
-                  Bergabung Tanggal : {users.employee_joined}
+                  Bergabung Tanggal : {datesUpt(users.employee_joined)}
               </Col>
           </div>
         </div>
+
+      <StatistikUser />
+
       </main>
     </div>
   )

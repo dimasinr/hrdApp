@@ -8,9 +8,8 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { NAMES, USER_ID, USER_TOKEN, BASE_URL } from '../../fetch/fetch';
+import { NAMES, USER_ID } from '../../fetch/fetch';
 import MenuIcon from '@mui/icons-material/Menu';
-import axios from 'axios';
 import './sidebar.css'
 import { nawastraIcon } from '../../Components/images/images';
 import ListBar from './ListBar';
@@ -21,7 +20,6 @@ function SideBar(props) {
 
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [users, setUsers] = React.useState([])
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -30,21 +28,6 @@ function SideBar(props) {
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
-
-  const getUsers = () => {
-    axios.get(`${BASE_URL}/users/employees/${USER_ID}/`,{
-      headers: {
-        "Authorization" : 'Token ' + USER_TOKEN
-      }
-    })
-    .then((response) => {
-      const res = response.data
-      setUsers(res)
-      console.log(res)
-    })
-  }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  React.useEffect(() => getUsers(), [USER_ID])
 
   const drawer = (
     <div >
@@ -55,7 +38,7 @@ function SideBar(props) {
       <div className="text-center">
           <span className='text-secondary'>
             <b>
-              {capitalizeFirstLetter(NAMES)} | {USER_ID}{users.employee_joined ? users.employee_joined.toString().replace(/\s/g,'-') : '24124321'} | {users.division} 
+              {capitalizeFirstLetter(NAMES)} || {USER_ID}24124321
             </b> 
           </span>
       </div>
@@ -76,7 +59,7 @@ function SideBar(props) {
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          backgroundColor:'#0b305a', color:'white' 
+          backgroundColor:'#4a44b1', color:'white' 
         }}
       >
         <Toolbar>

@@ -1,4 +1,5 @@
 import React,{useState, useEffect} from 'react'
+import './dashboard.css'
 import SideBar from '../../Components/SideBar'
 import { Calendar, DateObject } from "react-multi-date-picker"
 import axios from 'axios'
@@ -110,7 +111,7 @@ function Dashboard() {
       // eslint-disable-next-line react-hooks/exhaustive-deps
       useEffect(() => getWeekOf(), [])
 
-      var dates = new Date().toISOString().slice(0,4)
+      var dates = new Date().getFullYear()
       var startDate = new Date(`01/01/${dates}`);
       var endDate = new Date(`12/31/${dates}`);
       var numOfDates = getBusinessDatesCount(startDate,endDate);
@@ -132,10 +133,6 @@ function Dashboard() {
         return (x/y*100)
       }
     
-    //   function percentageSyst(x, y){
-    //     return (x/dayPerc*100)
-    //   }
-
     const dateOff = off => {
         return new DateObject().setDay(off.days).setMonth(off.months).setYear(off.years)
     }
@@ -161,9 +158,6 @@ function Dashboard() {
         return x-y
       }
 
-      
-      
-
   return (
     <div id='image__background' className='d-flex'>
         <SideBar />
@@ -175,7 +169,7 @@ function Dashboard() {
                     <div className="d-flex flex-wrap">
                         <div className="col-md-3 mb-2">
                             <div className="card shadow-card" style={{ border:'none', marginRight:'10px', marginLeft:'10px' }}>
-                                <div className='card-title text-center' style={{ backgroundColor: '#0B305A', color:'white' }}>Total Working Days</div>
+                                <div className='card-title text-center top_card_color'>Total Working Days</div>
                                 <div className="card-body text-center">
                                     <span><h4>{sumMin(numOfDates, weekdays && weekdays.length)} Days</h4></span>
                                 </div>
@@ -184,7 +178,7 @@ function Dashboard() {
 
                         <div className="col-md-3 mb-2">
                             <div className="card shadow-card" style={{ border:'none' }}>
-                                <div className='card-title text-center' style={{ backgroundColor: '#0B305A', color:'white' }}>Attendance Percentage</div>
+                                <div className='card-title text-center top_card_color'>Attendance Percentage</div>
                                 <div className="card-body text-center">
                                     <span><h4>{percentage(topDash.total_work_hour_all && topDash.total_work_hour_all.working_hour__sum, dayPerc ).toString().slice(0,6)}%</h4></span>
                                 </div>
@@ -193,7 +187,7 @@ function Dashboard() {
 
                         <div className="col-md-3 mb-2">
                             <div className="card shadow-card" style={{ border:'none', marginLeft:'10px' }}>
-                                <div className='card-title text-center' style={{ backgroundColor: '#0B305A', color:'white' }}>Total Active Employee</div>
+                                <div className='card-title text-center top_card_color'>Total Active Employee</div>
                                 <div className="card-body text-center">
                                     <span><h4>{topDash.employee && topDash.employee.active_employee} Employee</h4></span>
                                 </div>
@@ -202,7 +196,7 @@ function Dashboard() {
 
                         <div className="col-md-3 mb-2">
                             <div className="card shadow-card" style={{ border:'none', marginLeft:'10px' }}>
-                                <div className='card-title text-center' style={{ backgroundColor: '#0B305A', color:'white' }}>Total Resign Employee</div>
+                                <div className='card-title text-center top_card_color'>Total Resign Employee</div>
                                 <div className="card-body text-center">
                                     <span><h4>{topDash.employee && topDash.employee.inactive_employee} Employee</h4></span>
                                 </div>
@@ -214,7 +208,7 @@ function Dashboard() {
                 </div>
                 <div className="col-md-3" style={{ marginLeft:'10px' }}>
                     <div className="card shadow-card" style={{ border:'none', marginRight:'10px' }}>
-                        <div className='card-title text-center' style={{ backgroundColor: '#0B305A', color:'white' }}>Year</div>
+                        <div className='card-title text-center top_card_color'>Year</div>
                         <div className="card-body text-center">
                             <span><h4>{casc && casc}</h4></span>
                         </div>
@@ -233,7 +227,6 @@ function Dashboard() {
                 plugins={[
                     multiColors({ position: 'none' }),
                 ]}
-                // onChange={setDates}
                 disableMonthPicker
                 disableYearPicker
                 readOnly
@@ -243,14 +236,14 @@ function Dashboard() {
                     <div className="row">
                         <div className="col-md-12 mb-2">
                             <div className="card shadow-card" style={{ border:'none' }}>
-                                <div className="card-title text-center" style={{ backgroundColor: '#0B305A', color:'white' }}>Top 5 Employee</div>
+                                <div className="card-title text-center top_card_color">Top 5 Employee</div>
                                 <div className="card-body">
                                     <ol>
                                         {top_emp.map((topEmp, index) =>{
                                             return(
                                                 <li>
                                                     <div className='d-flex justify-content-between'>
-                                                        <span>{topEmp.name}</span>
+                                                    <span>{topEmp.name.toString().length > 10 ? topEmp.name.toString().slice(0,10) + '...' : topEmp.name}</span>
                                                         <span style={{ color:'#91E57B' }}>{percentage(topEmp.working_hour, dayPerc).toString().slice(0,5)}%</span>
                                                     </div>
                                                 </li>
@@ -262,14 +255,14 @@ function Dashboard() {
                         </div>
                         <div className="col-md-12 mb-2">
                             <div className="card shadow-card" style={{ border:'none' }}>
-                                <div className="card-title text-center" style={{ backgroundColor: '#0B305A', color:'white' }}>5 Bottom Presence</div>
+                                <div className="card-title text-center top_card_color">5 Bottom Presence</div>
                                 <div className="card-body">
                                     <ol>
                                         {low_emp.map((lowEmp, index) =>{
                                             return(
                                                 <li>
                                                     <div className='d-flex justify-content-between'>
-                                                        <span>{lowEmp.name}</span>
+                                                        <span>{lowEmp.name.toString().length > 10 ? lowEmp.name.toString().slice(0,10) + '...' : lowEmp.name}</span>
                                                         <span className='text-danger'>{percentage(lowEmp.working_hour, dayPerc).toString().slice(0,5)}%</span>
                                                     </div>
                                                 </li>
@@ -282,7 +275,7 @@ function Dashboard() {
 
                         <div className="col-md-12 mb-2">
                             <div className="card shadow-card" style={{ border:'none' }}>
-                                <div className="card-title text-center" style={{ backgroundColor: '#0B305A', color:'white' }}>
+                                <div className="card-title text-center top_card_color">
                                     Hari Libur
                                 </div>
                                  <div className="d-flex justify-content-between">
@@ -333,48 +326,6 @@ function Dashboard() {
                 </div>
             </div>
         </div>
-
-            {/* <Dialog
-                    open={open}
-                    TransitionComponent={Transition}
-                    keepMounted
-                    onClose={handleClickOpen}
-                    aria-describedby="alert-dialog-slide-description"
-                  >
-                    <DialogTitle>{"Tambah Hari Libur"}</DialogTitle>
-                    <DialogContent sx={{ width:520 }}>
-                      <DialogContentText id="alert-dialog-slide-description">
-                        
-                      <TextField 
-                        fullWidth
-                        value={day_name}
-                        onChange={e => setDayName(e.target.value)}
-                        id="Harilibur"
-                        sx={{ mt:2 }} 
-                        label='Hari Libur'
-                         />
-                        <Box sx={{ mt:2 }}>
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <MobileDatePicker
-                              label="Tanggal Libur"
-                              value={new Date(tanggal)}
-                            //   value={tanggal}
-                              onChange={(valuese) => {
-                                  setTanggal(valuese);
-                              }}
-                              renderInput={(params) => <TextField fullWidth variant='outlined' label='Tanggal Hari Libur' {...params} />}
-                              />
-                          </LocalizationProvider>
-                        </Box>
-                       
-                      </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                      <Button onClick={handleClickOpen}>Tutup</Button>
-                      <Button onClick={addOffDay}>Tambah</Button>
-                    </DialogActions>
-                  </Dialog> */}
-
            
         </main>
     </div>

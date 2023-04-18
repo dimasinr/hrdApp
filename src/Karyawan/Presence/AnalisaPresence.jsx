@@ -1,0 +1,471 @@
+import React,{useState, useEffect} from 'react'
+import SideBar from '../../Hrd/Components/SideBar'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { ArrowBackIos, GetApp } from '@mui/icons-material'
+import { BASE_URL, USER_TOKEN } from '../../fetch/fetch'
+import axios from 'axios'
+// import Table from 'react-bootstrap/Table';
+import { CircularProgress, Tooltip, Table, TableHead, TableBody, TableCell, TableRow } from '@mui/material'
+import { useDownloadExcel } from 'react-export-table-to-excel'
+import { bulan } from '../../Components/utilsFunction/arrayFunction'
+import { sumTotal, sumHE, totalAtt, aktualLembur, leb, asce, ascr, dividDed } from './utlis/utlis'
+import { NAMES, USER_ID } from '../../fetch/fetch'
+import { changeDayName, datesUpt, workHour } from '../../Components/utilsFunction/functionUtils'
+
+function SelfEmployeeAnalisisPresence() {
+  const tableRef = React.useRef("");
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const month_id = location.pathname.split('/')[3]
+  const year_id = location.pathname.split('/')[4]
+  const month_a = month_id-1
+
+  console.log(month_id, year_id)
+
+  const [loading, setLoading] = useState(true)
+  const [attendance, setAttendance] = useState([])
+  const [TotalAttendance, setTotalAttendance] = useState([])
+
+  const [hour_working, setHourWorking] = useState([])
+  const [minutes_working, setMinutesWorking] = useState([])
+
+  const [hour_lembur, setHourLembur] = useState([])
+  const [minutes_lembur, setMinutesLembur] = useState([])
+
+  const getListPengajuan = () => {
+    axios.get(`${BASE_URL}/api/presence/employee/analysis/?months=${month_id}&years=${year_id}`,{
+      headers: {
+        "Authorization" : 'Token ' + USER_TOKEN
+      }
+    })
+    .then((response) => {
+      const res = response.data
+      setAttendance(res)
+      setLoading(false) 
+
+      setHourWorking(res.map((ab) => {
+        return(ascr(ab.working_hour))
+        }))
+
+      setMinutesWorking(res.map((ab) => {
+        return(asce(ab.working_hour))
+        }))
+
+      setHourLembur(res.map((ab) => {
+          return(ascr(ab.lembur_hour))
+        }))
+      
+      setMinutesLembur(res.map((ab) => {
+        return(asce(ab.lembur_hour))
+        }))
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      console.log(res)
+    })
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => getListPengajuan(), [USER_ID, month_id, loading])
+
+  const getTotalDay = () => {
+    axios.get(`${BASE_URL}/api/presence/total-day/?employee=${USER_ID}&months=${month_id}`,{
+      headers: {
+        "Authorization" : 'Token ' + USER_TOKEN
+      }
+    })
+    .then((response) => {
+      const res = response.data
+      setTotalAttendance(res.data)
+      console.log(res)
+    })
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => getTotalDay(), [USER_ID, month_id])
+  
+    const sumData = sumTotal(minutes_working)/60
+    const sumDataLembur = sumTotal(minutes_lembur)/60
+    
+    const sumDataWork = sumTotal(hour_working)
+    const sumHourLembur = sumTotal(hour_lembur)
+    
+    console.log(sumTotal(hour_working))
+    console.log("func baru : ",dividDed(sumData, sumDataWork))
+    console.log(sumTotal(minutes_working))
+
+    const lemburTotal = dividDed(sumDataLembur, sumHourLembur)
+    const jamKerjaA = dividDed(sumData, sumDataWork)
+
+    const jamKerjaS = sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur))
+
+    const aktualLem = aktualLembur(jamKerjaA, lemburTotal)
+    
+    const kurangLeb = leb(aktualLem, jamKerjaS)
+
+    const { onDownload } = useDownloadExcel({
+      currentTableRef: tableRef.current,
+      filename: `Analisa Absensi ${NAMES && NAMES.replace(/%20/g, " ")} Bulan ${bulan[month_a].month}`,
+      sheet: `Analisa Absensi ${NAMES && NAMES.replace(/%20/g, " ")} Bulan ${bulan[month_a].month}`,
+  })
+
+  return (
+    <div className='d-flex'>
+        <SideBar />
+        <div id="image__background" style={{ marginTop:'65px' }}>
+            <main className="container mt-3">
+                <div className="card shadow-card" style={{ border:'none', borderRadius:'10px' }}>
+                  <div className="card-body">
+                    <div className="d-flex justify-content-between">
+                      <button className='btn' onClick={() => navigate(-1)}>
+                          <span className="d-flex align-items-center mb-2">
+                            <ArrowBackIos />
+                            <h4 style={{ marginTop:'8px' }}>Analisa Absensi {NAMES && NAMES.replace(/%20/g, " ")} Bulan {bulan[month_a].month} </h4>
+                          </span>
+                        </button>
+                          <Tooltip title='Export to excel'>
+                            <button onClick={onDownload} className='btn'> <GetApp /> </button>
+                          </Tooltip>
+
+                    </div>
+                      <div className="col-md-12">
+                        {loading && loading ? 
+                        <CircularProgress />
+                        : 
+                        <div className="card shadow-card" style={{ border: 'none', borderRadius:'15px' }}>
+                          <div className="card-body">
+                          <Table ref={tableRef} bordered hover responsive>
+                            <TableHead>
+                            <TableRow>
+                                <TableCell>Nama</TableCell>
+                                <TableCell align="center">Tanggal</TableCell>
+                                <TableCell align="center">Hari</TableCell>
+                                <TableCell align="center">Masuk</TableCell>
+                                <TableCell align="center">Pulang</TableCell>
+                                <TableCell align="center">LemburS</TableCell>
+                                <TableCell align="center">LemburE</TableCell>
+                                <TableCell align="center">Keterangan</TableCell>
+                                <TableCell align="center">Total Jam</TableCell>
+                                <TableCell align="center">Total Lembur</TableCell>
+                            </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {attendance.map((att, index) => {
+                                  return(
+                                        <TableRow key={index}>
+                                        <TableCell>{att.employee && att.employee.name ? att.employee.name : "Nawastra Employee" }</TableCell>
+                                        <TableCell>{att.working_date ? datesUpt(att.working_date) : '-'}</TableCell>
+                                        <TableCell>{att.days ? changeDayName(att.days) : "-"}</TableCell>
+                                        <TableCell>{att.start_from ? workHour(att.start_from) : "-"}</TableCell>
+                                        <TableCell>{att.end_from ? workHour(att.end_from) : "-"}</TableCell>
+                                        <TableCell>{att.lembur_start ? workHour(att.lembur_start) : "-"}</TableCell>
+                                        <TableCell>{att.lembur_end ? workHour(att.lembur_end) : "-"}</TableCell>
+                                        <TableCell>{att.ket ? att.ket : null}</TableCell>
+                                      
+                                        <TableCell>
+                                          {/* Total Jam Kerja */}
+                                          {att.working_hour !== null ? att.working_hour.toString().length === 1 ?
+                                          att.working_hour.toString() + ' Menit'
+                                          : null : null
+                                        }
+                                          {att.working_hour !== null ? att.working_hour.toString().length === 2 ?
+                                          att.working_hour.toString() + ' Menit'
+                                          : null : null
+                                        }
+                                        {att.working_hour !== null ? att.working_hour.toString().length === 3 ?
+                                          att.working_hour.toString().slice(0,1) + ':'+ att.working_hour.toString().slice(1,3) + ' Jam'
+                                          : null : null
+                                        }
+                                        {att.working_hour !== null ? att.working_hour.toString().length === 4 ?
+                                          att.working_hour.toString().slice(0,2) + ':' + att.working_hour.toString().slice(2,4) + ' Jam'
+                                        : null : null
+                                        }
+                                          {/* </TableCell> */}
+                                          {/* <TableCell> */}
+                                        </TableCell>
+                                        <TableCell>
+                                          {/* Total Jam Lembur */}
+
+                                          {att.lembur_hour !== null ? att.lembur_hour.toString().length === 2 ?
+                                            att.lembur_hour + ' Menit'
+                                            : null : null
+                                          }
+                                          {att.lembur_hour !== null ? att.lembur_hour.toString().length === 3 ?
+                                            att.lembur_hour.toString().slice(0,1) + ':'+ att.lembur_hour.toString().slice(1,3) + ' Jam'
+                                            : null : null
+                                          }
+                                          {att.lembur_hour !== null ? att.lembur_hour.toString().length === 4 ?
+                                            att.lembur_hour.toString().slice(0,2) + ':' + att.lembur_hour.toString().slice(2,4) + ' Jam'
+                                          : null : null
+                                          }
+                                        </TableCell>
+                                        
+                                      </TableRow>   
+                                    )
+                                })}
+                                <TableRow>
+                                    <TableCell colSpan={8}><h6>Total</h6></TableCell>
+                                    
+                                      {dividDed(sumData, sumDataWork).toString().length === 1 ?
+                                        <TableCell colSpan={1}>
+                                          {dividDed(sumData, sumDataWork).toString()} Menit
+                                        </TableCell>
+                                        : null
+                                      }
+                                      {dividDed(sumData, sumDataWork).toString().length === 2 ?
+                                        <TableCell colSpan={1}>
+                                          {dividDed(sumData, sumDataWork).toString()} Menit
+                                        </TableCell>
+                                        : null
+                                      }
+                                      {dividDed(sumData, sumDataWork).toString().length === 3 ?
+                                        <TableCell colSpan={1}>
+                                          {dividDed(sumData, sumDataWork).toString().slice(0,1)},{dividDed(sumData, sumDataWork).toString().slice(1,3)} Jam
+                                        </TableCell>
+                                        : null
+                                      }
+                                      {dividDed(sumData, sumDataWork).toString().length === 4 ?
+                                        <TableCell colSpan={1}>
+                                          {dividDed(sumData, sumDataWork).toString().slice(0,2)},{dividDed(sumData, sumDataWork).toString().slice(2,4)} Jam
+                                        </TableCell>
+                                        : null
+                                      }
+                                      {dividDed(sumData, sumDataWork).toString().length === 5 ?
+                                        <TableCell colSpan={1}>
+                                          {dividDed(sumData, sumDataWork).toString().slice(0,3)},{dividDed(sumData, sumDataWork).toString().slice(3,5)} Jam
+                                        </TableCell>
+                                        : null
+                                      }
+
+                                    <TableCell colSpan={1}>
+                                      {lemburTotal.toString().length === 2 ?
+                                          lemburTotal.toString() +' Menit'
+                                          : null
+                                      }
+                                
+                                    {lemburTotal.toString().length === 3 ?
+                                          lemburTotal.toString().slice(0,1)+":"+
+                                          lemburTotal.toString().slice(1,3)+" Jam"
+                                        : null
+                                      }
+                                    
+                                    {lemburTotal.toString().length === 4 ?
+                                          lemburTotal.toString().slice(0,2)+':'+
+                                          lemburTotal.toString().slice(2,4) +' Jam'
+                                        : null
+                                      }
+                                      {lemburTotal.toString().length === 5 ?
+                                          lemburTotal.toString().slice(0,3)+':'+
+                                          lemburTotal.toString().slice(3,5) +' Jam'
+                                        : null
+                                      }
+                                    </TableCell>
+                                                                    
+                                </TableRow> 
+                                <TableRow>
+                                    <TableCell colSpan={11}><h5>Analisa Absensi</h5></TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell colSpan={8}>Hari Kerja Efektif</TableCell>
+                                    <TableCell colSpan={3}>{totalAtt(attendance.length, TotalAttendance.employee_lembur)} Hari</TableCell>
+                                </TableRow> 
+                                <TableRow>
+                                    <TableCell colSpan={8}>Jumlah Jam Kerja Efektif</TableCell>
+                                      {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)) === 0 ?
+                                      <TableCell colSpan={3}></TableCell> : null
+                                    }
+                                    {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().length === 3 ?
+                                    <TableCell colSpan={3}>
+                                      {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,1)}: 
+                                      {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(1,3)} Jam
+                                      </TableCell>
+                                      : null
+                                    }
+
+                                    {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().length === 4 ?
+                                    <TableCell colSpan={3}>
+                                      {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,2)}: 
+                                      {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(2,4)} Jam
+                                      </TableCell>
+                                      : null
+                                    }
+
+                                  {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().length === 5 ?
+                                    <TableCell colSpan={3}>
+                                      {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,3)}: 
+                                      {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(3,5)} Jam
+                                      </TableCell>
+                                      : null
+                                    }                                
+                                      
+                                </TableRow> 
+                                <TableRow>
+                                    <TableCell colSpan={8}>Jumlah Jam Kerja Aktual</TableCell>
+                                    {/* {dividDed(sumData, sumDataWork) === 0 ?
+                                        <TableCell colSpan={3}>
+                                        </TableCell>
+                                        : null
+                                      } */}
+                                      {dividDed(sumData, sumDataWork).toString().length === 1 ?
+                                        <TableCell colSpan={3}>
+                                          {dividDed(sumData, sumDataWork).toString()} Menit
+                                        </TableCell>
+                                        : null
+                                      }
+                                      {dividDed(sumData, sumDataWork).toString().length === 2 ?
+                                        <TableCell colSpan={3}>
+                                          {dividDed(sumData, sumDataWork).toString()} Menit
+                                        </TableCell>
+                                        : null
+                                      }
+                                    {dividDed(sumData, sumDataWork).toString().length === 3 ?
+                                        <TableCell colSpan={3}>
+                                          {dividDed(sumData, sumDataWork).toString().slice(0,1)}:
+                                          {dividDed(sumData, sumDataWork).toString().slice(1,3)} Jam
+                                        </TableCell>
+                                        : null
+                                      }
+                                    {dividDed(sumData, sumDataWork).toString().length === 4 ?
+                                        <TableCell colSpan={3}>
+                                          {dividDed(sumData, sumDataWork).toString().slice(0,2)}:
+                                          {dividDed(sumData, sumDataWork).toString().slice(2,4)} Jam
+                                        </TableCell>
+                                        : null
+                                      }
+                                      {dividDed(sumData, sumDataWork).toString().length === 5 ?
+                                        <TableCell colSpan={3}>
+                                          {dividDed(sumData, sumDataWork).toString().slice(0,3)}:
+                                          {dividDed(sumData, sumDataWork).toString().slice(3,5)} Jam
+                                        </TableCell>
+                                        : null
+                                      }
+                                </TableRow> 
+                                <TableRow>
+                                    <TableCell colSpan={8}>Jumlah Jam Lembur</TableCell>
+                                    {lemburTotal.toString().length === 0 ?
+                                        <TableCell colSpan={3}>
+                                          
+                                        </TableCell>
+                                        : null
+                                      }
+                                      {lemburTotal.toString().length === 1 ?
+                                        <TableCell colSpan={3}>
+                                          {lemburTotal.toString()} Menit
+                                        </TableCell>
+                                        : null
+                                      }
+                                      {lemburTotal.toString().length === 2 ?
+                                        <TableCell colSpan={3}>
+                                          {lemburTotal.toString()} Menit
+                                        </TableCell>
+                                        : null
+                                      }
+                                      {lemburTotal.toString().length === 3 ?
+                                        <TableCell colSpan={3}>
+                                          {lemburTotal.toString().slice(0,1)}:
+                                          {lemburTotal.toString().slice(1,3)} Jam
+                                        </TableCell>
+                                        : null
+                                      }
+                                      {lemburTotal.toString().length === 4 ?
+                                        <TableCell colSpan={3}>
+                                          {lemburTotal.toString().slice(0,2)}:
+                                          {lemburTotal.toString().slice(2,4)} Jam
+                                        </TableCell>
+                                        : null
+                                      }
+                                </TableRow> 
+                                <TableRow>
+                                    <TableCell colSpan={8}>Jam Kerja Aktual - lembur</TableCell>
+                                    <TableCell colSpan={3}>
+                                    {aktualLem.toString().length === 1?
+                                      aktualLem.toString().slice(0,1)+' Menit' :
+                                      null
+                                    }
+                                    {aktualLem.toString().length === 2?
+                                      aktualLem.toString().slice(0,1)+':'+
+                                      aktualLem.toString().slice(1,3) + ' Menit' :
+                                      null
+                                    }
+                                      {aktualLem.toString().length === 3?
+                                      aktualLem.toString().slice(0,1)+':'+
+                                      aktualLem.toString().slice(1,3) + ' Jam' :
+                                      null
+                                    }
+
+                                    {aktualLem.toString().length === 4?
+                                      aktualLem.toString().slice(0,2)+':'+
+                                      aktualLem.toString().slice(2,4) + ' Jam' :
+                                      null
+                                    } 
+                                    {aktualLem.toString().length === 5?
+                                      aktualLem.toString().slice(0,3)+':'+
+                                      aktualLem.toString().slice(3,5) + ' Jam' :
+                                      null
+                                    } 
+                                    </TableCell>
+                                </TableRow> 
+                                <TableRow>
+                                    <TableCell colSpan={8}>(Kurang/Lebih) Jam Kerja</TableCell>
+                                    {kurangLeb.toString().length === 0 ?
+                                        <TableCell colSpan={3}>
+                                        </TableCell>
+                                        : null
+                                      } 
+                                      {kurangLeb.toString().length === 1 ?
+                                        <TableCell colSpan={3}>
+                                          {kurangLeb.toString().slice(0,2)} Menit
+                                      
+                                        </TableCell>
+                                        : null
+                                      }
+
+                                    {kurangLeb.toString().length === 2 ?
+                                        <TableCell colSpan={3}>
+                                          {kurangLeb.toString().slice(0,2)} Menit
+                                        </TableCell>
+                                        : null
+                                      }
+                                    {kurangLeb.toString().length === 3 ?
+                                        <TableCell colSpan={3}>
+                                          {kurangLeb.toString().slice(0,1)},
+                                          {kurangLeb.toString().slice(1,3)} 
+                                          {kurangLeb.toString().slice(0,1) === '-' ?
+                                          " Menit"
+                                          :
+                                          " Jam"
+                                          } 
+                                        </TableCell>
+                                        : null
+                                      }
+                                      {kurangLeb.toString().length === 4 ?
+                                        <TableCell colSpan={3}>
+                                          {kurangLeb.toString().slice(0,2)},{kurangLeb.toString().slice(2,4)} Jam
+                                        </TableCell>
+                                        : null
+                                      }
+                                      {kurangLeb.toString().length === 5 ?
+                                        <TableCell colSpan={3}>
+                                          {kurangLeb.toString().slice(0,3)},
+                                          {kurangLeb.toString().slice(3,5)} Jam
+                                        </TableCell>
+                                        : null
+                                      }
+                                </TableRow> 
+                                
+                            </TableBody>
+                          </Table>
+                          </div>
+                        </div>
+
+                        }
+                      </div>
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+  )
+}
+
+export default SelfEmployeeAnalisisPresence

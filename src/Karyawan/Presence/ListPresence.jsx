@@ -1,20 +1,20 @@
 import React,{useState, useEffect} from 'react'
 import './presence.css'
 import axios from 'axios'
+import SideBar from '../../Hrd/Components/SideBar'
 import { Col } from 'react-bootstrap'
-import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch'
+import { BASE_URL, NAMES, USER_TOKEN } from '../../fetch/fetch'
 import { CircularProgress } from '@mui/material'
 import { TextField, Box, FormControl, Select, InputLabel, MenuItem } from '@mui/material'
 import {Slide, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, Alert, Backdrop} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Pagination from '@mui/material/Pagination';
-import SideBar from '../../../Components/SideBar'
 import { bulan } from './utlis/arrayfuc'
 import { zeta, delta } from './utlis/utlis'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { HRTableComponents } from '../../../../Karyawan/Components/Table/EmployeeTableComponents'
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import { EmployeeTableComponents } from '../Components/Table/EmployeeTableComponents'
 
 const StyledPagination = styled(Pagination)({
   display: 'flex',
@@ -38,9 +38,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function ListPresence() {
+export default function SelfListPresence() {
 
-  const [search_name, setSearchName] = useState([])
   const [search_month, setSearchMonth] = useState([])
   const [loading, setLoading] = useState(true)
   const [open, setOpen] = useState(false)
@@ -68,7 +67,7 @@ export default function ListPresence() {
   };
 
   const getListPresence = () => {
-    axios.get(`${BASE_URL}/api/presence/employees/?limit=15&offset=${offSet}&employee=${search_name}&months=${search_month}`,{
+    axios.get(`${BASE_URL}/api/presence/employees/?limit=15&offset=${offSet}&months=${search_month}`,{
       headers: {
         "Authorization" : 'Token ' + USER_TOKEN
       }
@@ -84,7 +83,7 @@ export default function ListPresence() {
     })
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => getListPresence(), [search_name, offSet, search_month])
+  useEffect(() => getListPresence(), [offSet, search_month])
 
   const itemsPerPage = 15;
   const pageCount = Math.ceil(presence_paginate.count / itemsPerPage);
@@ -188,12 +187,10 @@ export default function ListPresence() {
               <div className="card mb-4" style={{ borderRadius:'10px', border:'none' }}>
                 <div className="card-body">
                  <div className="card-title">
-                    <h4>List Absensi Karyawan</h4>
-                    <small className='text-secondary'>Klik tanda dibagian action untuk detail absensinya.</small>
+                    <h4>List Absensi {NAMES}</h4>
                   </div>
                   <Col md={12} className='mb-2 text-secondary d-flex justify-content-between'>
                     <Box sx={{ display: 'flex' }}>
-                        <TextField placeholder='Nama Lengkap' sx={{ mt:3, mr:2, mb:1 }} value={search_name} onChange={e => setSearchName(e.target.value)} />
                         <FormControl sx={{ mr:1, mt:3, minWidth: 220 }}>
                           <InputLabel id="tahun-label">Pilih bulan</InputLabel>
                           <Select
@@ -212,13 +209,8 @@ export default function ListPresence() {
                           
                           </Select>
                       </FormControl>
-                        {/* <TextField placeholder='Pilih Bulan' sx={{ mt:3 }} value={searchMonth} onChange={e => setSearchMonth(e.target.value)} /> */}
                       </Box>
                      
-                      <Box>
-                      {/* <button className='btn btn-primary'>Search Pages</button> */}
-                      <button onClick={handleClickOpen} className='btn btn-primary' style={{ marginLeft:'5px' }}>Tambah Data</button>
-                      </Box>
                     </Col>
                  
                 <hr />
@@ -228,7 +220,7 @@ export default function ListPresence() {
                     open={loading}
                   >
                   <CircularProgress color="inherit" /></Backdrop> : 
-                        <HRTableComponents tableData={list_presence} link={`/employee/absensi`} />
+                   <EmployeeTableComponents tableData={list_presence} />
                   }
                   <StyledPagination
                         count={pageCount}
@@ -278,7 +270,7 @@ export default function ListPresence() {
                     {/* <TextField value={employee_id} fullWidth onChange={e => setEmployeeName(e.target.value)} sx={{ mr:1 }} label='Nama Karyawan' /> */}
                     
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DesktopDatePicker
+                          <MobileDatePicker
                           label="Working Date"
                           value={new Date(dates)}
                           onChange={(newValue) => {
