@@ -125,6 +125,7 @@ function ListPengajuanHrd() {
                                           </Col>
 
                                         </Col>
+                                        <hr />
 
                                         <Col md={12}>
                                           {loading && loading ? 
