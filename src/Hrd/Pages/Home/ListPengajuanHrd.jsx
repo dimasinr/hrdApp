@@ -78,9 +78,9 @@ function ListPengajuanHrd() {
                                 <div className="card-body">
                                     {ROLES === 'hrd' || ROLES === 'superuser' ? 
                                     <React.Fragment>
+                                    <h5>List Pengajuan</h5>
 
                                     <Col md={12} className='mb-2 text-secondary d-flex justify-content-between'>
-                                      <h5>List Pengajuan</h5>
                                           <Col md={9} className="mt-2">
                                             <FormControl sx={{ mr: 1, mt:1, minWidth: 120 }}>
                                               <InputLabel id="demo-controlled-open-select-label">Perizinan</InputLabel>
