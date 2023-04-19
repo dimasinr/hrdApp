@@ -9,7 +9,9 @@ import { Add } from '@mui/icons-material'
 import { datesUpt } from '../../../Components/utilsFunction/functionUtils'
 import styled from '@emotion/styled'
 import { useNavigate } from 'react-router-dom'
-import { Pagination } from '@mui/material'
+import { Pagination, Stack, Chip, CircularProgress } from '@mui/material'
+import TopBar from '../../Components/MainDashboard/TopBar'
+import MainDashboard from '../../Components/MainDashboard/MainDashboard'
 
 const StyledPagination = styled(Pagination)({
   display: 'flex',
@@ -32,13 +34,10 @@ const StyledPagination = styled(Pagination)({
 function Dashboard() {
 
     const navigate = useNavigate()
-    const casc = new Date().toISOString().slice(0,4)
-    const [topDash , setTopDash] = useState([])
     const [offDay , setOffDay] = useState([])
     const [top_emp, setTopEmp ] = useState([])
     const [low_emp, setLowEmp ] = useState([])
-    // const [weekOffs, setWeekOffs] = useState([])
-    const [weekdays, setWeekdays] = useState([])
+    const [loading, setLoading] = useState(false)
 
     const [presence_paginate, setPresencePaginate] = useState([])
     const [currentPage, setCurrentPage] = useState(0);
@@ -47,20 +46,7 @@ function Dashboard() {
     const itemsPerPage = 50;
     const pageCount = Math.ceil(presence_paginate.count / itemsPerPage);
 
-      const getDates = () => {
-        axios.get(`${BASE_URL}/users/employee-total/`,{
-          headers: {
-            "Authorization" : `Token ${USER_TOKEN}`
-          }
-        })
-        .then((response) => {
-          const res = response.data
-          setTopDash(res)
-          console.log(res)
-        })
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      useEffect(() => getDates(), [])
+
 
       const getOffDay = () => {
         axios.get(`${BASE_URL}/api/dashboard/employee-dashboard/?limit=50&offset=${offSet}`,{
@@ -86,6 +72,7 @@ function Dashboard() {
         })
         .then((response) => {
           const res = response.data
+          setLoading(true)
           setTopEmp(res.top_five)
           setLowEmp(res.low_five)
           console.log(res)
@@ -93,23 +80,6 @@ function Dashboard() {
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => getTopFive(), [])
-
-
-      const getWeekOf = () => {
-        axios.get(`${BASE_URL}/api/dashboard/week-of`,{
-          headers: {
-            "Authorization" : `Token ${USER_TOKEN}`
-          }
-        })
-        .then((response) => {
-          const res = response.data
-        //   setWeekOffs(res)
-          setWeekdays(res.weekday)
-          console.log(res)
-        })
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      useEffect(() => getWeekOf(), [])
 
       var dates = new Date().getFullYear()
       var startDate = new Date(`01/01/${dates}`);
@@ -154,8 +124,9 @@ function Dashboard() {
         multiple: true
       }
 
-      function sumMin(x,y){
-        return x-y
+      const [main, setMain] = useState(true)
+      const changeMainDisplay = () =>{
+        setMain(!main)
       }
 
   return (
@@ -164,64 +135,25 @@ function Dashboard() {
         <main className="container" style={{ marginTop:'75px' }}>
 
         {/* Top Main */}
-            <div className="col-md-12 d-flex mb-2">
-                <div className="col-md-9">
-                    <div className="d-flex flex-wrap">
-                        <div className="col-md-3 mb-2">
-                            <div className="card shadow-card" style={{ border:'none', marginRight:'10px', marginLeft:'10px' }}>
-                                <div className='card-title text-center top_card_color'>Total Working Days</div>
-                                <div className="card-body text-center">
-                                    <span><h4>{sumMin(numOfDates, weekdays && weekdays.length)} Days</h4></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col-md-3 mb-2">
-                            <div className="card shadow-card" style={{ border:'none' }}>
-                                <div className='card-title text-center top_card_color'>Attendance Percentage</div>
-                                <div className="card-body text-center">
-                                    <span><h4>{percentage(topDash.total_work_hour_all && topDash.total_work_hour_all.working_hour__sum, dayPerc ).toString().slice(0,6)}%</h4></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col-md-3 mb-2">
-                            <div className="card shadow-card" style={{ border:'none', marginLeft:'10px' }}>
-                                <div className='card-title text-center top_card_color'>Total Active Employee</div>
-                                <div className="card-body text-center">
-                                    <span><h4>{topDash.employee && topDash.employee.active_employee} Employee</h4></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="col-md-3 mb-2">
-                            <div className="card shadow-card" style={{ border:'none', marginLeft:'10px' }}>
-                                <div className='card-title text-center top_card_color'>Total Resign Employee</div>
-                                <div className="card-body text-center">
-                                    <span><h4>{topDash.employee && topDash.employee.inactive_employee} Employee</h4></span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-                <div className="col-md-3" style={{ marginLeft:'10px' }}>
-                    <div className="card shadow-card" style={{ border:'none', marginRight:'10px' }}>
-                        <div className='card-title text-center top_card_color'>Year</div>
-                        <div className="card-body text-center">
-                            <span><h4>{casc && casc}</h4></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            <TopBar />
         {/* Content Main */}
 
         <div className="col-md-12" style={{ marginLeft:'10px' }}>
             <div className="d-flex flex-wrap">
                 <div className="col-md-8" style={{ marginRight:'55px' }}>
-                <Calendar
+                  {main ? 
+                <Stack direction="row" spacing={1} sx={{ mb:2 }}>
+                  <Chip label="Calendar Dashboard" onClick={changeMainDisplay} color="primary" />
+                  <Chip label="Statistik Dashboard" onClick={changeMainDisplay} color="primary" variant="outlined"  />
+                </Stack>
+                  :
+                <Stack direction="row" spacing={1} sx={{ mb:2 }}>
+                  <Chip label="Calendar Dashboard" onClick={changeMainDisplay} color="primary" variant="outlined" />
+                  <Chip label="Statistik Dashboard" onClick={changeMainDisplay} color="primary" />
+                </Stack>
+                }
+               {main ?
+               <Calendar
                 fullYear
                 {...initialProps}
                 plugins={[
@@ -231,24 +163,36 @@ function Dashboard() {
                 disableYearPicker
                 readOnly
                 /> 
+                :
+              <MainDashboard />
+              }
+
+          
                 </div>
                 <div className="col-md-3">
                     <div className="row">
                         <div className="col-md-12 mb-2">
                             <div className="card shadow-card" style={{ border:'none' }}>
-                                <div className="card-title text-center top_card_color">Top 5 Employee</div>
+                                <div className="card-title text-center top_card_color">Top 5 Presence</div>
                                 <div className="card-body">
                                     <ol>
-                                        {top_emp.map((topEmp, index) =>{
+                                      {loading && loading ?
+                                        <React.Fragment>
+                                          {top_emp.map((top, index) =>{
                                             return(
-                                                <li>
+                                                <li key={index}>
                                                     <div className='d-flex justify-content-between'>
-                                                    <span>{topEmp.name.toString().length > 10 ? topEmp.name.toString().slice(0,10) + '...' : topEmp.name}</span>
-                                                        <span style={{ color:'#91E57B' }}>{percentage(topEmp.working_hour, dayPerc).toString().slice(0,5)}%</span>
+                                                      <span>{top.name.toString().length > 10 ? top.name.toString().slice(0,10) + '...' : top.name}</span>
+                                                      <span className='text-success'>{percentage(top.working_hour, dayPerc).toString().slice(0,5)}%</span>
                                                     </div>
                                                 </li>
                                             )
-                                        })}
+                                          })
+                                        }
+                                        </React.Fragment>
+                                        :
+                                        <CircularProgress />  
+                                        }
                                     </ol>
                                 </div>
                             </div>
@@ -258,16 +202,23 @@ function Dashboard() {
                                 <div className="card-title text-center top_card_color">5 Bottom Presence</div>
                                 <div className="card-body">
                                     <ol>
-                                        {low_emp.map((lowEmp, index) =>{
+                                        {loading && loading ?
+                                        <React.Fragment>
+                                          {low_emp.map((lowEmp, index) =>{
                                             return(
-                                                <li>
+                                                <li key={index}>
                                                     <div className='d-flex justify-content-between'>
-                                                        <span>{lowEmp.name.toString().length > 10 ? lowEmp.name.toString().slice(0,10) + '...' : lowEmp.name}</span>
-                                                        <span className='text-danger'>{percentage(lowEmp.working_hour, dayPerc).toString().slice(0,5)}%</span>
+                                                      <span>{lowEmp.name.toString().length > 10 ? lowEmp.name.toString().slice(0,10) + '...' : lowEmp.name}</span>
+                                                      <span className='text-danger'>{percentage(lowEmp.working_hour, dayPerc).toString().slice(0,5)}%</span>
                                                     </div>
                                                 </li>
                                             )
-                                        })}
+                                          })
+                                        }
+                                        </React.Fragment>
+                                        :
+                                        <CircularProgress />  
+                                        }
                                     </ol>
                                 </div>
                             </div>

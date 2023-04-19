@@ -1,5 +1,5 @@
 import React from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Pie, PieChart, Cell } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Pie, PieChart, Cell, ComposedChart, Legend, Bar, Line } from 'recharts';
 
 export const UserChartComponents = ({ chartData }) => {
     return (
@@ -23,6 +23,23 @@ export const UserChartComponents = ({ chartData }) => {
             <Area type="monotone" dataKey="total_jam" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" />
             {/* <Area type="monotone" dataKey="total_jam" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" /> */}
             </AreaChart>
+      </ResponsiveContainer>
+    );
+  };
+
+  export const HREmployeeChartComponents = ({ chartData }) => {
+    return (
+      <ResponsiveContainer width="100%" height={300}>
+        <ComposedChart width={730} height={250} data={chartData}>
+          <XAxis dataKey="employee_name" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <CartesianGrid stroke="#f5f5f5" />
+          <Area type="monotone" dataKey="total_attendance" fill="#8884d8" stroke="#8884d8" />
+          <Bar dataKey="total_attendance" barSize={20} fill="#413ea0" />
+          <Line type="monotone" dataKey="total_attendance" stroke="#ff7300" />
+        </ComposedChart>
       </ResponsiveContainer>
     );
   };

@@ -122,12 +122,12 @@ export const HRTableNotesComponents = ({ tableData, link }) => {
                 <TableCell component="th" scope="row" >{row.employee ? row.employee && row.employee.name : "ex karyawan"}</TableCell>
                 <TableCell align="center">{row.date_note ? datesUpt(row.date_note) : "Tanggal tidak tertera"}</TableCell>
                 <TableCell align="center">{row.name_day ? changeDayName(row.name_day) : "Hari tidak diketahui"}</TableCell>
-                <TableCell align="center">{row.name_day ? row.type_notes : "Hari tidak diketahui"}</TableCell>
+                <TableCell align="center">{row.type_notes ? row.type_notes : "Tidak ada"}</TableCell>
                 <TableCell align="left">{row.notes ? 
                     row.notes.toString().length < 30 ? 
                         row.notes : 
                           row.notes.toString().slice(0,30)+"..." 
-                    : "Tidak ada Alasan"}
+                    : "Tidak ada Notes"}
                 </TableCell>                <TableCell align="center">
                     <Tooltip title="Detail">
                       <Link to={`${link}/${row.id}`}>
@@ -144,6 +144,34 @@ export const HRTableNotesComponents = ({ tableData, link }) => {
   );
 };
 
+export const HRTableStatistikComponents = ({ tableData}) => {
+  return (
+    <React.Fragment>
+        <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+            <TableRow>
+                <TableCell>Nama</TableCell>
+                <TableCell align="center">Total Absensi</TableCell>
+            </TableRow>
+            </TableHead>
+            <TableBody>
+            {tableData.map((row) => (
+                <TableRow
+                key={row.id}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                <TableCell component="th" scope="row" >{row.employee_name ? row.employee_name && row.employee_name : "ex karyawan"}</TableCell>
+                <TableCell align="center">{row.total_attendance ? row.total_attendance : "0"}</TableCell>
+                
+              </TableRow>
+            ))}
+            </TableBody>
+        </Table>
+        </TableContainer>
+    </React.Fragment>
+  );
+};
 
 export const SubmissionTableComponents = ({ tableData, link }) => {
   return (

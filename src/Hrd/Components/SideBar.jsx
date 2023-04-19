@@ -59,7 +59,7 @@ function SideBar(props) {
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          backgroundColor:'#4a44b1', color:'white' 
+          backgroundColor:'#4932a7', color:'white' 
         }}
       >
         <Toolbar>
