@@ -76,17 +76,11 @@ function ListPengajuanHrd() {
                 <Col md={12} sm={12}>
                             <div className="card shadow_card" style={{ border:'none', borderRadius:'12px' }}>
                                 <div className="card-body">
-                                    {/* <div className="card-title mb-3"><h5>Hallo, Selamat Datang {NAMES}</h5></div> */}
                                     {ROLES === 'hrd' || ROLES === 'superuser' ? 
                                     <React.Fragment>
-                                      {/* <Col md={3}>
-                                        <div className="d-flex justify-content-between">
-                                          <button className={ids === 'home' ? 'btn btn-secondary' : 'btn btn-primary'}>List Pengajuan Karyawan</button>
-                                          <button onClick={() => navigate('/notes')} className={ids !== 'home' ? 'btn btn-secondary' : 'btn btn-primary'}>Notes HRD</button>
-                                        </div>
-                                    </Col> */}
 
                                     <Col md={12} className='mb-2 text-secondary d-flex justify-content-between'>
+                                      <h5>List Pengajuan</h5>
                                           <Col md={9} className="mt-2">
                                             <FormControl sx={{ mr: 1, mt:1, minWidth: 120 }}>
                                               <InputLabel id="demo-controlled-open-select-label">Perizinan</InputLabel>
