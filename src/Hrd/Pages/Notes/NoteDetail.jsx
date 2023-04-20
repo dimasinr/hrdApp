@@ -1,17 +1,14 @@
 import React from 'react'
 import { Col } from 'react-bootstrap'
 import { TextField, Box, Skeleton, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
-// import Navbars from '../../../Components/Navbars'
 import { ArrowBackIos, Delete, Edit } from '@mui/icons-material';
-// import { Skeleton } from '@mui/material';
-// import { useNavigate } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch';
+import { BASE_URL, USER_TOKEN } from '../../../fetch/fetch';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import SideBar from '../../../Components/SideBar';
+import SideBar from '../../Components/SideBar';
 import { dataNotes } from './array';
 import {Snackbar, Alert} from '@mui/material';
 
@@ -22,7 +19,6 @@ const columns = [
   { field: 'notes', headerName: 'Notes', width: 520 },
 ];
 
-// sadafa
 const LoadingSkeleton = () => (
     <Box
       sx={{

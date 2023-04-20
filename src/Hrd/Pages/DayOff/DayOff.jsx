@@ -1,5 +1,5 @@
 import React from 'react'
-import SideBar from '../../../Components/SideBar';
+import SideBar from '../../Components/SideBar';
 import { TextField, Box, 
     Slide, 
     Dialog, DialogTitle, DialogContent, DialogContentText,  DialogActions, Button,
@@ -9,7 +9,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MobileDatePicker } from '@mui/x-date-pickers';
 import { useState, useEffect } from 'react';
-import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch';
+import { BASE_URL, USER_TOKEN } from '../../../fetch/fetch';
 import axios from 'axios';
 import { Col } from 'react-bootstrap';
 import { DataGrid } from '@mui/x-data-grid';

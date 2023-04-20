@@ -7,7 +7,7 @@ import { ROLES } from "../fetch/fetch";
 import AuthenticationPages from "../Components/AuthenticationPages";
 import AccountSettings from "../Components/AccountSettings";
 // import Maintenance from "../Components/Maintenance/Maintenance";
-import Test from "../Hrd/Pages/Home/Test/Test";
+import Test from "../Hrd/Pages/Test/Test";
 
   // Hrd
 import LoginHrd from "../Hrd/Pages/Auth/LoginHrd";
@@ -15,21 +15,22 @@ import Dashboard from "../Hrd/Pages/Home/Dashboard";
 import ListPengajuanHrd from "../Hrd/Pages/Home/ListPengajuanHrd";
 import DetailPerizinan from "../Hrd/Pages/Home/DetailPerizinan";
 import CalendarCuti from "../Hrd/Pages/Home/CalendarCuti";
-import ListKaryawan from "../Hrd/Pages/Home/Employee/ListKaryawan";
-import DetailEmployee from "../Hrd/Pages/Home/Employee/DetailEmployee"; 
-import EmployeeContract from "../Hrd/Pages/Home/Employee/EmployeeContract";
+import ListKaryawan from "../Hrd/Pages/Employee/ListKaryawan";
+import DetailEmployee from "../Hrd/Pages/Employee/DetailEmployee"; 
+import EmployeeContract from "../Hrd/Pages/Employee/EmployeeContract";
 
-import Note from "../Hrd/Pages/Home/Notes/Note";
-import NoteDetail from "../Hrd/Pages/Home/Notes/NoteDetail";
+import Note from "../Hrd/Pages/Notes/Note";
+import NoteDetail from "../Hrd/Pages/Notes/NoteDetail";
 
-import ListPresence from "../Hrd/Pages/Home/Presence/ListPresence";
-import DetailPresence from "../Hrd/Pages/Home/Presence/DetailPresence";
-import EmployeePresence from "../Hrd/Pages/Home/Presence/EmployeePresence";
-import ListEmployeePresence from "../Hrd/Pages/Home/Presence/ListEmployeePresence";
-import AnalisaPresence from "../Hrd/Pages/Home/Presence/AnalisaPresence";
+import ListPresence from "../Hrd/Pages/Presence/ListPresence";
+import DetailPresence from "../Hrd/Pages/Presence/DetailPresence";
+import EmployeePresence from "../Hrd/Pages/Presence/EmployeePresence";
+import ListEmployeePresence from "../Hrd/Pages/Presence/ListEmployeePresence";
+import AnalisaPresence from "../Hrd/Pages/Presence/AnalisaPresence";
+import PresencePeriode from "../Hrd/Pages/Presence/PresencePeriode";
 
-import DayOff from "../Hrd/Pages/Home/DayOff/DayOff";
-import DayOffDetail from "../Hrd/Pages/Home/DayOff/DayOffDetail";
+import DayOff from "../Hrd/Pages/DayOff/DayOff";
+import DayOffDetail from "../Hrd/Pages/DayOff/DayOffDetail";
 
 // Atasan
 import DashboardAtasan from "../Atasan/DashboardAtasan";
@@ -46,7 +47,6 @@ import SelfEmployeePresence from "../Karyawan/Presence/EmployeePresenceAnalysis"
 import SelfEmployeeAnalisisPresence from "../Karyawan/Presence/AnalisaPresence";
 
 import { AuthContext } from "../Context/AuthContext";
-import PresencePeriode from "../Hrd/Pages/Home/Presence/PresencePeriode";
 
 export const AppRouter = () => {
 

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { Col } from 'react-bootstrap'
 import axios from 'axios'
-import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch'
+import { BASE_URL, USER_TOKEN } from '../../../fetch/fetch'
 import { DataGrid } from '@mui/x-data-grid';
 import { Box, Skeleton, TextField } from '@mui/material';
-import SideBar from '../../../Components/SideBar'
+import SideBar from '../../Components/SideBar'
 import { useNavigate } from 'react-router-dom';
 
 const columns = [

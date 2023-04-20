@@ -1,33 +1,14 @@
 import React,{useState, useEffect} from 'react'
 import { Table } from 'react-bootstrap'
 import axios from 'axios'
-import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch'
+import { BASE_URL, USER_TOKEN } from '../../../fetch/fetch'
 import { CircularProgress } from '@mui/material'
-import { workHour, totalWorkHour, datesUpt, totalWorking } from '../../../../Components/utilsFunction/functionUtils'
+import { workHour, totalWorkHour, datesUpt, totalWorking } from '../../../Components/utilsFunction/functionUtils'
 import { TextField, Box } from '@mui/material'
-import { styled } from '@mui/material/styles';
-import Pagination from '@mui/material/Pagination';
-import SideBar from '../../../Components/SideBar'
+import SideBar from '../../Components/SideBar'
 import { Link } from 'react-router-dom'
 import { Visibility } from '@mui/icons-material'
-
-const StyledPagination = styled(Pagination)({
-  display: 'flex',
-  justifyContent: 'end',
-  borderRadius: '50%',
-  marginTop: '1rem',
-  borderColor: '#84B5E7',
-  '& .MuiPaginationItem-root': {
-    color: '#2C3E50',
-    borderRadius: '50%',
-    borderColor: '#84B5E7',
-
-  },
-  '& .Mui-selected': {
-    backgroundColor: '#E3EEFA',
-    color: '#1976D5',
-  },
-});
+import { StyledPagination } from '../../../Karyawan/Components/Pagination/PaginationEmployee'
 
 export default function Test() {
 

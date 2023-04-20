@@ -2,37 +2,18 @@ import React,{useState, useEffect} from 'react'
 import './presence.css'
 import axios from 'axios'
 import { Col } from 'react-bootstrap'
-import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch'
+import { BASE_URL, USER_TOKEN } from '../../../fetch/fetch'
 import { CircularProgress } from '@mui/material'
 import { TextField, Box, FormControl, Select, InputLabel, MenuItem } from '@mui/material'
 import {Slide, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, Alert, Backdrop} from '@mui/material';
-import { styled } from '@mui/material/styles';
-import Pagination from '@mui/material/Pagination';
-import SideBar from '../../../Components/SideBar'
+import SideBar from '../../Components/SideBar'
 import { bulan } from './utlis/arrayfuc'
 import { zeta, delta } from './utlis/utlis'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { HRTableComponents } from '../../../../Karyawan/Components/Table/EmployeeTableComponents'
-
-const StyledPagination = styled(Pagination)({
-  display: 'flex',
-  justifyContent: 'end',
-  borderRadius: '50%',
-  marginTop: '1rem',
-  borderColor: '#84B5E7',
-  '& .MuiPaginationItem-root': {
-    color: '#2C3E50',
-    borderRadius: '50%',
-    borderColor: '#84B5E7',
-
-  },
-  '& .Mui-selected': {
-    backgroundColor: '#E3EEFA',
-    color: '#1976D5',
-  },
-});
+import { HRTableComponents } from '../../../Karyawan/Components/Table/EmployeeTableComponents'
+import { StyledPagination } from '../../../Karyawan/Components/Pagination/PaginationEmployee'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;

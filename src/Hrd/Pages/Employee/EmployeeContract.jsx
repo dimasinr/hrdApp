@@ -1,10 +1,10 @@
 import React from 'react'
-import SideBar from '../../../Components/SideBar'
+import SideBar from '../../Components/SideBar';
 import {Paper, Table, TableBody, TableCell, TableContainer, 
     TableHead, TablePagination, TableRow} 
     from '@mui/material';
 import { ArrowBackIos } from '@mui/icons-material';
-import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch';
+import { BASE_URL, USER_TOKEN } from '../../../fetch/fetch';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Col } from 'react-bootstrap';

@@ -1,8 +1,8 @@
 import React,{useState, useEffect} from 'react'
-import SideBar from '../../../Components/SideBar'
+import SideBar from '../../Components/SideBar'
 import { Col } from 'react-bootstrap'
 import axios from 'axios'
-import { BASE_URL, USER_TOKEN } from '../../../../fetch/fetch'
+import { BASE_URL, USER_TOKEN } from '../../../fetch/fetch'
 import { DataGrid } from '@mui/x-data-grid';
 import { Box, Skeleton, TextField } from '@mui/material';
 import {Slide, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, InputLabel, Select, FormControl, MenuItem} from '@mui/material';
