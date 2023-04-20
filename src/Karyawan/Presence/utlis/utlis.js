@@ -84,7 +84,7 @@ export function sumTotal(arr){
   }
 
 export function sumHE(name, he){
-    if(name.replace(/%20/g, " ") === 'Kunut C'){
+    if(name.replace(/%20/g, " ") === 'Kunut Catur'){
       return he*900
     }else{
       return he*800
