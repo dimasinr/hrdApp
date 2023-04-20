@@ -9,6 +9,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import runOneSignal from '../../../oneSignal/oneSignal'
 import SideBar from '../../Components/SideBar'
 import { SubmissionTableComponents } from '../../../Karyawan/Components/Table/EmployeeTableComponents'
+import { StyledPagination } from '../../../Karyawan/Components/Pagination/PaginationEmployee'
 
 function ListPengajuanHrd() {
 
@@ -21,8 +22,15 @@ function ListPengajuanHrd() {
     const [list_pengajuan, setListPengajuan] = React.useState([])
     const [loading, setLoading] = React.useState(true)
     
+    const [offSet, setOffSet] = React.useState(0)
+    const [submission_paginate, setSubmissionPaginate] = React.useState([])
+    const [currentPage, setCurrentPage] = React.useState(0);
+  
+    const itemsPerPage = 15;
+    const pageCount = Math.ceil(submission_paginate.count / itemsPerPage);
+    
     const getListPengajuan = () => {
-      axios.get(`${BASE_URL}/api/submission/employees/?permission_type=${perizinan}&start_date=${start_dates}&end_date=${end_dates}&employee_name=${employees}`,{
+      axios.get(`${BASE_URL}/api/submission/employees/?limit=${itemsPerPage}&offset=${offSet}&permission_type=${perizinan}&start_date=${start_dates}&end_date=${end_dates}&employee_name=${employees}`,{
         headers: {
           "Authorization" : 'Token ' + USER_TOKEN
         }
@@ -30,6 +38,7 @@ function ListPengajuanHrd() {
       .then((response) => {
         const res = response.data
         setListPengajuan(res.results)
+        setSubmissionPaginate(res)
         setLoading(false)
         console.log(res)
       })
@@ -134,7 +143,21 @@ function ListPengajuanHrd() {
                                              open={loading}
                                            >
                                            <CircularProgress color="inherit" /></Backdrop> :
-                                        <SubmissionTableComponents tableData={list_pengajuan} link='/perizinan/detail' />
+                                           <React.Fragment>
+                                             <SubmissionTableComponents tableData={list_pengajuan} link='/perizinan/detail' />
+                                             <StyledPagination
+                                              count={pageCount}
+                                              page={currentPage + 1}
+                                              onChange={(event, page) => {
+                                                setCurrentPage(page - 1)
+                                                setOffSet(page*itemsPerPage-15)
+                                              }}
+                                              variant="outlined"
+                                              shape="rounded"
+                                              // size="large"
+                                            />
+                                            <hr />
+                                           </React.Fragment>
                                         }
                                         </Col>
                                     </React.Fragment>

@@ -3,14 +3,20 @@ import SideBar from '../Hrd/Components/SideBar'
 import axios from 'axios'
 import { BASE_URL, USER_TOKEN } from '../fetch/fetch'
 import { SubmissionTableComponents } from './Components/Table/EmployeeTableComponents'
+import { StyledPagination } from './Components/Pagination/PaginationEmployee'
 
 function ListPerizinanKaryawan() {
 
   const [list_pengajuan, setListPengajuan] = React.useState([])
-  // const [loading, setLoading] = React.useState(true)
-  
+  const [offSet, setOffSet] = React.useState(0)
+  const [submission_paginate, setSubmissionPaginate] = React.useState([])
+  const [currentPage, setCurrentPage] = React.useState(0);
+
+  const itemsPerPage = 15;
+  const pageCount = Math.ceil(submission_paginate.count / itemsPerPage);
+
   const getListPengajuan = () => {
-    axios.get(`${BASE_URL}/api/submission/employees/`,{
+    axios.get(`${BASE_URL}/api/submission/employees/?limit=${itemsPerPage}&offset=${offSet}`,{
       headers: {
         "Authorization" : 'Token ' + USER_TOKEN
       }
@@ -18,12 +24,13 @@ function ListPerizinanKaryawan() {
     .then((response) => {
       const res = response.data
       setListPengajuan(res.results)
+      setSubmissionPaginate(res)
       // setLoading(false)
       console.log(res)
     })
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  React.useEffect(() => getListPengajuan(), [])
+  React.useEffect(() => getListPengajuan(), [itemsPerPage, offSet])
 
   return (
     <div id='image__backgrounds' className='d-flex'>
@@ -33,6 +40,18 @@ function ListPerizinanKaryawan() {
           <div className="card-body">
             <h4>List Pengajuan Anda</h4>
             <SubmissionTableComponents tableData={list_pengajuan} link={`/perizinan/detail`} />
+            <StyledPagination
+                count={pageCount}
+                page={currentPage + 1}
+                onChange={(event, page) => {
+                  setCurrentPage(page - 1)
+                  setOffSet(page*itemsPerPage-15)
+                }}
+                variant="outlined"
+                shape="rounded"
+                // size="large"
+              />
+              <hr />
           </div>
         </div>
       </main>

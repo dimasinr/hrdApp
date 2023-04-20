@@ -7,32 +7,13 @@ import { BASE_URL, NAMES, USER_TOKEN } from '../../fetch/fetch'
 import { CircularProgress } from '@mui/material'
 import { TextField, Box, FormControl, Select, InputLabel, MenuItem } from '@mui/material'
 import {Slide, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Snackbar, Alert, Backdrop} from '@mui/material';
-import { styled } from '@mui/material/styles';
-import Pagination from '@mui/material/Pagination';
 import { bulan } from './utlis/arrayfuc'
 import { zeta, delta } from './utlis/utlis'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { EmployeeTableComponents } from '../Components/Table/EmployeeTableComponents'
-
-const StyledPagination = styled(Pagination)({
-  display: 'flex',
-  justifyContent: 'end',
-  borderRadius: '50%',
-  marginTop: '1rem',
-  borderColor: '#84B5E7',
-  '& .MuiPaginationItem-root': {
-    color: '#2C3E50',
-    borderRadius: '50%',
-    borderColor: '#84B5E7',
-
-  },
-  '& .Mui-selected': {
-    backgroundColor: '#E3EEFA',
-    color: '#1976D5',
-  },
-});
+import { StyledPagination } from '../Components/Pagination/PaginationEmployee'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
