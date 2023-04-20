@@ -153,7 +153,11 @@ export function dividDed(x, y){
   if(fixedNum === 0){
     fixedNum = '00'
   }else{
-    fixedNum = Math.round(data)
+    if(fixedNum.toString().length === 1){
+      fixedNum = '0'+Math.round(data)
+    }else{
+      fixedNum = Math.round(data)
+    }
   }
   const varXY =  dataY+''+fixedNum
   return parseInt(varXY)

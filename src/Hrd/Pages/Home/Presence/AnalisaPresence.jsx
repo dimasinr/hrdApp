@@ -100,12 +100,15 @@ function AnalisaPresence() {
 
     const lemburTotal = dividDed(sumDataLembur, sumHourLembur)
     const jamKerjaA = dividDed(sumData, sumDataWork)
-
+    
     const jamKerjaS = sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur))
-
+    
     const aktualLem = aktualLembur(jamKerjaA, lemburTotal)
     
     const kurangLeb = leb(aktualLem, jamKerjaS)
+
+    console.log("sum data: ", sumData, "sum data work", sumDataWork )
+    console.log('jam kerja:', jamKerjaA, "sum data round", Math.round((sumData-Math.round(sumData))*60))
 
     const { onDownload } = useDownloadExcel({
       currentTableRef: tableRef.current,
