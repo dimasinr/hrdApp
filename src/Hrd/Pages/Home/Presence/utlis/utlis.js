@@ -30,7 +30,7 @@ export function leb(x,y){
     const data1 =len-2
     const slics = varX.slice(data1, len)
     if(slics > 59){
-      return varD-100+60
+      return varD+40
     }else if(len > 1){
       if(slics > 59){
         return varD-40
@@ -44,6 +44,54 @@ export function leb(x,y){
     }
 
   }
+
+export function totalKurLeb(end_from, start_from){
+  var calc, tle, taw, finn, lenstart, lenend, tlestr, tleend, digstr, finnstr, digend, finnend
+  var ef
+  calc = (end_from - start_from)
+  tle = calc.toString().length
+  if(tle === 1){
+    return tle
+  }else if(tle > 1){
+    return tle-2
+  }
+  finn = calc.toString(taw, tle)
+
+  lenstart = start_from.toString().length
+  lenend = end_from.toString().length
+  tlestr = lenstart-2
+  tleend = lenend-2
+
+  digstr = start_from.toString()
+  finnstr = digstr.slice(tlestr, lenstart)
+
+  digend = start_from.toString()
+  finnend = digend.slice(tleend, lenend)
+
+  if(finn > 59 ){
+    ef = end_from-100+60
+    return (ef - start_from)
+  }
+  else if(tle > 1 ){
+    if(finn > 59){
+      return calc-100+60
+      }else if(finn < 60){
+        if(finnend < finnstr){
+          return calc-40
+        }else{
+          return calc
+        } 
+      }else{
+        return calc-40
+      }
+  }
+  else if(tle === 2 ){
+    return calc-100+60
+  }
+  else{
+    return calc
+  }
+}
 
 
   // function sumTotaled(arr){

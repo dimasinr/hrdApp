@@ -106,6 +106,8 @@ function AnalisaPresence() {
     const aktualLem = aktualLembur(jamKerjaA, lemburTotal)
     
     const kurangLeb = leb(aktualLem, jamKerjaS)
+    console.log("aktual lemb : ", aktualLem)
+    console.log("jam kerja : ", jamKerjaS)
 
     console.log("sum data: ", sumData, "sum data work", sumDataWork )
     console.log('jam kerja:', jamKerjaA, "sum data round", Math.round((sumData-Math.round(sumData))*60))
