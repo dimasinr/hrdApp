@@ -38,7 +38,7 @@ function ListEmployeePresence() {
     const [searchEmployee, setSearchEmployee] = useState('')
 
      const getListPengajuan = () => {
-      axios.get(`${BASE_URL}/users/employee/search/?name=${searchEmployee}`,{
+      axios.get(`${BASE_URL}/users/employee/search/?name=${searchEmployee}&active=True`,{
         headers: {
           "Authorization" : 'Token ' + USER_TOKEN
         }

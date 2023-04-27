@@ -42,15 +42,15 @@ export default function StatistikUser() {
   const [chartStatEmployee, setChartStatEmployee] = React.useState([])
 
   const getListPengajuan = () => {
-    axios.get(`${BASE_URL}/api/dashboard/presence-statistik/${years}/`,{
+    axios.get(`${BASE_URL}/api/dashboard/preview/${years}/`,{
       headers: {
         "Authorization" : 'Token ' + USER_TOKEN
       }
     })
     .then((response) => {
       const res = response.data
-      setChartStatEmployee(res.chart)
-      console.log(res.chart)
+      setChartStatEmployee(res)
+      console.log(res)
     })
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps

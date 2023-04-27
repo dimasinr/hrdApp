@@ -20,7 +20,7 @@ export const UserChartComponents = ({ chartData }) => {
             <YAxis />
             <CartesianGrid strokeDasharray="3 3" />
             <Tooltip />
-            <Area type="monotone" dataKey="total_jam" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" />
+            <Area type="monotone" dataKey="value" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" />
             {/* <Area type="monotone" dataKey="total_jam" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" /> */}
             </AreaChart>
       </ResponsiveContainer>
