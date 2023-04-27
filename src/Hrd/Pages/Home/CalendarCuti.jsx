@@ -7,22 +7,22 @@ import SideBar from '../../Components/SideBar'
 
 function ListKaryawan() {
 
-    const [listPengajuan , setListPengajuan] = React.useState([])
+    const [listCalendarCuti , setListCalendarCuti] = React.useState([])
 
-    const getDates = () => {
-      axios.get(`${BASE_URL}/petitions/employee-calendar/?limit=50`,{
+    const getCalendarCuti = () => {
+      axios.get(`${BASE_URL}/api/submission/calendar`,{
         headers: {
           "Authorization" : `Token ${USER_TOKEN}`
         }
       })
       .then((response) => {
         const res = response.data
-        setListPengajuan(res.results)
+        setListCalendarCuti(res)
         console.log(res)
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    React.useEffect(() => getDates(), [])
+    React.useEffect(() => getCalendarCuti(), [])
   
   return (
     <div id='image__background' className='d-flex'>
@@ -34,12 +34,12 @@ function ListKaryawan() {
                 <FullCalendar
                 plugins={[ dayGridPlugin ]}
                 initialView="dayGridMonth"
-                //   weekends={false}
-                eventBackgroundColor={listPengajuan.color}
-                // eventContent={renderEventContent(listPengajuan)}
+                // weekends={true}
+                eventBackgroundColor={listCalendarCuti.color}
+                // eventContent={renderEventContent(listCalendarCuti)}
                 // dateClick={handleDateClick}
                 // events={newArrayOfObj}
-                events={listPengajuan}
+                events={listCalendarCuti}
                 />
                 </div>
             </div>

@@ -6,6 +6,7 @@ import axios from 'axios'
 import { BASE_URL, USER_TOKEN, NAMES } from '../fetch/fetch'
 import StatistikUser from './Components/StatistikUser'
 import { datesUpt } from '../Components/utilsFunction/functionUtils'
+import { hitungDurasi } from './Components/Utils/utils'
 
 function DashboardKaryawan() {
 
@@ -40,6 +41,8 @@ function DashboardKaryawan() {
                   Sisa Cuti Anda : {users.sisa_cuti}
                   <br />
                   Bergabung Tanggal : {datesUpt(users.employee_joined)}
+                  <br />
+                  Sudah Bekerja Selama : {hitungDurasi(users.employee_joined)}
               </Col>
           </div>
         </div>

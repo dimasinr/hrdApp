@@ -2,7 +2,7 @@ import React from 'react'
 import { Col, Container } from 'react-bootstrap'
 import axios from 'axios'
 import { BASE_URL, USER_TOKEN, NAMES } from '../../fetch/fetch'
-import { UserChartComponents, UserChartPieComponents } from './Charts/UserChartsComponents'
+import { UserChartComponents, UserChartBarComponents } from './Charts/UserChartsComponents'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers';
@@ -17,18 +17,19 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
-const RADIAN = Math.PI / 180;
-const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+// UserChartPieComponents
+// const RADIAN = Math.PI / 180;
+// const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+//   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+//   const x = cx + radius * Math.cos(-midAngle * RADIAN);
+//   const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-  return (
-    <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-      {`${(percent * 100).toFixed(0)}%`}
-    </text>
-  );
-};
+//   return (
+//     <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+//       {`${(percent * 100).toFixed(0)}%`}
+//     </text>
+//   );
+// };
 
 export default function StatistikUser() {
 
@@ -137,14 +138,17 @@ export default function StatistikUser() {
                             return(
                               <React.Fragment key={index}>
                                 <div className="d-flex">
-                                  <DataUsage style={{ color:COLORS[index] }} /> &nbsp; {permiss.name} : {permiss.value}
+                                  <DataUsage style={{ color: COLORS[index] }} /> &nbsp; {permiss.name} : {permiss.value}{permiss.name !== 'Lembur' ? "d" : "h"}
                                 </div>
                               </React.Fragment>
                             )
                           })}
                         </div>
                       </span>
-                      <UserChartPieComponents chartData={permission} label={renderCustomizedLabel} color={COLORS} />
+                      {/* <UserChartPieComponents chartData={permission} label={renderCustomizedLabel} color={COLORS} /> */}
+                      <div className="mt-1">
+                        <UserChartBarComponents chartData={permission}  />
+                      </div>
                     </div>
                   </div>
                 </Col>
