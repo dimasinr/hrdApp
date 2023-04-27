@@ -32,14 +32,14 @@ export default function MainDashboard() {
       useEffect(() => getStatistikEmployee(), [year, month])
     
     const getStatistikPresence = () => {
-        axios.get(`${BASE_URL}/api/dashboard/presence-statistik/${year}/`,{
+        axios.get(`${BASE_URL}/api/dashboard/preview/${year}/`,{
           headers: {
             "Authorization" : `Token ${USER_TOKEN}`
           }
         })
         .then((response) => {
           const res = response.data
-          setPresenceStat(res.chart)
+          setPresenceStat(res)
           setLoading(false)
           console.log(res)
         })
