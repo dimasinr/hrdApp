@@ -24,11 +24,7 @@ function DetailPerizinanAtasan() {
   const [end_date, setEndDate] = useState(new Date());
   const [return_date, setReturnDate] = useState(new Date());
   const [permission_pi, setPermissionPi] = useState('');
-  const [emp_id, setEmpId] = useState('');
   const [sisaCut, setSisaCut] = useState('');
-
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
 
   const [permission_pil, setPermissionPil] = useState('');
   const [reason_rejected, setReasonRejected] = useState(null);
@@ -60,15 +56,15 @@ function DetailPerizinanAtasan() {
   const [loading, setLoading] = React.useState(true)
   
   const getListPengajuan = () => {
-    axios.get(`${BASE_URL}/petitions/employee/${id}/`,{
+    axios.get(`${BASE_URL}/api/submission/employees/${id}/`,{
       headers: {
         "Authorization" : 'Token ' + USER_TOKEN
       }
     })
     .then((response) => {
       const res = response.data
-      setEmployeeName(res.employee_name)
-      setDivision(res.division)
+      setEmployeeName(res.employee.name)
+      setDivision(res.employee.division)
       setJenis(res.permission_type)
       setStartDate(res.start_date)
       setEndDate(res.end_date)
@@ -83,31 +79,13 @@ function DetailPerizinanAtasan() {
       setReason(res.reason)
       setJumlahHari(res.jumlah_hari)
       setLoading(false)
-      setEmpId(res.employee_id)
+      setSisaCut(res.employee.sisa_cuti)
       console.log(res)
     })
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => getListPengajuan(), [id])
 
-  const getEmployees = () => {
-      axios.get(`${BASE_URL}/users/employees/${emp_id}/`,{
-        headers: {
-          "Authorization" : 'Token ' + USER_TOKEN
-        }
-      })
-      .then((response) => {
-        const res = response.data
-        setLoading(false)
-        setSisaCut(res.sisa_cuti)
-        setUsername(res.username)
-        setEmail(res.email)
-        console.log(res)
-      })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    React.useEffect(() => getEmployees(), [emp_id])
-  
 
   const perizinanAdm = async e => {
       try{
@@ -118,17 +96,12 @@ function DetailPerizinanAtasan() {
               formData.append("suspended_end", suspended_end);
           }else if(permission_pil === 'ditolak'){
               formData.append("reason_rejected", reason_rejected);
-          }else if(permission_pil === 'disetujui' & jenis !== 'lembur' & jenis !== 'sakit'){
-              perizinanSisaCuti()
-              CalendarInput()
           }else if(permission_pil === 'bersyarat'){
               formData.append("conditional_reasons", conditional_reason);
-          }else if(permission_pil === 'disetujui' & jenis === 'lembur'){
-            AttendanceInput()
         }
           const res = await axios({
               method: 'put',
-              url:`${BASE_URL}/petitions/employee/${id}/`,
+              url:`${BASE_URL}/api/submission/employees/${id}/`,
               data: formData,
               headers: {
                   "Authorization" : `Token ${USER_TOKEN}`
@@ -158,133 +131,6 @@ function DetailPerizinanAtasan() {
       }
     };
 
-  const actv = true
-    function TotalCu(x,y){
-        return x-y
-    }
-    function TotalCuPlus(x,y){
-        return x+y
-    }
-    const cutiAkhir = TotalCu(sisaCut, jumlah_hari)
-    const cutiAkhirPlus = TotalCuPlus(sisaCut, jumlah_hari)
-
-  const perizinanSisaCuti = async e => {
-      try{
-          const formData = new FormData();
-          if(permission_pi === 'disetujui'){
-            formData.append("sisa_cuti", cutiAkhirPlus);
-          }else{
-            formData.append("sisa_cuti", cutiAkhir);
-          }
-          formData.append("username", username);
-          formData.append("email", email);
-          formData.append("is_active", actv);
-          const res = await axios({
-              method: 'put',
-              url:`${BASE_URL}/users/employees/${emp_id}/`,
-              data: formData,
-              headers: {
-                  "Authorization" : `Token ${USER_TOKEN}`
-                }
-          })
-          console.log(res)
-      }catch(error){
-          if( error.response &&
-              error.response.status >= 400 &&
-              error.response.status <= 500
-              ){
-                  Swal.fire({
-                      icon: 'error',
-                      title: 'Failed',
-                      showConfirmButton: false,
-                      timer: 1500
-                    })
-                  console.log(error)
-          }
-      }
-    };
-
-    const starts = new Date(start_date).toISOString()
-    const ends = new Date(end_date).toISOString()
-
-    const CalendarInput = async e => {
-      try{
-          const formData = new FormData();
-          formData.append("title", employee_names);
-          formData.append("division", division);
-          formData.append("permission_type", jenis);
-          formData.append("reason", reason);
-          formData.append("start", starts);
-          formData.append("end", ends);
-          const res = await axios({
-              method: 'post',
-              url:`${BASE_URL}/petitions/employee-calendar/`,
-              data: formData,
-              headers: {
-                  "Authorization" : `Token ${USER_TOKEN}`
-                }
-          })
-          console.log(res)
-      }catch(error){
-          if( error.response &&
-              error.response.status >= 400 &&
-              error.response.status <= 500
-              ){
-                  Swal.fire({
-                      icon: 'error',
-                      title: 'Failed',
-                      showConfirmButton: false,
-                      timer: 1500
-                    })
-                  console.log(error)
-          }
-      }
-    };
-
-    const AttendanceInput = async e => {
-      try{
-          const formData = new FormData();
-          formData.append("employee_name", employee_names);
-          formData.append("working_date", start_date);
-          formData.append("lembur_start", fromHour);
-          formData.append("lembur_end", endHour);
-          const res = await axios({
-              method: 'post',
-              url:`${BASE_URL}/attendance/employees/`,
-              data: formData,
-              headers: {
-                  "Authorization" : `Token ${USER_TOKEN}`
-                }
-          })
-          console.log(res)
-      }catch(error){
-          if( error.response &&
-              error.response.status >= 400 &&
-              error.response.status <= 500
-              ){
-                  Swal.fire({
-                      icon: 'error',
-                      title: 'Failed',
-                      showConfirmButton: false,
-                      timer: 1500
-                    })
-                  console.log(error)
-          }
-      }
-    };
-
-    const handleCli = () => {
-      if (ROLES === 'atasan' & cutiAkhir > '1') {
-          perizinanAdm()
-      }else{
-          Swal.fire({
-              icon: 'error',
-              title: 'Gagal',
-              showConfirmButton: false,
-              timer: 1500
-            })
-      }
-    }
 
     function JaMe(x){
       let lent = x.toString().length
@@ -314,8 +160,6 @@ function DetailPerizinanAtasan() {
       return 0
     }
 }
-
-    console.log(ROLES)
 
   return (
     <div id='image__backgrounds' className='d-flex'>
@@ -493,7 +337,7 @@ function DetailPerizinanAtasan() {
                         permission_pi === 'disetujui'?
                         null
                         : 
-                        <button onClick={handleCli} className='btn btn-primary'>Submit</button>
+                        <button onClick={perizinanAdm} className='btn btn-primary'>Submit</button>
                     }
                 </div>
             </div>
