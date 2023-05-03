@@ -6,7 +6,6 @@ import { BASE_URL, USER_TOKEN, ROLES } from '../fetch/fetch'
 import {  FormControl, InputLabel, Select, MenuItem, TextField, Backdrop, CircularProgress } from '@mui/material';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import runOneSignal from '../../../oneSignal/oneSignal'
 import SideBar from '../Hrd/Components/SideBar'
 import {SubmissionTableComponents} from '../Karyawan/Components/Table/EmployeeTableComponents'
 import { StyledPagination } from '../Karyawan/Components/Pagination/PaginationEmployee'
@@ -65,10 +64,6 @@ function ListPengajuan() {
     let dated = JSON.stringify(event);
     setEndDates(dated.slice(1, 11))
   }
-
-  React.useEffect(() => {
-    runOneSignal();
-  },[])
 
   if(ROLES === 'employee' || ROLES === 'atasan' ){
     localStorage.clear()
