@@ -90,9 +90,6 @@ function PengajuanKaryawan() {
     const submitPetitions = async e => {
         try{
             const formData = new FormData();
-            formData.append("employee_id", USER_ID);
-            formData.append("employee_name", NAMES);
-            formData.append("division", bagian);
             formData.append("permission_type", jenis);
             if(jenis === 'lembur'){
                 formData.append("from_hour", lembur_str);
@@ -106,7 +103,7 @@ function PengajuanKaryawan() {
 
             const res = await axios({
                 method: 'post',
-                url:`${BASE_URL}/petitions/pengajuan/`,
+                url:`${BASE_URL}/api/submission/employees/`,
                 data: formData,
                 headers: {
                     "Authorization" : `Token ${USER_TOKEN}`
