@@ -1,96 +1,179 @@
 import React from 'react'
-import SideBar from '../Hrd/Components/SideBar'
 import { Col } from 'react-bootstrap'
-import { DataGrid } from '@mui/x-data-grid'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { BASE_URL, USER_TOKEN } from '../fetch/fetch'
-import { Box, Skeleton, TextField } from '@mui/material';
+import { BASE_URL, USER_TOKEN, ROLES } from '../../../fetch/fetch'
+import {  FormControl, InputLabel, Select, MenuItem, TextField, Backdrop, CircularProgress } from '@mui/material';
+import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import runOneSignal from '../../../oneSignal/oneSignal'
+import SideBar from '../../Components/SideBar'
+import { SubmissionTableComponents } from '../../../Karyawan/Components/Table/EmployeeTableComponents'
+import { StyledPagination } from '../../../Karyawan/Components/Pagination/PaginationEmployee'
 
-const columns = [
-  { field: 'id', headerName: 'Id', width: 50 },
-  { field: 'employee_name', headerName: 'Nama', width: 130 },
-  { field: 'division', headerName: 'Bagian', width: 110 },
-  { field: 'permission_type', headerName: 'Jenis Ijin', width: 110 },
-  { field: 'reason', headerName: 'Alasan', width: 130 },
-  { field: 'start_date', headerName: 'Tanggal Awal', width: 130 },
-  { field: 'end_date', headerName: 'Tanggal Akhir', width: 130 },
-  { field: 'return_date', headerName: 'Masuk Kembali', width: 130 },
-  { field: 'permission_pil', headerName: 'Izin Atasan', width: 130 },
-];
+function ListPengajuanHrd() {
 
-const LoadingSkeleton = () => (
-<Box
-  sx={{
-    height: 'max-content',
-  }}
->
-  {[...Array(1)].map((_, index) => (
-    <Skeleton variant="rectangular" sx={{ my: 4, mx: 1 }} key={index} />
-  ))}
-</Box>
-);
-
-function ListPengajuan() {
-
-  const navigate = useNavigate()
-  const [list_pengajuan, setListPengajuan] = React.useState([])
-  const [loading, setLoading] = React.useState(true)
-  const [searchEmp, setSearchEmp] = React.useState('')
-  const [permiss, setPermiss] = React.useState('')
+    const navigate = useNavigate()
+    const [open, setOpen] = React.useState(false)
+    const [perizinan, setPerizinan] = React.useState('')
+    const [start_dates, setStartDates] = React.useState('')
+    const [end_dates, setEndDates] = React.useState('')
+    const [employees, setEmployess] = React.useState('')
+    const [list_pengajuan, setListPengajuan] = React.useState([])
+    const [loading, setLoading] = React.useState(true)
+    
+    const [offSet, setOffSet] = React.useState(0)
+    const [submission_paginate, setSubmissionPaginate] = React.useState([])
+    const [currentPage, setCurrentPage] = React.useState(0);
   
-  const getListPengajuan = () => {
-    axios.get(`${BASE_URL}/petitions/pengajuan/?employee_name=${searchEmp}&permission_type=${permiss}`,{
-      headers: {
-        "Authorization" : 'Token ' + USER_TOKEN
-      }
-    })
-    .then((response) => {
-      const res = response.data
-      setListPengajuan(res)
-      setLoading(false)
-      console.log(res)
-    })
-  }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  React.useEffect(() => getListPengajuan(), [searchEmp, permiss])
-
-  const handleRowClick = (params) => {
-    navigate(`/perizinan/detail/${params.row.id}`)
+    const itemsPerPage = 15;
+    const pageCount = Math.ceil(submission_paginate.count / itemsPerPage);
+    
+    const getListPengajuan = () => {
+      axios.get(`${BASE_URL}/api/submission/employees/?limit=${itemsPerPage}&offset=${offSet}&permission_type=${perizinan}&start_date=${start_dates}&end_date=${end_dates}&employee_name=${employees}`,{
+        headers: {
+          "Authorization" : 'Token ' + USER_TOKEN
+        }
+      })
+      .then((response) => {
+        const res = response.data
+        setListPengajuan(res.results)
+        setSubmissionPaginate(res)
+        setLoading(false)
+        console.log(res)
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    React.useEffect(() => getListPengajuan(), [perizinan, start_dates, end_dates, employees])
+  
+    const handleChange = (event) => {
+      setPerizinan(event.target.value);
   };
 
+  const handled = () => {
+    setOpen(!open);
+  };
+
+  const convDate = (newdate) => {
+    let event = new Date(newdate);
+    let dated = JSON.stringify(event);
+    setStartDates(dated.slice(1, 11))
+  }
+
+  const convDates = (newdates) => {
+    let event = new Date(newdates);
+    let dated = JSON.stringify(event);
+    setEndDates(dated.slice(1, 11))
+  }
+
+  React.useEffect(() => {
+    runOneSignal();
+  },[])
+
+  if(ROLES === 'employee' || ROLES === 'atasan' ){
+    localStorage.clear()
+    navigate('/')
+  }
+
   return (
-    <div id='image__backgrounds' className='d-flex'>
-      <SideBar />
-      <main className="container" style={{ marginTop:'80px' }}>
-        <div className="card shadow-card" style={{ border:'none', borderRadius:'10px' }}>
-          <div className="card-body">
-            <h4>List Pengajuan Karyawan</h4>
-            <Box sx={{ display:'flex', mb:2 }}>
-                <TextField sx={{ mr:2 }} value={searchEmp} onChange={e => setSearchEmp(e.target.value)} label='Cari Nama Karyawan' />
-                <TextField value={permiss} onChange={e => setPermiss(e.target.value)} label='Cari Izin' />
-            </Box>
-              <Col md={12}>
-                <div style={{ height: 520, width: '100%' }}>
-                <DataGrid
-                rows={list_pengajuan}
-                columns={columns}
-                pageSize={10}
-                rowsPerPageOptions={[10]}
-                getRowId={(row) => row.id}
-                onRowClick={handleRowClick}
-                components={{
-                    LoadingOverlay: LoadingSkeleton,
-                  }}
-                  loading={loading}
-                />
+    <React.Fragment>
+        <div className="d-flex">
+        <SideBar />
+         <div  id="image__background">
+         <main className="container" style={{ marginTop:'75px'}}>
+                <div className='mt-4'>
+                <Col md={12} sm={12}>
+                            <div className="card shadow_card" style={{ border:'none', borderRadius:'12px' }}>
+                                <div className="card-body">
+                                    {ROLES === 'hrd' || ROLES === 'superuser' ? 
+                                    <React.Fragment>
+                                    <h5>List Pengajuan</h5>
+
+                                    <Col md={12} className='mb-2 text-secondary d-flex justify-content-between'>
+                                          <Col md={9} className="mt-2">
+                                            <FormControl sx={{ mr: 1, mt:1, minWidth: 120 }}>
+                                              <InputLabel id="demo-controlled-open-select-label">Perizinan</InputLabel>
+                                              <Select
+                                                labelId="demo-controlled-open-select-label"
+                                                id="demo-controlled-open-select"
+                                                open={open}
+                                                onClose={handled}
+                                                onOpen={handled}
+                                                value={perizinan}
+                                                label="Age"
+                                                onChange={handleChange}
+                                              >
+                                                <MenuItem value={'ijin'}>Ijin</MenuItem>
+                                                <MenuItem value={'sakit'}>Sakit</MenuItem>
+                                                <MenuItem value={'cuti'}>Cuti</MenuItem>
+                                                <MenuItem value={'lembur'}>Lembur</MenuItem>
+                                                <MenuItem value={''}>All</MenuItem>
+                                              </Select>
+                                            </FormControl>
+                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                <MobileDatePicker
+                                                label="Tanggal Awal"
+                                                value={new Date(start_dates)}
+                                                onChange={(newValue) => {
+                                                    convDate(newValue);
+                                                }}
+                                                renderInput={(params) => <TextField variant='outlined' sx={{ mr:1, mt:1 }} {...params} />}
+                                                />
+                                                <MobileDatePicker
+                                                label="Tanggal Berakhir"
+                                                value={new Date(end_dates)}
+                                                onChange={(newValue) => {
+                                                    convDates(newValue);
+                                                }}
+                                                renderInput={(params) => <TextField variant='outlined' sx={{ mt:1 }} {...params} />}
+                                                />
+                                            </LocalizationProvider>
+                                          </Col>
+                                          <Col md={2}>
+                                            <TextField placeholder='Cari Nama Karyawan' sx={{ mt:3 }} value={employees} onChange={e => setEmployess(e.target.value)} />
+                                          </Col>
+
+                                        </Col>
+                                        <hr />
+
+                                        <Col md={12}>
+                                          {loading && loading ? 
+                                             <Backdrop
+                                             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                                             open={loading}
+                                           >
+                                           <CircularProgress color="inherit" /></Backdrop> :
+                                           <React.Fragment>
+                                             <SubmissionTableComponents tableData={list_pengajuan} link='/perizinan/detail' />
+                                             <StyledPagination
+                                              count={pageCount}
+                                              page={currentPage + 1}
+                                              onChange={(event, page) => {
+                                                setCurrentPage(page - 1)
+                                                setOffSet(page*itemsPerPage-15)
+                                              }}
+                                              variant="outlined"
+                                              shape="rounded"
+                                              // size="large"
+                                            />
+                                            <hr />
+                                           </React.Fragment>
+                                        }
+                                        </Col>
+                                    </React.Fragment>
+                                    :
+                                    <div className="d-flex justify-content-center">Anda Login Sebagai {ROLES}. Anda tidak dapat mengakses fitur di menu HR</div>
+                                    }
+
+                                </div>
+                            </div>
+                        </Col>
                 </div>
-              </Col>
-          </div>
+            </main>
+         </div>
         </div>
-      </main>
-    </div>
+    </React.Fragment>
   )
 }
 
-export default ListPengajuan
+export default ListPengajuanHrd
