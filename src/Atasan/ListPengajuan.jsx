@@ -2,16 +2,16 @@ import React from 'react'
 import { Col } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { BASE_URL, USER_TOKEN, ROLES } from '../../../fetch/fetch'
+import { BASE_URL, USER_TOKEN, ROLES } from '../fetch/fetch'
 import {  FormControl, InputLabel, Select, MenuItem, TextField, Backdrop, CircularProgress } from '@mui/material';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import runOneSignal from '../../../oneSignal/oneSignal'
-import SideBar from '../../Components/SideBar'
-import { SubmissionTableComponents } from '../../../Karyawan/Components/Table/EmployeeTableComponents'
-import { StyledPagination } from '../../../Karyawan/Components/Pagination/PaginationEmployee'
+import SideBar from '../Hrd/Components/SideBar'
+import {SubmissionTableComponents} from '../Karyawan/Components/Table/EmployeeTableComponents'
+import { StyledPagination } from '../Karyawan/Components/Pagination/PaginationEmployee'
 
-function ListPengajuanHrd() {
+function ListPengajuan() {
 
     const navigate = useNavigate()
     const [open, setOpen] = React.useState(false)
@@ -176,4 +176,4 @@ function ListPengajuanHrd() {
   )
 }
 
-export default ListPengajuanHrd
+export default ListPengajuan
