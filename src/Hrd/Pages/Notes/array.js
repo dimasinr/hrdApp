@@ -22,7 +22,7 @@ export const dataNotes = [
     {
       'id' : 5,
       'name' : 'izin',
-      'value' : 'ijin'
+      'value' : 'izin'
     },
     {
       'id' : 6,
