@@ -9,9 +9,10 @@ import { Add } from '@mui/icons-material'
 import { datesUpt } from '../../../Components/utilsFunction/functionUtils'
 import styled from '@emotion/styled'
 import { useNavigate } from 'react-router-dom'
-import { Pagination, Stack, Chip, CircularProgress } from '@mui/material'
+import { Pagination, Stack, Chip } from '@mui/material'
 import TopBar from '../../Components/MainDashboard/TopBar'
 import MainDashboard from '../../Components/MainDashboard/MainDashboard'
+import { SideCardTop, SideCardLow, SideCardBirthday } from '../../Components/Card/SideCard'
 
 const StyledPagination = styled(Pagination)({
   display: 'flex',
@@ -34,10 +35,15 @@ const StyledPagination = styled(Pagination)({
 function Dashboard() {
 
     const navigate = useNavigate()
+    const monthToday = new Date().getMonth()+1
+
     const [offDay , setOffDay] = useState([])
     const [top_emp, setTopEmp ] = useState([])
     const [low_emp, setLowEmp ] = useState([])
+    const [birth_emp, setBirthEmp ] = useState([])
+
     const [loading, setLoading] = useState(false)
+    const [loadingMonth, setLoadingMonth] = useState(false)
 
     const [presence_paginate, setPresencePaginate] = useState([])
     const [currentPage, setCurrentPage] = useState(0);
@@ -45,8 +51,6 @@ function Dashboard() {
 
     const itemsPerPage = 50;
     const pageCount = Math.ceil(presence_paginate.count / itemsPerPage);
-
-
 
       const getOffDay = () => {
         axios.get(`${BASE_URL}/api/dashboard/employee-dashboard/?limit=50&offset=${offSet}`,{
@@ -81,28 +85,24 @@ function Dashboard() {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => getTopFive(), [])
 
-      var dates = new Date().getFullYear()
-      var startDate = new Date(`01/01/${dates}`);
-      var endDate = new Date(`12/31/${dates}`);
-      var numOfDates = getBusinessDatesCount(startDate,endDate);
+    const getBirthdayEmployee = () => {
+      axios.get(`${BASE_URL}/api/dashboard/employee-birth/${monthToday}/`,{
+        headers: {
+          "Authorization" : `Token ${USER_TOKEN}`
+        }
+      })
+      .then((response) => {
+        const res = response.data
+        setLoadingMonth(true)
+        setBirthEmp(res)
+        console.log(res)
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => getBirthdayEmployee(), [monthToday])
+
+  console.log(monthToday)
       
-      function getBusinessDatesCount(startDate, endDate) {
-          let count = 0;
-          const curDate = new Date(startDate.getTime());
-          while (curDate <= endDate) {
-              const dayOfWeek = curDate.getDay();
-              if(dayOfWeek !== 0 && dayOfWeek !== 6) count++;
-              curDate.setDate(curDate.getDate() + 1);
-          }
-          return count;
-      }
-
-      const dayPerc = numOfDates*800
-
-      function percentage(x, y){
-        return (x/y*100)
-      }
-    
     const dateOff = off => {
         return new DateObject().setDay(off.days).setMonth(off.months).setYear(off.years)
     }
@@ -166,63 +166,14 @@ function Dashboard() {
                 :
               <MainDashboard />
               }
-
-          
                 </div>
+
                 <div className="col-md-3">
                     <div className="row">
-                        <div className="col-md-12 mb-2">
-                            <div className="card shadow-card" style={{ border:'none' }}>
-                                <div className="card-title text-center top_card_color">Top 5 Presence</div>
-                                <div className="card-body">
-                                    <ol>
-                                      {loading && loading ?
-                                        <React.Fragment>
-                                          {top_emp.map((top, index) =>{
-                                            return(
-                                                <li key={index}>
-                                                    <div className='d-flex justify-content-between'>
-                                                      <span>{top.name.toString().length > 10 ? top.name.toString().slice(0,10) + '...' : top.name}</span>
-                                                      <span className='text-success'>{percentage(top.working_hour, dayPerc).toString().slice(0,5)}%</span>
-                                                    </div>
-                                                </li>
-                                            )
-                                          })
-                                        }
-                                        </React.Fragment>
-                                        :
-                                        <CircularProgress />  
-                                        }
-                                    </ol>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-12 mb-2">
-                            <div className="card shadow-card" style={{ border:'none' }}>
-                                <div className="card-title text-center top_card_color">5 Bottom Presence</div>
-                                <div className="card-body">
-                                    <ol>
-                                        {loading && loading ?
-                                        <React.Fragment>
-                                          {low_emp.map((lowEmp, index) =>{
-                                            return(
-                                                <li key={index}>
-                                                    <div className='d-flex justify-content-between'>
-                                                      <span>{lowEmp.name.toString().length > 10 ? lowEmp.name.toString().slice(0,10) + '...' : lowEmp.name}</span>
-                                                      <span className='text-danger'>{percentage(lowEmp.working_hour, dayPerc).toString().slice(0,5)}%</span>
-                                                    </div>
-                                                </li>
-                                            )
-                                          })
-                                        }
-                                        </React.Fragment>
-                                        :
-                                        <CircularProgress />  
-                                        }
-                                    </ol>
-                                </div>
-                            </div>
-                        </div>
+                        
+                    <SideCardTop data={top_emp} loading={loading} />
+                    <SideCardLow data={low_emp} loading={loading} />  
+                    <SideCardBirthday data={birth_emp} loading={loadingMonth} />
 
                         <div className="col-md-12 mb-2">
                             <div className="card shadow-card" style={{ border:'none' }}>
