@@ -27,10 +27,7 @@ function AuthenticationPages() {
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={backdrop_active}
       >
-        <div className="row">
           <CircularProgress color="inherit" />
-          User Authentication
-        </div>
       </Backdrop>
     </div>
   )

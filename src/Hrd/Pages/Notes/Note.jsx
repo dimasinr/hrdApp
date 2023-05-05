@@ -5,7 +5,7 @@ import { Col } from 'react-bootstrap'
 import { BASE_URL, USER_TOKEN } from '../../../fetch/fetch'
 import { Box, TextField, FormControl, InputLabel, Select, MenuItem, CircularProgress } from '@mui/material';
 import {Slide, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
-import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers'
+import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { bulan } from '../Presence/utlis/arrayfuc'
 import { tahun, dataNotes } from './array'
@@ -29,7 +29,7 @@ function Note() {
     const [currentPage, setCurrentPage] = useState(0);
 
     const [employee, setEmployee] = useState('')
-    const [tanggal, setTanggal] = useState(new Date().toISOString().slice(0,10))
+    const [tanggal, setTanggal] = useState(new Date())
     const [type_notes, setTypeNotes] = useState('catatan')
     const [notes_employee, setNotesEmployee] = useState('')
   
@@ -80,17 +80,21 @@ function Note() {
     setNotesDate(dated.slice(1, 11))
   }
 
-  const convDated = (xdate) => {
-    let event = new Date(xdate);
-    let dated = JSON.stringify(event);
-    setTanggal(dated.slice(1, 11))
+  function trueDate(date){
+    if (date !== '') {
+      let eve = new Date(date)
+      return eve.toISOString().slice(0,10)
+    }else{
+      return ''
+    }
   }
+  const newDate = trueDate(tanggal)
 
   const addNewNotes = async e => {
     try{
         const formData = new FormData();
         formData.append("employee", employee);
-        formData.append("date_note", tanggal);
+        formData.append("date_note", newDate);
         formData.append("type_notes", type_notes);
         formData.append("notes", notes_employee);
        await axios({
@@ -149,6 +153,9 @@ function Note() {
   const itemsPerPage = 15;
   const pageCount = Math.ceil(notes_paginate / itemsPerPage);
 
+  
+  console.log(trueDate(tanggal))
+
   return (
     <React.Fragment>
         <div className="d-flex">
@@ -168,7 +175,7 @@ function Note() {
                                     <Col md={11} className='mb-2 text-secondary d-flex'>
                                       <TextField placeholder='Cari Nama Karyawan' sx={{ mt:3 }} value={employees_name} onChange={e => setemployeesName(e.target.value)} />
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <MobileDatePicker
+                                            <DesktopDatePicker
                                             label="Tanggal Catatan"
                                             value={new Date(note_dates)}
                                             onChange={(newValue) => {
@@ -288,11 +295,11 @@ function Note() {
                         </Box>
                         <Box sx={{ mt:2 }}>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <MobileDatePicker
+                              <DesktopDatePicker
                               label="Tanggal Catatan"
                               value={tanggal}
                               onChange={(valuese) => {
-                                  convDated(valuese);
+                                setTanggal(valuese);
                               }}
                               renderInput={(params) => <TextField fullWidth variant='outlined' label='Tanggal Catatan' {...params} />}
                               />
