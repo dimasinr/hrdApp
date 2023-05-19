@@ -450,7 +450,7 @@ const postNewPassword = async e => {
                                                 </LocalizationProvider>
 
                                                 <TextField value={contract_time} variant='outlined' label='Lama Kontrak' sx={{ mt:3, mr:1 }}  />
-                                                <FormControlLabel sx={{ mt:4, ml:1 }} onChange={handleChangeActive} control={active_user ? <Checkbox checked /> : <Checkbox />} label={active_user ? "Karyawan aktif" : "Karyawan tidak aktif"} />
+                                                <FormControlLabel sx={{ mt:4, ml:1 }} onChange={handleChangeActive} control={active_user ? <Checkbox checked /> : <Checkbox />} label={active_user ? "Karyawan aktif" : "Karyawan aktif"} />
                                             </Box>
 
                                             <Box sx={{ mt:2}}>
