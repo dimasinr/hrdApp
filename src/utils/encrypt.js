@@ -1,34 +1,18 @@
-import CryptoJS from "crypto-js";
-
-const key = CryptoJS.enc.Utf8.parse("kuncirahasiaaes");
-const iv = CryptoJS.enc.Utf8.parse("ivrahasiaaes1234");
-
-export function encrypt(text) {
-    const cipher = CryptoJS.AES.encrypt(
-      CryptoJS.enc.Utf8.parse(text),
-      key,
-      {
-        iv: iv,
-        mode: CryptoJS.mode.CBC,
-        padding: CryptoJS.pad.Pkcs7,
-      }
-    );
-    return cipher.toString();
+export function encryptToken(message) {
+  var encryptedMessage = "";
+  for (var i = 0; i < message.length; i++) {
+    var charCode = message.charCodeAt(i);
+    if (65 <= charCode && charCode <= 90) {
+      encryptedMessage += String.fromCharCode(((charCode - 65 + 2) % 26) + 65);
+    } else if (97 <= charCode && charCode <= 122) {
+      encryptedMessage += String.fromCharCode(((charCode - 97 + 2) % 26) + 97);
+    } else {
+      encryptedMessage += message.charAt(i);
+    }
   }
-  
-  // Dekripsi teks
-export function decrypt(text) {
-    const cipher = CryptoJS.AES.decrypt(text, key, {
-      iv: iv,
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.Pkcs7,
-    });
-    return cipher.toString(CryptoJS.enc.Utf8);
-  }
+  return encryptedMessage;
+}
 
-const plainText = "Ini teks rahasia yang akan dienkripsi";
-const encryptedText = encrypt(plainText);
-console.log("Teks terenkripsi: ", encryptedText);
-
-const decryptedText = decrypt(encryptedText);
-console.log("Teks terdekripsi: ", decryptedText);
+export function decryptToken(encryptedMessage) {
+  return encryptToken(encryptedMessage, 26 - 2);
+}

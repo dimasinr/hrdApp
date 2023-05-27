@@ -54,12 +54,6 @@ export default function TopBar() {
         return count;
     }
 
-    const dayPerc = numOfDates*800
-
-    function percentage(x, y){
-      return (x/y*100)
-    }
-    
     function sumMin(x,y){
         return x-y
       }
@@ -81,7 +75,7 @@ export default function TopBar() {
                 <div className="card shadow-card" style={{ border:'none' }}>
                     <div className='card-title text-center top_card_color'>Attendance Percentage</div>
                     <div className="card-body text-center">
-                        <span><h4>{percentage(topDash.total_work_hour_all && topDash.total_work_hour_all.working_hour__sum, dayPerc ).toString().slice(0,6)}%</h4></span>
+                        <span><h4>{topDash.total_work_hour_all && topDash.total_work_hour_all.working_hour__sum }</h4></span>
                     </div>
                 </div>
             </div>
