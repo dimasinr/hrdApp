@@ -6,6 +6,7 @@ export default function TopBar() {
 
     const [weekdays, setWeekdays] = useState([])
     const [topDash , setTopDash] = useState([])
+    const yearToday = new Date().getFullYear()
 
     const getWeekOf = () => {
         axios.get(`${BASE_URL}/api/dashboard/week-of`,{
@@ -23,7 +24,7 @@ export default function TopBar() {
       useEffect(() => getWeekOf(), [])
 
     const getTopBar = () => {
-        axios.get(`${BASE_URL}/users/employee-total/`,{
+        axios.get(`${BASE_URL}/users/employee-total/${yearToday}`,{
           headers: {
             "Authorization" : `Token ${USER_TOKEN}`
           }
@@ -54,9 +55,12 @@ export default function TopBar() {
         return count;
     }
 
-    function sumMin(x,y){
-        return x-y
+    function sumAttendance(jumlah_hari, jumlah_karyawan, total_prec){
+        let precentage_att = (total_prec / (jumlah_hari * jumlah_karyawan)) * 100
+        return precentage_att
       }
+
+
 
   return (
     <div className="col-md-12 d-flex mb-2">
@@ -66,7 +70,7 @@ export default function TopBar() {
                 <div className="card shadow-card" style={{ border:'none', marginRight:'10px', marginLeft:'10px' }}>
                     <div className='card-title text-center top_card_color'>Total Working Days</div>
                     <div className="card-body text-center">
-                        <span><h4>{sumMin(numOfDates, weekdays && weekdays.length)} Days</h4></span>
+                        <span><h4>{topDash.working_day ? topDash.working_day : '0'} Day</h4></span>
                     </div>
                 </div>
             </div>
@@ -75,7 +79,7 @@ export default function TopBar() {
                 <div className="card shadow-card" style={{ border:'none' }}>
                     <div className='card-title text-center top_card_color'>Attendance Percentage</div>
                     <div className="card-body text-center">
-                        <span><h4>{topDash.total_work_hour_all && topDash.total_work_hour_all.working_hour__sum }</h4></span>
+                        <span><h4>{sumAttendance(topDash.working_day, topDash.employee && topDash.employee.active_employee, topDash.total_attendance && topDash.total_attendance.presence).toFixed(2) } %</h4></span>
                     </div>
                 </div>
             </div>
