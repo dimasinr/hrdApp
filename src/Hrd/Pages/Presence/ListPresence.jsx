@@ -261,6 +261,7 @@ export default function ListPresence() {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DesktopDatePicker
                           label="Working Date"
+                          inputFormat="DD MMMM YYYY"
                           value={new Date(dates)}
                           onChange={(newValue) => {
                               convDate(newValue);

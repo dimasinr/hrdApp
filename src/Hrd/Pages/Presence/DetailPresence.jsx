@@ -7,7 +7,7 @@ import axios from 'axios'
 import { BASE_URL, USER_TOKEN } from '../../../fetch/fetch'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Swal from 'sweetalert2';
 
 function DetailPresence() {
@@ -35,12 +35,6 @@ function DetailPresence() {
       setSnack(false)
     };
   
-  const convDate = (newdate) => {
-    let event = new Date(newdate);
-    let dated = JSON.stringify(event);
-    setWorkingDate(dated.slice(1, 11))
-  }
-
   const getAttendanceEmp = () => {
     axios.get(`${BASE_URL}/api/presence/employees/${id_att}/`,{
       headers: {
@@ -212,11 +206,12 @@ function DetailPresence() {
                             <TextField sx={{ mr:2 }} value={lembur_end} onChange={e => setLemburEnd(e.target.value)} fullWidth type='text' label='Jam Akhir Lembur' />
                             <TextField sx={{ mr:2 }} value={lembur_total} disabled fullWidth type='text' label='Total Jam Lembur' />
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <MobileDatePicker
+                                <DesktopDatePicker
                                 label="Working Date"
+                                inputFormat="DD MMMM YYYY"
                                 value={working_date}
                                 onChange={(newValue) => {
-                                    convDate(newValue);
+                                  setWorkingDate(newValue);
                                 }}
                                 renderInput={(params) => <TextField fullWidth variant='outlined' {...params} />}
                                 />

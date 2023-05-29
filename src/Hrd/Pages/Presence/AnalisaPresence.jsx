@@ -179,7 +179,7 @@ function AnalisaPresence() {
                                     <td>{att.end_from ? workHour(att.end_from) : "-"}</td>
                                     <td>{att.lembur_start ? workHour(att.lembur_start) : "-"}</td>
                                     <td>{att.lembur_end ? workHour(att.lembur_end) : "-"}</td>
-                                    <td>{att.ket ? att.ket.toString().slice(0,12) + '...' : null}</td>
+                                    <td>{att.ket ? att.ket : null}</td>
                                    
                                     <td>
                                       {/* Total Jam Kerja */}

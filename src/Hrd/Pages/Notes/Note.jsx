@@ -89,6 +89,7 @@ function Note() {
     }
   }
   const newDate = trueDate(tanggal)
+  console.log(newDate)
 
   const addNewNotes = async e => {
     try{
@@ -110,7 +111,7 @@ function Note() {
         setSnack(true)
         setStatus('info')
         setMessage('Berhasil membuat notes')
-        setTanggal(new Date().toISOString().slice(0,10))
+        setTanggal(new Date())
         setNotesEmployee('')
         getListPengajuan()
     }catch(error){

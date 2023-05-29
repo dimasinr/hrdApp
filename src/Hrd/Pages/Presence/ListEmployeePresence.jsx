@@ -32,7 +32,7 @@ const columns = [
 function ListEmployeePresence() {
 
     const navigate = useNavigate()
-    const [list_pengajuan, setListPengajuan] = React.useState([])
+    const [list_users, setListUsers] = React.useState([])
     const [loading, setLoading] = React.useState(true)
 
     const [searchEmployee, setSearchEmployee] = useState('')
@@ -45,7 +45,7 @@ function ListEmployeePresence() {
       })
       .then((response) => {
         const res = response.data
-        setListPengajuan(res)
+        setListUsers(res)
         setLoading(false)
         console.log(res)
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -85,7 +85,7 @@ function ListEmployeePresence() {
                                     <Col md={12}>
                                        <div style={{ height: 520 }}>
                                         <DataGrid
-                                        rows={list_pengajuan}
+                                        rows={list_users}
                                         columns={columns}
                                         pageSize={10}
                                         rowsPerPageOptions={[10]}

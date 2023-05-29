@@ -22,7 +22,7 @@ const columns = [
     { field: 'title_day', headerName: 'Nama Hari', width: 140 },
     { field: 'date', headerName: 'Tanggal', width: 180 },
     { field: 'type_day', headerName: 'Jenis Libur', width: 140 },
-    { field: 'day_name', headerName: 'Hari', width: 140 },
+    { field: 'day_names', headerName: 'Hari', width: 140 },
     { field: 'day_of', headerName: 'Tipe Libur', width: 130 },
     { field: 'years', headerName: 'Tahun', width: 120 },
 ];
@@ -52,10 +52,9 @@ function DayOff() {
     const [offDay, setOffDay] = useState([])
     const [searchFirst, setSearchFirst] = useState('')
     const [loading, setLoading] = useState(true)
-    const [type_date, setTypeDate] = useState('weekday')
+    const [type_day, setTypeDay] = useState('national')
 
     const dated = tanggal.toISOString().slice(0,10)
-    const type_day = 'national'
 
     // snackbar
     const [snack, setSnack] = React.useState(false);
@@ -91,7 +90,6 @@ function DayOff() {
             const formData = new FormData();
             formData.append("title_day", day_name);
             formData.append("date", dated);
-            formData.append("day_of", type_date);
             formData.append("type_day", type_day);
            await axios({
                 method: 'post',
@@ -144,17 +142,17 @@ function DayOff() {
     };
 
     const changeDate = (event) => {
-        setTypeDate(event.target.value);
+        setTypeDay(event.target.value);
       };
 
       const dataNotes = [
         {
           'id' : 1,
-          'name' : 'weekend'
+          'name' : 'national'
         },
         {
           'id' : 2,
-          'name' : 'weekday'
+          'name' : 'kantor'
         },
       ]
 
@@ -251,7 +249,7 @@ function DayOff() {
                             <Select
                             labelId="type-notes"
                             id="type-notes"
-                            value={type_date}
+                            value={type_day}
                             onChange={changeDate}
                             label="Type Notes"
                             >

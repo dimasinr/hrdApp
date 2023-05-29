@@ -50,7 +50,7 @@ function DayOffDetail() {
         })
         .then((response) => {
           const res = response.data
-          setDayName(res.day_name)
+          setDayName(res.day_names)
           setMonth(res.months)
           setYear(res.years)
           console.log(res)
@@ -107,7 +107,8 @@ function DayOffDetail() {
             setSnack(true)
             setStatus('success')
             setMessage('Data Berhasil dihapus')
-              getOffDay()
+            getOffDay()
+            navigate(-1)
         }catch(error){
             if( error.response &&
                 error.response.status >= 400 &&
