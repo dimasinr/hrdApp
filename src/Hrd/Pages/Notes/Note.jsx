@@ -153,8 +153,6 @@ function Note() {
   const itemsPerPage = 15;
   const pageCount = Math.ceil(notes_paginate / itemsPerPage);
 
-  
-  console.log(trueDate(tanggal))
 
   return (
     <React.Fragment>

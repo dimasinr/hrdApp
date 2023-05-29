@@ -76,10 +76,11 @@ export const AppRouter = () => {
                 <Route path='/pengajuan/me' element={<ListPerizinanKaryawan />} />
                 <Route path='/list-karyawan' element={<ListKaryawan />} />
                 <Route path='/list-karyawan/detail/:id' element={<DetailEmployee />} />
-                <Route path='/employee/absensi' element={<ListPresence />} />
-                <Route path='/employee/absensi/:id' element={<DetailPresence />} />
                 <Route path='/contract/employee' element={<EmployeeContract />} />
                 <Route path='/employee/contract/:id' element={<EmployeeContract />} />
+                {/* Presensi */}
+                <Route path='/employee/absensi' element={<ListPresence />} />
+                <Route path='/employee/absensi/:id' element={<DetailPresence />} />
                 <Route path='/absensi/' element={<ListEmployeePresence />} />
                 <Route path='/absensi/:name_id/:id' element={<EmployeePresence />} />
                 <Route path='/absensi/:name_id/:id/:month_id/:year_id' element={<AnalisaPresence />} />

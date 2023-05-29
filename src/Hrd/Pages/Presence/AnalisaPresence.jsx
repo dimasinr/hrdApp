@@ -1,6 +1,6 @@
 import React,{useState, useEffect} from 'react'
 import SideBar from '../../Components/SideBar'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { ArrowBackIos, GetApp } from '@mui/icons-material'
 import { BASE_URL, USER_TOKEN } from '../../../fetch/fetch'
 import axios from 'axios'
@@ -167,7 +167,11 @@ function AnalisaPresence() {
                             {attendance.map((att, index) => {
                                 return(
                                     <tr key={index}>
-                                    <td>{att.id}</td>
+                                    <td style={{ color: '#4932A7' }}>
+                                      <Link to={`/employee/absensi/${att.id}`} className='unlink'>
+                                        {index + 1}
+                                      </Link>
+                                    </td>
                                     <td>{att.employee && att.employee.name ? att.employee.name : "Nawastra Employee" }</td>
                                     <td>{att.working_date ? datesUpt(att.working_date) : '-'}</td>
                                     <td>{att.days ? changeDayName(att.days) : "-"}</td>
@@ -175,7 +179,7 @@ function AnalisaPresence() {
                                     <td>{att.end_from ? workHour(att.end_from) : "-"}</td>
                                     <td>{att.lembur_start ? workHour(att.lembur_start) : "-"}</td>
                                     <td>{att.lembur_end ? workHour(att.lembur_end) : "-"}</td>
-                                    <td>{att.ket ? att.ket : null}</td>
+                                    <td>{att.ket ? att.ket.toString().slice(0,12) + '...' : null}</td>
                                    
                                     <td>
                                       {/* Total Jam Kerja */}
@@ -480,10 +484,6 @@ function AnalisaPresence() {
                         </Table>
 
                         }
-                      </div>
-
-                      <div className="d-flex justify-content-end">
-                        <button className='btn btn-primary'>Attendance Submit</button>
                       </div>
 
                   </div>
