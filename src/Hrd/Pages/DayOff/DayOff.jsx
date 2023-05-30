@@ -45,8 +45,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function DayOff() {
 
-    const [open, setOpen] = useState(false)
     const navigate = useNavigate()
+    const [open, setOpen] = useState(false)
     const [day_name, setDayName] = useState('')
     const [tanggal, setTanggal] = useState(new Date())
     const [offDay, setOffDay] = useState([])

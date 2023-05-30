@@ -6,7 +6,7 @@ import {
 import { ROLES } from "../fetch/fetch";
 import AuthenticationPages from "../Components/AuthenticationPages";
 import AccountSettings from "../Components/AccountSettings";
-import Maintenance from "../Components/Maintenance/Maintenance";
+// import Maintenance from "../Components/Maintenance/Maintenance";
 import Test from "../Hrd/Pages/Test/Test";
 
   // Hrd
@@ -29,7 +29,7 @@ import ListEmployeePresence from "../Hrd/Pages/Presence/ListEmployeePresence";
 import AnalisaPresence from "../Hrd/Pages/Presence/AnalisaPresence";
 import PresencePeriode from "../Hrd/Pages/Presence/PresencePeriode";
 
-// import DayOff from "../Hrd/Pages/DayOff/DayOff";
+import DayOff from "../Hrd/Pages/DayOff/DayOff";
 import DayOffDetail from "../Hrd/Pages/DayOff/DayOffDetail";
 
 // Atasan
@@ -86,7 +86,7 @@ export const AppRouter = () => {
                 <Route path='/absensi/:name_id/:id/:month_id/:year_id' element={<AnalisaPresence />} />
                 <Route path='/absensi/periode/:name_id/:emp_id/:start_date/:end_date' element={<PresencePeriode />} />
 
-                <Route path='/dashboard/day-off/' element={<Maintenance />} />
+                <Route path='/dashboard/day-off/' element={<DayOff />} />
                 <Route path='/dashboard/day-off/:id' element={<DayOffDetail />} />
             </React.Fragment>
             : null

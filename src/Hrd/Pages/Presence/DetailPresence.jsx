@@ -59,8 +59,8 @@ function DetailPresence() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => getAttendanceEmp(), [id_att])
   
-  console.log(lembur_start)
   console.log(keterangan)
+  console.log(working_date)
 
   const saveAttendance = async e => {
     try{
@@ -85,7 +85,6 @@ function DetailPresence() {
                 "Authorization" : `Token ${USER_TOKEN}`
               }
         })
-        window.location.reload()
         setSnack(true)
         setStatus('success')
         setMessage('data berhasil di perbaharui')
@@ -166,6 +165,24 @@ function DetailPresence() {
         setEmployeeName(event.target.value);
       };
 
+      
+      function trueDate(date){
+        if (date !== '') {
+          let eve = new Date(date)
+          return eve.toISOString().slice(0,10)
+        }else{
+          return ''
+        }
+      }
+      const newDate = trueDate(working_date)
+      console.log(newDate)
+
+      const convDate = (newdate) => {
+        let event = new Date(newdate);
+        let dated = JSON.stringify(event);
+        setWorkingDate(dated.slice(1, 11))
+      }
+
   return (
     <div className='d-flex'>
         <SideBar />
@@ -209,13 +226,16 @@ function DetailPresence() {
                                 <DesktopDatePicker
                                 label="Working Date"
                                 inputFormat="DD MMMM YYYY"
-                                value={working_date}
+                                value={new Date(working_date)}
                                 onChange={(newValue) => {
-                                  setWorkingDate(newValue);
+                                  convDate(newValue);
                                 }}
                                 renderInput={(params) => <TextField fullWidth variant='outlined' {...params} />}
                                 />
                             </LocalizationProvider>
+                         </Box>
+                         <Box sx={{ display:'flex', mr:2, mb:2 }}>
+                          <TextField sx={{ mr:2 }} value={keterangan} onChange={e => setKeterangan(e.target.value)} type='text' label='Keterangan' />
                          </Box>
                       <div className="d-flex justify-content-end">
                             <button onClick={saveAttendance} className="btn text-primary" style={{ marginRight:'20px' }}>Simpan</button>

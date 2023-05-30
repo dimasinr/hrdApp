@@ -134,16 +134,6 @@ function PengajuanKaryawan() {
         }
       };
 
-    const JumlahCut = () =>{
-        Swal.fire({
-            icon: 'error',
-            title: `Gagal`,
-            text: `Jumlah cuti tidak mencukupi`,
-            showConfirmButton: false,
-            timer: 2500
-          })
-    }
-
     const getCuti = () => {
         axios.get(`${BASE_URL}/users/employees/${USER_ID}/`,{
           headers: {
@@ -158,12 +148,6 @@ function PengajuanKaryawan() {
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
       React.useEffect(() => getCuti(), [])
-
-      function fax(x,y){
-        return x-y
-      }
-
-      const har = fax(sisaCuti, jumlah_hari)
 
   return (
     <div id='image__backgrounds' className='d-flex'>
@@ -272,7 +256,7 @@ function PengajuanKaryawan() {
 
                 <div className="d-flex justify-content-between mt-4 mb-4">
                     <small className='text-secondary'>Sisa Cuti Anda : {sisaCuti} *(sisa cuti berkurang berdasarkan pengajuan cuti dan izin) </small>
-                    <button onClick={har < '1' ? JumlahCut : submitPetitions} className='btn btn-primary'>Submit</button>
+                    <button onClick={submitPetitions} className='btn btn-primary'>Submit</button>
                 </div>
             </div>
         </div>
