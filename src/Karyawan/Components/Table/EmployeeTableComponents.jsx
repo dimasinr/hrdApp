@@ -81,7 +81,7 @@ export const HRTableComponents = ({ tableData, link }) => {
                 <TableCell align="center">{row.working_hour === 0 || row.working_hour > 0 ? totalWorking(row.working_hour) : "-"}</TableCell>
                 <TableCell align="center">{row.lembur_start ? workHour(row.lembur_start) : "-"}</TableCell>
                 <TableCell align="center">{row.lembur_end ? workHour(row.lembur_end) : "-"}</TableCell>
-                <TableCell align="center">{row.ket ? workHour(row.ket) : "-"}</TableCell>
+                <TableCell align="center">{row.ket ? row.ket : "-"}</TableCell>
                 <TableCell align="center">
                     <Tooltip title="Detail">
                       <Link to={`${link}/${row.id}`}>
