@@ -1,8 +1,8 @@
-// export const BASE_URL = process.env.REACT_APP_API_URL;
-export const BASE_URL = "http://127.0.0.1:8000"
+export const BASE_URL = process.env.REACT_APP_API_URL;
+// export const BASE_URL = "http://127.0.0.1:8000"
 export const USER_TOKEN = localStorage.getItem("user_token")
-// export const API_KEY = process.env.REACT_APP_API_KEY;
-export const API_KEY = "2641aa71fc732376e406d7a1b8c367578f8d9706" //local
+export const API_KEY = process.env.REACT_APP_API_KEY;
+// export const API_KEY = "2641aa71fc732376e406d7a1b8c367578f8d9706" //local
 export const NAMES = localStorage.getItem("name")
 export const ROLES = localStorage.getItem("roles")
 export const USER_ID = localStorage.getItem("user_id")
