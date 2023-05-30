@@ -5,7 +5,6 @@ import { Calendar, DateObject } from "react-multi-date-picker"
 import axios from 'axios'
 import { USER_TOKEN, BASE_URL } from '../../../fetch/fetch'
 import multiColors from "react-multi-date-picker/plugins/colors"
-import { Add } from '@mui/icons-material'
 import { datesUpt } from '../../../Components/utilsFunction/functionUtils'
 import styled from '@emotion/styled'
 import { useNavigate } from 'react-router-dom'
@@ -13,6 +12,7 @@ import { Pagination, Stack, Chip } from '@mui/material'
 import TopBar from '../../Components/MainDashboard/TopBar'
 import MainDashboard from '../../Components/MainDashboard/MainDashboard'
 import { SideCardTop, SideCardLow, SideCardBirthday } from '../../Components/Card/SideCard'
+import { DateRange } from '@mui/icons-material'
 
 const StyledPagination = styled(Pagination)({
   display: 'flex',
@@ -181,11 +181,8 @@ function Dashboard() {
                                     Hari Libur
                                 </div>
                                  <div className="d-flex justify-content-between">
-                                        <button onClick={() => navigate('/dashboard/day-off')} className='btn text-primary align-items-center'>
-                                            <div className="d-flex justify-content-between">
-                                                    <Add />
-                                                <span>Tambah Hari Libur</span>
-                                            </div>
+                                        <button onClick={() => navigate('/dashboard/day-off')} style={{ fontWeight:'500' }} className='btn text-primary align-items-center'>
+                                        <DateRange /> Menu Hari Libur 
                                         </button>
                                 </div>
                                 <div className="card-body">
