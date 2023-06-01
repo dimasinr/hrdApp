@@ -12,23 +12,26 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import {Snackbar, Alert} from '@mui/material';
+import { HRTableNotesComponents, SubmissionTableComponents } from '../../../Karyawan/Components/Table/EmployeeTableComponents';
 
 function DetailEmployee() {
 
     const navigate = useNavigate()
     const location = useLocation()
     const ids = location.pathname.split('/')[3]
+    const yearToday = new Date().getFullYear()
 
-    const [employee_code, setEmployeeCode] = React.useState([])
-    const [email, setEmail] = React.useState([])
-    const [username, setUsername] = React.useState([])
-    const [nama_depan, setNamaDepan] = React.useState([])
-    const [nama_belakang, setNamaBelakang] = React.useState([])
+    const [user_id, setUserId] = React.useState(0)
+    const [employee_code, setEmployeeCode] = React.useState('')
+    const [email, setEmail] = React.useState('')
+    const [username, setUsername] = React.useState('')
+    const [nama_depan, setNamaDepan] = React.useState('')
+    const [nama_belakang, setNamaBelakang] = React.useState('')
     const [roles, setRoles] = React.useState("")
     const [roles2, setRoles2] = React.useState([])
     const [division, setDivision] = React.useState("")
     const [division2, setDivision2] = React.useState([])
-    const [sisa_cuti, setSisaCuti] = React.useState([])
+    const [sisa_cuti, setSisaCuti] = React.useState(0)
     const [religion, setReligion] = React.useState([])
     const [gender, setGender] = React.useState('Laki-Laki')
     const [date_join, setDateJoin] = React.useState(new Date().toISOString().slice(0,10))
@@ -37,6 +40,9 @@ function DetailEmployee() {
     const [akhir_kontrak, setAkhirKontrak] = React.useState(new Date().toISOString().slice(0,10))
     const [contract_time, setContractTime] = React.useState([])
     const [active_user, setActiveUser] = React.useState(true)
+
+    const [notes_cuti, setNotesCuti] = React.useState([])
+    const [submission_cuti, setSubmissionCuti] = React.useState([])
 
     const [visib, setVisib] = useState("password");
     const [rest, setRest] = useState(false)
@@ -52,6 +58,7 @@ function DetailEmployee() {
         })
         .then((response) => {
           const res = response.data
+          setUserId(res.pk)
           setEmployeeCode(res.employee_code)
           setEmail(res.email)
           setUsername(res.username)
@@ -88,6 +95,25 @@ function DetailEmployee() {
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
       React.useEffect(() => getRolesEmployee(), [])
+
+      const url = `${BASE_URL}/users/employee/cuti/${user_id}/${yearToday}/`
+      console.log(url)
+
+      const getUserDataCuti = () => {
+        axios.get(`${BASE_URL}/users/employee/cuti/${user_id}/${yearToday}/`,{
+          headers: {
+            "Authorization" : 'Token ' + USER_TOKEN
+          }
+        })
+        .then((response) => {
+          const res = response.data
+          setNotesCuti(res.notes_cuti)
+          setSubmissionCuti(res.submission_cuti)
+          console.log(res)
+        })
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      React.useEffect(() => getUserDataCuti(), [user_id, yearToday])
 
       const getDivisionUser = () => {
         axios.get(`${BASE_URL}/users/employees-division/`,{
@@ -292,7 +318,7 @@ const postNewPassword = async e => {
     setSnack(false)
   };
 
-  const gende = [
+  const genderEmployee = [
     {'id': 1,
     'name' : 'Laki-Laki'
   },
@@ -318,7 +344,7 @@ const postNewPassword = async e => {
               <main className="p-3 ">
                   <div className='d-flex justify-content-center'>
                       <Col md={12} sm={12}>
-                          <div className="card shadow_card" style={{ border:'none', borderRadius:'12px' }}>
+                          <div className="card shadow-card" style={{ border:'none', borderRadius:'12px' }}>
                               <div className="card-body">
                                       <button onClick={() => navigate(-1)} className="d-flex align-items-center btn">
                                           <ArrowBackIos />
@@ -380,7 +406,7 @@ const postNewPassword = async e => {
                                                     onChange={handleGend}
                                                     label="Jenis Kelamin"
                                                     >
-                                                        {gende && gende.map((div, index) => {
+                                                        {genderEmployee && genderEmployee.map((div, index) => {
                                                             return(
                                                                 <MenuItem value={div.name} key={index}>{div.name}</MenuItem>
                                                             )
@@ -484,6 +510,18 @@ const postNewPassword = async e => {
                                       </Col>
 
                               </div>
+                          </div>
+                          <div className="card shadow-card mt-2" style={{ border:'none', borderRadius:'12px' }}>
+                            <div className="card-body">
+                              <h5 className='card-title'>Pengajuan Cuti {nama_depan + ' ' + nama_belakang} &nbsp; {yearToday}</h5>
+                              <SubmissionTableComponents tableData={submission_cuti && submission_cuti} link='/perizinan/detail' />
+                            </div>
+                          </div>
+                          <div className="card shadow-card mt-2" style={{ border:'none', borderRadius:'12px' }}>
+                            <div className="card-body">
+                              <h5 className='card-title'>Notes Cuti {nama_depan + ' ' + nama_belakang} &nbsp; {yearToday} </h5>
+                              <HRTableNotesComponents tableData={notes_cuti && notes_cuti} link={`/notes/detail`} />
+                            </div>
                           </div>
                           <Snackbar
                             anchorOrigin={{ vertical : 'top', horizontal: 'right' }}

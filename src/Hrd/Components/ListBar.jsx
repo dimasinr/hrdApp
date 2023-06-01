@@ -196,6 +196,18 @@ return (
         </ListItem>
       </Link>
         <Divider />
+      <small className='text-secondary container'>Notes Cuti</small>
+        <Link to="/notes/employee/" style={{ textDecoration:'none', color:'black' }}>
+        <ListItem disablePadding className={side_name === 'notes' ? "side_col" : "side_no_col" }>
+          <ListItemButton>
+            <ListItemIcon>
+              <AutoStories sx={side_name === 'notes' ? {color: '#ffffff'} : { color:'#0B305A' }} />
+            </ListItemIcon>
+            <ListItemText primary='Catatan Cuti' />
+          </ListItemButton>
+        </ListItem>
+      </Link>
+      <Divider />
         <small className='text-secondary container'>Pengaturan</small>
         {/* <Link to="/settings/" style={{ textDecoration:'none', color:'black' }}> */}
         <ListItem disablePadding>

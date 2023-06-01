@@ -10,7 +10,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { bulan } from '../Presence/utlis/arrayfuc'
 import { tahun, dataNotes } from './array'
 import {Snackbar, Alert} from '@mui/material'
-import { HRTableNotesComponents } from '../../../Karyawan/Components/Table/EmployeeTableComponents'
+import { HRTableNotesComponents, NoDataTableNotesComponents } from '../../../Karyawan/Components/Table/EmployeeTableComponents'
 import { StyledPagination } from '../../../Karyawan/Components/Pagination/PaginationEmployee'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -228,10 +228,17 @@ function Note() {
                                     </div>
 
                                     {loading && loading ?
-                                    <CircularProgress /> :
+                                    <center>
+                                      <CircularProgress /> 
+                                    </center>
+                                    :
                                     <Col md={12}>
                                     <hr />
+                                    {notes_paginate !== 0 ?
                                     <HRTableNotesComponents tableData={list_notes} link={`/notes/detail`} />
+                                      :
+                                      <NoDataTableNotesComponents />
+                                    }
                                     <StyledPagination
                                         count={pageCount}
                                         page={currentPage + 1}
