@@ -263,6 +263,7 @@ export const SubmissionTableComponents = ({ tableData, link }) => {
                 <TableCell align="center">Alasan</TableCell>
                 <TableCell align="center">Tanggal Awal</TableCell>
                 <TableCell align="center">Tanggal Akhir</TableCell>
+                <TableCell align="center">Lama Hari</TableCell>
                 <TableCell align="center">Izin Atasan</TableCell>
                 <TableCell align="center">Action</TableCell>
             </TableRow>
@@ -285,6 +286,7 @@ export const SubmissionTableComponents = ({ tableData, link }) => {
                 </TableCell>
                 <TableCell align="center">{row.start_date ? datesUpt(row.start_date) : "Tanggal tidak tertera"}</TableCell>
                 <TableCell align="center">{row.end_date ? datesUpt(row.end_date) : "Tanggal tidak tertera"}</TableCell>
+                <TableCell align="center">{row.jumlah_hari ? row.jumlah_hari + ' hari' : "1 hari"}</TableCell>
                 <TableCell align="center" >{row.permission_pil ? row.permission_pil : "waiting for approval"}</TableCell>
                 <TableCell align="center">
                     <Tooltip title="Detail">
