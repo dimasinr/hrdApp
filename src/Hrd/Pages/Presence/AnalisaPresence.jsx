@@ -126,7 +126,7 @@ function AnalisaPresence() {
     
   console.log(JSON.stringify(weekendDates))
   console.log(attendance)
-  const actualDate = mergedDataPresence(weekendDates, attendance)
+  const actualDate = mergedDataPresence(attendance, weekendDates)
 
   console.log(actualDate)
     
@@ -182,7 +182,7 @@ function AnalisaPresence() {
                                     <tr key={index}>
                                     <td style={{ color: '#4932A7' }}>
                                       {ROLES === 'hrd' ?
-                                      <Link to={`/employee/absensi/${att.id}`} className='unlink'>
+                                      <Link to={att.id ? `/employee/absensi/${att.id}` : `/absensi/${name_id}/${user_id}/${month_id}/${year_id}`} className='unlink'>
                                         {index + 1}
                                       </Link>:
                                       index+1

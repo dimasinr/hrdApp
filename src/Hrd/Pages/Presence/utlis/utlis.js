@@ -267,7 +267,9 @@ export function mergedDataPresence(data1, data2) {
   data2.forEach((item2) => {
     const index = mergedData.findIndex((item1) => item1.working_date === item2.working_date);
     if (index === -1) {
-      mergedData.push(item2);
+      const newItem = { ...item2 };
+      newItem.employee = { ...data1[0].employee };
+      mergedData.push(newItem);
     } else {
       mergedData[index].days = item2.days;
     }
