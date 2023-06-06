@@ -155,12 +155,12 @@ function SelfEmployeeAnalisisPresence() {
                                         <TableRow key={index}>
                                         <TableCell>{index+1}</TableCell>
                                         <TableCell>{att.employee && att.employee.name ? att.employee.name : "Nawastra Employee" }</TableCell>
-                                        <TableCell>{att.working_date ? datesUpt(att.working_date) : '-'}</TableCell>
-                                        <TableCell>{att.days ? changeDayName(att.days) : "-"}</TableCell>
-                                        <TableCell>{att.start_from ? workHour(att.start_from) : "-"}</TableCell>
-                                        <TableCell>{att.end_from ? workHour(att.end_from) : "-"}</TableCell>
-                                        <TableCell>{att.lembur_start ? workHour(att.lembur_start) : "-"}</TableCell>
-                                        <TableCell>{att.lembur_end ? workHour(att.lembur_end) : "-"}</TableCell>
+                                        <TableCell>{att.working_date ? datesUpt(att.working_date) : ''}</TableCell>
+                                        <TableCell>{att.days ? changeDayName(att.days) : ""}</TableCell>
+                                        <TableCell>{att.start_from ? workHour(att.start_from) : ""}</TableCell>
+                                        <TableCell>{att.end_from ? workHour(att.end_from) : ""}</TableCell>
+                                        <TableCell>{att.lembur_start ? workHour(att.lembur_start) : ""}</TableCell>
+                                        <TableCell>{att.lembur_end ? workHour(att.lembur_end) : ""}</TableCell>
                                         <TableCell>{att.ket ? att.ket : null}</TableCell>
                                       
                                         <TableCell>

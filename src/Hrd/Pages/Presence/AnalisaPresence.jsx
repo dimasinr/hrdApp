@@ -124,11 +124,7 @@ function AnalisaPresence() {
   const weekendDates = getWeekendDates(startDate, endDate);
 
     
-  console.log(JSON.stringify(weekendDates))
-  console.log(attendance)
   const actualDate = mergedDataPresence(attendance, weekendDates)
-
-  console.log(actualDate)
     
   return (
     <div className='d-flex'>
