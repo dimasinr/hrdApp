@@ -8,7 +8,7 @@ import Table from 'react-bootstrap/Table';
 import { CircularProgress, Tooltip } from '@mui/material'
 import { useDownloadExcel } from 'react-export-table-to-excel'
 import { bulan } from '../../../Components/utilsFunction/arrayFunction'
-import { sumTotal, sumHE, totalAtt, aktualLembur, leb, asce, ascr, dividDed } from './utlis/utlis'
+import { sumTotal, sumHE, totalAtt, aktualLembur, leb, asce, ascr, dividDed, getWeekendDates, mergedDataPresence } from './utlis/utlis'
 import { changeDayName, datesUpt, workHour } from '../../../Components/utilsFunction/functionUtils'
 
 function AnalisaPresence() {
@@ -117,6 +117,19 @@ function AnalisaPresence() {
       sheet: `Analisa Absensi ${name_id && name_id.replace(/%20/g, " ")} Bulan ${bulan[month_a].month}`,
   })
 
+  const lastWorkingDate = attendance[attendance.length - 1]?.working_date;
+  console.log(lastWorkingDate)
+  const startDate = new Date(`2023-${month_id}-01`);
+  const endDate = new Date(lastWorkingDate);
+  const weekendDates = getWeekendDates(startDate, endDate);
+
+    
+  console.log(JSON.stringify(weekendDates))
+  console.log(attendance)
+  const actualDate = mergedDataPresence(weekendDates, attendance)
+
+  console.log(actualDate)
+    
   return (
     <div className='d-flex'>
         <SideBar />
@@ -164,7 +177,7 @@ function AnalisaPresence() {
                             </tr>
                         </thead>
                         <tbody>
-                            {attendance.map((att, index) => {
+                            {actualDate.map((att, index) => {
                                 return(
                                     <tr key={index}>
                                     <td style={{ color: '#4932A7' }}>
@@ -176,29 +189,29 @@ function AnalisaPresence() {
                                       }
                                     </td>
                                     <td>{att.employee && att.employee.name ? att.employee.name : "Nawastra Employee" }</td>
-                                    <td>{att.working_date ? datesUpt(att.working_date) : '-'}</td>
-                                    <td>{att.days ? changeDayName(att.days) : "-"}</td>
-                                    <td>{att.start_from ? workHour(att.start_from) : "-"}</td>
-                                    <td>{att.end_from ? workHour(att.end_from) : "-"}</td>
-                                    <td>{att.lembur_start ? workHour(att.lembur_start) : "-"}</td>
-                                    <td>{att.lembur_end ? workHour(att.lembur_end) : "-"}</td>
+                                    <td>{att.working_date ? datesUpt(att.working_date) : ''}</td>
+                                    <td>{att.days ? changeDayName(att.days) : ""}</td>
+                                    <td>{att.start_from ? workHour(att.start_from) : ""}</td>
+                                    <td>{att.end_from ? workHour(att.end_from) : ""}</td>
+                                    <td>{att.lembur_start ? workHour(att.lembur_start) : ""}</td>
+                                    <td>{att.lembur_end ? workHour(att.lembur_end) : ""}</td>
                                     <td>{att.ket ? att.ket : null}</td>
                                    
                                     <td>
                                       {/* Total Jam Kerja */}
-                                      {att.working_hour !== null ? att.working_hour.toString().length === 1 ?
+                                      {att.working_hour ? att.working_hour.toString().length === 1 ?
                                       att.working_hour.toString() + ' Menit'
                                       : null : null
                                     }
-                                      {att.working_hour !== null ? att.working_hour.toString().length === 2 ?
+                                      {att.working_hour ? att.working_hour.toString().length === 2 ?
                                       att.working_hour.toString() + ' Menit'
                                       : null : null
                                     }
-                                    {att.working_hour !== null ? att.working_hour.toString().length === 3 ?
+                                    {att.working_hour ? att.working_hour.toString().length === 3 ?
                                       att.working_hour.toString().slice(0,1) + ':'+ att.working_hour.toString().slice(1,3) + ' Jam'
                                       : null : null
                                     }
-                                    {att.working_hour !== null ? att.working_hour.toString().length === 4 ?
+                                    {att.working_hour ? att.working_hour.toString().length === 4 ?
                                       att.working_hour.toString().slice(0,2) + ':' + att.working_hour.toString().slice(2,4) + ' Jam'
                                     : null : null
                                     }
@@ -208,15 +221,15 @@ function AnalisaPresence() {
                                     <td>
                                       {/* Total Jam Lembur */}
 
-                                      {att.lembur_hour !== null ? att.lembur_hour.toString().length === 2 ?
+                                      {att.lembur_hour ? att.lembur_hour.toString().length === 2 ?
                                         att.lembur_hour + ' Menit'
                                         : null : null
                                       }
-                                      {att.lembur_hour !== null ? att.lembur_hour.toString().length === 3 ?
+                                      {att.lembur_hour ? att.lembur_hour.toString().length === 3 ?
                                         att.lembur_hour.toString().slice(0,1) + ':'+ att.lembur_hour.toString().slice(1,3) + ' Jam'
                                         : null : null
                                       }
-                                      {att.lembur_hour !== null ? att.lembur_hour.toString().length === 4 ?
+                                      {att.lembur_hour ? att.lembur_hour.toString().length === 4 ?
                                         att.lembur_hour.toString().slice(0,2) + ':' + att.lembur_hour.toString().slice(2,4) + ' Jam'
                                       : null : null
                                       }

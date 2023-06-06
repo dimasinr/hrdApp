@@ -80,6 +80,7 @@ function DayOff() {
           setOffDay(res.results)
           console.log(res)
           setLoading(false)
+          window.scrollTo({top: 0, behavior: 'smooth'});
         })
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -111,7 +112,7 @@ function DayOff() {
                 ){
                 setSnack(true)
                 setStatus('error')
-                setMessage(`${error.response.data.detail}`)
+                setMessage(`${error.response.data.message}`)
             }
         }
     };
@@ -136,7 +137,7 @@ function DayOff() {
                 ){
                 setSnack(true)
                 setStatus('error')
-                setMessage(`${error.response.data.detail}`)
+                setMessage(`${error.response.data.message}`)
             }
         }
     };

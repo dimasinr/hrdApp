@@ -109,10 +109,10 @@ export const HRTableNotesComponents = ({ tableData, link }) => {
             <TableRow>
                 <TableCell align="left">id</TableCell>
                 <TableCell>Nama</TableCell>
-                <TableCell align="center">Tanggal</TableCell>
-                <TableCell align="center">Hari</TableCell>
-                <TableCell align="center">Tipe Catatan</TableCell>
-                <TableCell align="center">Catatan</TableCell>
+                <TableCell align="left">Tanggal</TableCell>
+                <TableCell align="left">Hari</TableCell>
+                <TableCell align="left">Tipe Catatan</TableCell>
+                <TableCell align="left">Catatan</TableCell>
                 <TableCell align="center">Action</TableCell>
             </TableRow>
             </TableHead>
@@ -124,9 +124,9 @@ export const HRTableNotesComponents = ({ tableData, link }) => {
                 >
                 <TableCell component="th" scope="row" >{row.id ? row.id && row.id : "0"}</TableCell>
                 <TableCell component="th" scope="row" >{row.employee ? row.employee && row.employee.name : "ex karyawan"}</TableCell>
-                <TableCell align="center">{row.date_note ? datesUpt(row.date_note) : "Tanggal tidak tertera"}</TableCell>
-                <TableCell align="center">{row.name_day ? changeDayName(row.name_day) : "Hari tidak diketahui"}</TableCell>
-                <TableCell align="center">{row.type_notes ? row.type_notes : "Tidak ada"}</TableCell>
+                <TableCell align="left">{row.date_note ? datesUpt(row.date_note) : "Tanggal tidak tertera"}</TableCell>
+                <TableCell align="left">{row.name_day ? changeDayName(row.name_day) : "Hari tidak diketahui"}</TableCell>
+                <TableCell align="left">{row.type_notes ? row.type_notes : "Tidak ada"}</TableCell>
                 <TableCell align="left">{row.notes ? 
                     row.notes.toString().length < 30 ? 
                         row.notes : 

@@ -25,13 +25,10 @@ function DayOffDetail() {
 
     const [day_title, setDayTitle] = useState('')
     const [tanggal, setTanggal] = useState(new Date())
-    const [dayName, setDayName] = useState('')
-    const [month, setMonth] = useState('')
-    const [year, setYear] = useState('')
     const [loading, setLoading] = useState(true)
     const [day_of, setDayOf] = useState('weekday')
 
-    const type_day = 'national'
+    const [type_day, setTypeDay] = useState('national')
 
     // snackbar
     const [snack, setSnack] = React.useState(false);
@@ -50,14 +47,13 @@ function DayOffDetail() {
         })
         .then((response) => {
           const res = response.data
-          setDayName(res.day_names)
-          setMonth(res.months)
-          setYear(res.years)
           console.log(res)
           setDayOf(res.day_of)
           setDayTitle(res.title_day)
           setTanggal(res.date)
+          setTypeDay(res.type_day)
           setLoading(false)
+          window.scrollTo({top: 0, behavior: 'smooth'});
         })
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,7 +78,6 @@ function DayOffDetail() {
             setStatus('info')
             setMessage('Data Berhasil di ubah')
             getOffDay()
-            navigate(-1)
         }catch(error){
             if( error.response &&
                 error.response.status >= 400 &&
@@ -90,16 +85,21 @@ function DayOffDetail() {
                 ){
                 setSnack(true)
                 setStatus('error')
-                setMessage(`${error.response.data.detail}`)
+                setMessage(`${error.response.data.message}`)
             }
         }
     };
 
     const deleteOffDay = async e => {
         try{
-           await axios({
-                method: 'delete',
-                url:`${BASE_URL}/api/dashboard/employee-dashboard/${off_id}/`,
+            const formData = new FormData();
+            formData.append("title_day", day_title);
+            formData.append("type_day", type_day);
+            formData.append("date", tanggal);
+            await axios({
+                method: 'post',
+                url:`${BASE_URL}/api/dashboard/day-of/delete/`,
+                data: formData,
                 headers: {
                     "Authorization" : `Token ${USER_TOKEN}`
                   }
@@ -107,7 +107,6 @@ function DayOffDetail() {
             setSnack(true)
             setStatus('success')
             setMessage('Data Berhasil dihapus')
-            getOffDay()
             navigate(-1)
         }catch(error){
             if( error.response &&
@@ -116,13 +115,18 @@ function DayOffDetail() {
                 ){
                 setSnack(true)
                 setStatus('error')
-                setMessage(`${error.response.data.detail}`)
+                setMessage(`${error.response.data.message}`)
             }
+            console.log(error)
         }
     };
 
-    const changeDate = (event) => {
+    const changeDayOf = (event) => {
         setDayOf(event.target.value);
+      };
+    
+    const changeTypeDayOff = (event) => {
+        setTypeDay(event.target.value);
       };
 
       const dataNotes = [
@@ -133,6 +137,17 @@ function DayOffDetail() {
         {
           'id' : 2,
           'name' : 'weekday'
+        },
+      ]
+
+      const type_off = [
+        {
+          'id' : 1,
+          'name' : 'national'
+        },
+        {
+          'id' : 2,
+          'name' : 'kantor'
         },
       ]
 
@@ -149,7 +164,7 @@ function DayOffDetail() {
         <main className="container" style={{ marginTop:'78px' }}>
 
             <Col md={12} sm={12}>
-                <div className="card shadow_card" style={{ border:'none', borderRadius:'10px' }}>
+                <div className="card shadow-card" style={{ border:'none', borderRadius:'10px' }}>
                     <div className="card-body">
 
                     <div className="card-title">
@@ -186,13 +201,16 @@ function DayOffDetail() {
                                                 renderInput={(params) => <TextField sx={{ mb:2 }} fullWidth variant='outlined' label='Tanggal Hari Libur' {...params} />}
                                                 />
                                             </LocalizationProvider>
+                                           
+                                        </Row>
+                                        <Row>
                                             <FormControl fullWidth sx={{ mb: 2, minWidth: 120 }}>
                                                 <InputLabel id="type-day-label">Tipe Hari Libur</InputLabel>
                                                 <Select
                                                 labelId="type-day"
                                                 id="type-day"
                                                 value={day_of}
-                                                onChange={changeDate}
+                                                onChange={changeDayOf}
                                                 label="Type day"
                                                 >
                                                     {dataNotes && dataNotes.map((rol, index) => {
@@ -203,12 +221,23 @@ function DayOffDetail() {
                                                 
                                                 </Select>
                                             </FormControl>
-                                        </Row>
-                                        <Row>
-                                        <TextField fullWidth value={dayName} onChange={e => setDayName(e.target.value)} id="dayname" sx={{ mb:2 }} label='Hari' disabled variant='filled' />
-                                        <TextField fullWidth value={month} onChange={e => setMonth(e.target.value)} id="daymonth" sx={{ mb:2 }} label='Hari' disabled variant='filled' />
-                                        <TextField fullWidth value={year} onChange={e => setYear(e.target.value)} id="dayyear" sx={{ mb:2 }} label='Hari' disabled variant='filled' />
-                                          
+                                            <FormControl fullWidth sx={{ mb: 2, minWidth: 120 }}>
+                                                <InputLabel id="type-off-label">Jenis Libur</InputLabel>
+                                                <Select
+                                                labelId="type-off"
+                                                id="type-off"
+                                                value={type_day}
+                                                onChange={changeTypeDayOff}
+                                                label="Type day"
+                                                >
+                                                    {type_off && type_off.map((rol, index) => {
+                                                        return(
+                                                            <MenuItem key={index} value={rol.name}>{rol.name.charAt(0).toUpperCase() + rol.name.slice(1)}</MenuItem>
+                                                        )
+                                                    })}
+                                                
+                                                </Select>
+                                            </FormControl>
                                         </Row>
                                     </Box>
 

@@ -234,3 +234,46 @@ export function zeta(x){
       return data.replace(':', '')
     }
 }
+
+function getDayOfWeek(dayNumber) {
+  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  return daysOfWeek[dayNumber];
+}
+
+// data tanggal weekend
+export function getWeekendDates(startDate, endDate) {
+  const weekendDates = [];
+  const currentDate = new Date(startDate);
+
+  while (currentDate <= endDate) {
+    if (currentDate.getDay() === 6 || currentDate.getDay() === 0) {
+      const date = currentDate.getDate();
+      const month = currentDate.getMonth() + 1;
+      const year = currentDate.getFullYear();
+      const formattedDate = `${year}-${month < 10 ? '0' + month : month}-${date < 10 ? '0' + date : date}`;
+      const day = getDayOfWeek(currentDate.getDay());
+      
+      weekendDates.push({ working_date: formattedDate, days: day });
+    }
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return weekendDates;
+}
+
+export function mergedDataPresence(data1, data2) {
+  const mergedData = [...data1];
+
+  data2.forEach((item2) => {
+    const index = mergedData.findIndex((item1) => item1.working_date === item2.working_date);
+    if (index === -1) {
+      mergedData.push(item2);
+    } else {
+      mergedData[index].days = item2.days;
+    }
+  });
+
+  mergedData.sort((a, b) => new Date(a.working_date) - new Date(b.working_date));
+
+  return mergedData;
+}

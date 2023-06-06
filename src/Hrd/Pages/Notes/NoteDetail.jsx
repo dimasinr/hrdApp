@@ -125,9 +125,15 @@ function NoteDetail() {
 
     const delNotes = async e => {
       try{
+        const formData = new FormData();
+        formData.append("employee", employee);
+        formData.append("date_note", date_note);
+        formData.append("notes", notes);
+        formData.append("type_notes", type_notes);
          await axios({
-              method: 'delete',
-              url:`${BASE_URL}/api/note/employee-notes/${ids}/`,
+              method: 'post',
+              url:`${BASE_URL}/api/note/delete/`,
+              data: formData,
               headers: {
                   "Authorization" : `Token ${USER_TOKEN}`
                 }
@@ -136,6 +142,7 @@ function NoteDetail() {
          setSnack(true)
          setStatus("info")
          setMessage("Data Berhasil dihapus")
+         
       }catch(error){
           if( error.response &&
               error.response.status >= 400 &&
