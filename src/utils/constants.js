@@ -1,4 +1,4 @@
-import { AppRouter } from "../router/index.js"
+import { AppRouter } from "../router"
 
 export const APPS = [
     {

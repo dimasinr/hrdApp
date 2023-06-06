@@ -8,7 +8,7 @@ module.exports = {
   mode: 'development',
   entry: './src/index.js', // Ubah sesuai dengan file utama Anda
   output: {
-    path: path.resolve(__dirname, 'build'), // Ubah sesuai dengan direktori output yang diinginkan
+    path: path.resolve(__dirname, 'dir'), // Ubah sesuai dengan direktori output yang diinginkan
     filename: 'bundle.js',
   },
   module: {
