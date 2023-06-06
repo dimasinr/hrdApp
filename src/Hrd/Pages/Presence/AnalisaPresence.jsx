@@ -2,7 +2,7 @@ import React,{useState, useEffect} from 'react'
 import SideBar from '../../Components/SideBar'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { ArrowBackIos, GetApp } from '@mui/icons-material'
-import { BASE_URL, USER_TOKEN } from '../../../fetch/fetch'
+import { BASE_URL, USER_TOKEN, ROLES } from '../../../fetch/fetch'
 import axios from 'axios'
 import Table from 'react-bootstrap/Table';
 import { CircularProgress, Tooltip } from '@mui/material'
@@ -168,9 +168,12 @@ function AnalisaPresence() {
                                 return(
                                     <tr key={index}>
                                     <td style={{ color: '#4932A7' }}>
+                                      {ROLES === 'hrd' ?
                                       <Link to={`/employee/absensi/${att.id}`} className='unlink'>
                                         {index + 1}
-                                      </Link>
+                                      </Link>:
+                                      index+1
+                                      }
                                     </td>
                                     <td>{att.employee && att.employee.name ? att.employee.name : "Nawastra Employee" }</td>
                                     <td>{att.working_date ? datesUpt(att.working_date) : '-'}</td>
