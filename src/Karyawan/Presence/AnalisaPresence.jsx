@@ -152,6 +152,7 @@ function SelfEmployeeAnalisisPresence() {
                                 {attendance.map((att, index) => {
                                   return(
                                         <TableRow key={index}>
+                                        <TableCell>{index+1}</TableCell>
                                         <TableCell>{att.employee && att.employee.name ? att.employee.name : "Nawastra Employee" }</TableCell>
                                         <TableCell>{att.working_date ? datesUpt(att.working_date) : '-'}</TableCell>
                                         <TableCell>{att.days ? changeDayName(att.days) : "-"}</TableCell>
