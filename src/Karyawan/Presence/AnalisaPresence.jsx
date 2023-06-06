@@ -136,6 +136,7 @@ function SelfEmployeeAnalisisPresence() {
                           <Table ref={tableRef} bordered hover responsive>
                             <TableHead>
                             <TableRow>
+                                <TableCell>No</TableCell>
                                 <TableCell>Nama</TableCell>
                                 <TableCell align="center">Tanggal</TableCell>
                                 <TableCell align="center">Hari</TableCell>

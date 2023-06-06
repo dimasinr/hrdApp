@@ -150,7 +150,7 @@ function AnalisaPresence() {
                         <Table ref={tableRef} bordered hover responsive>
                         <thead>
                             <tr>
-                            <th>Pid</th>
+                            <th>No</th>
                             <th>Nama</th>
                             <th>Tanggal</th>
                             <th>Hari</th>
