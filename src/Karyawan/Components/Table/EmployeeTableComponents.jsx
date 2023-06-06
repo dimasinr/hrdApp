@@ -256,7 +256,7 @@ export const SubmissionTableComponents = ({ tableData, link }) => {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
             <TableRow>
-                <TableCell>Id</TableCell>
+                <TableCell>No</TableCell>
                 <TableCell align="center">Nama</TableCell>
                 <TableCell align="center">Divisi</TableCell>
                 <TableCell align="center">Izin</TableCell>
@@ -269,12 +269,12 @@ export const SubmissionTableComponents = ({ tableData, link }) => {
             </TableRow>
             </TableHead>
             <TableBody>
-            {tableData.map((row) => (
+            {tableData.map((row, index) => (
                 <TableRow
                 key={row.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
-                <TableCell component="th" scope="row" >{row.id ? row.id.slice(0,5)+'...' : "null"}</TableCell>
+                <TableCell component="th" scope="row" >{index+1}</TableCell>
                 <TableCell align="center">{row.employee ? row.employee.name : "No name"}</TableCell>
                 <TableCell align="center">{row.employee ? row.employee.division : "Tidak ada divisi"}</TableCell>
                 <TableCell align="center">{row.permission_type ? row.permission_type : "Tidak ada izin"}</TableCell>
