@@ -5,12 +5,13 @@ import { ArrowBackIos, GetApp } from '@mui/icons-material'
 import { BASE_URL, USER_TOKEN } from '../../fetch/fetch'
 import axios from 'axios'
 // import Table from 'react-bootstrap/Table';
-import { CircularProgress, Tooltip, Table, TableHead, TableBody, TableCell, TableRow } from '@mui/material'
+import { CircularProgress, Tooltip, Table, TableHead, TableBody, TableCell, TableRow, TableContainer, Paper  } from '@mui/material'
 import { useDownloadExcel } from 'react-export-table-to-excel'
 import { bulan } from '../../Components/utilsFunction/arrayFunction'
 import { sumTotal, sumHE, totalAtt, aktualLembur, leb, asce, ascr, dividDed } from './utlis/utlis'
 import { NAMES, USER_ID } from '../../fetch/fetch'
-import { changeDayName, datesUpt, workHour } from '../../Components/utilsFunction/functionUtils'
+import { changeDayName, datesUpt, workHour, totalWorkHour } from '../../Components/utilsFunction/functionUtils'
+import { getWeekendDates, mergedDataPresence } from '../../Hrd/Pages/Presence/utlis/utlis'
 
 function SelfEmployeeAnalisisPresence() {
   const tableRef = React.useRef("");
@@ -108,6 +109,14 @@ function SelfEmployeeAnalisisPresence() {
       sheet: `Analisa Absensi ${NAMES && NAMES.replace(/%20/g, " ")} Bulan ${bulan[month_a].month}`,
   })
 
+  const lastWorkingDate = attendance[attendance.length - 1]?.working_date;
+  const startDate = new Date(`2023-${month_id}-01`);
+  const endDate = new Date(lastWorkingDate);
+  const weekendDates = getWeekendDates(startDate, endDate);
+
+    
+  const actualDate = mergedDataPresence(attendance, weekendDates)
+
   return (
     <div className='d-flex'>
         <SideBar />
@@ -131,9 +140,8 @@ function SelfEmployeeAnalisisPresence() {
                         {loading && loading ? 
                         <CircularProgress />
                         : 
-                        <div className="card shadow-card" style={{ border: 'none', borderRadius:'15px' }}>
-                          <div className="card-body">
-                          <Table ref={tableRef} bordered hover responsive>
+                        <TableContainer component={Paper}>
+                          <Table ref={tableRef}>
                             <TableHead>
                             <TableRow>
                                 <TableCell>No</TableCell>
@@ -150,116 +158,49 @@ function SelfEmployeeAnalisisPresence() {
                             </TableRow>
                             </TableHead>
                             <TableBody>
-                                {attendance.map((att, index) => {
+                                {actualDate.map((att, index) => {
                                   return(
                                         <TableRow key={index}>
                                         <TableCell>{index+1}</TableCell>
                                         <TableCell>{att.employee && att.employee.name ? att.employee.name : "Nawastra Employee" }</TableCell>
-                                        <TableCell>{att.working_date ? datesUpt(att.working_date) : ''}</TableCell>
-                                        <TableCell>{att.days ? changeDayName(att.days) : ""}</TableCell>
-                                        <TableCell>{att.start_from ? workHour(att.start_from) : ""}</TableCell>
-                                        <TableCell>{att.end_from ? workHour(att.end_from) : ""}</TableCell>
-                                        <TableCell>{att.lembur_start ? workHour(att.lembur_start) : ""}</TableCell>
-                                        <TableCell>{att.lembur_end ? workHour(att.lembur_end) : ""}</TableCell>
-                                        <TableCell>{att.ket ? att.ket : null}</TableCell>
-                                      
-                                        <TableCell>
-                                          {/* Total Jam Kerja */}
-                                          {att.working_hour !== null ? att.working_hour.toString().length === 1 ?
-                                          att.working_hour.toString() + ' Menit'
-                                          : null : null
-                                        }
-                                          {att.working_hour !== null ? att.working_hour.toString().length === 2 ?
-                                          att.working_hour.toString() + ' Menit'
-                                          : null : null
-                                        }
-                                        {att.working_hour !== null ? att.working_hour.toString().length === 3 ?
-                                          att.working_hour.toString().slice(0,1) + ':'+ att.working_hour.toString().slice(1,3) + ' Jam'
-                                          : null : null
-                                        }
-                                        {att.working_hour !== null ? att.working_hour.toString().length === 4 ?
-                                          att.working_hour.toString().slice(0,2) + ':' + att.working_hour.toString().slice(2,4) + ' Jam'
-                                        : null : null
-                                        }
-                                          {/* </TableCell> */}
-                                          {/* <TableCell> */}
-                                        </TableCell>
-                                        <TableCell>
-                                          {/* Total Jam Lembur */}
-
-                                          {att.lembur_hour !== null ? att.lembur_hour.toString().length === 2 ?
-                                            att.lembur_hour + ' Menit'
-                                            : null : null
-                                          }
-                                          {att.lembur_hour !== null ? att.lembur_hour.toString().length === 3 ?
-                                            att.lembur_hour.toString().slice(0,1) + ':'+ att.lembur_hour.toString().slice(1,3) + ' Jam'
-                                            : null : null
-                                          }
-                                          {att.lembur_hour !== null ? att.lembur_hour.toString().length === 4 ?
-                                            att.lembur_hour.toString().slice(0,2) + ':' + att.lembur_hour.toString().slice(2,4) + ' Jam'
-                                          : null : null
-                                          }
-                                        </TableCell>
-                                        
+                                        <TableCell align="center">{att.working_date ? datesUpt(att.working_date) : '-'}</TableCell>
+                                        <TableCell>{att.days ? changeDayName(att.days) : "-"}</TableCell>
+                                        <TableCell align="center">{att.start_from ? workHour(att.start_from) : "-"}</TableCell>
+                                        <TableCell align="center">{att.end_from ? workHour(att.end_from) : "-"}</TableCell>
+                                        <TableCell align="center">{att.lembur_start ? workHour(att.lembur_start) : "-"}</TableCell>
+                                        <TableCell align="center">{att.lembur_end ? workHour(att.lembur_end) : "-"}</TableCell>
+                                        <Tooltip title={att.ket} arrow>
+                                          <td>
+                                            {att.ket ? 
+                                          att.ket.toString().length > 5 ?
+                                          att.ket.toString().slice(0,5) + '...' : att.ket
+                                          : null}
+                                          </td>
+                                          </Tooltip>
+                                        <TableCell align="center">{att.working_hour ? workHour(att.working_hour) : '-'}</TableCell>
+                                        <TableCell align="center">{att.lembur_hour ? workHour(att.lembur_hour) : '-'} </TableCell>
                                       </TableRow>   
                                     )
                                 })}
                                 <TableRow>
-                                    <TableCell colSpan={8}><h6>Total</h6></TableCell>
+                                    <TableCell colSpan={9}><h6>Total</h6></TableCell>
                                     
-                                      {dividDed(sumData, sumDataWork).toString().length === 1 ?
-                                        <TableCell colSpan={1}>
-                                          {dividDed(sumData, sumDataWork).toString()} Menit
-                                        </TableCell>
-                                        : null
-                                      }
-                                      {dividDed(sumData, sumDataWork).toString().length === 2 ?
-                                        <TableCell colSpan={1}>
-                                          {dividDed(sumData, sumDataWork).toString()} Menit
-                                        </TableCell>
-                                        : null
-                                      }
-                                      {dividDed(sumData, sumDataWork).toString().length === 3 ?
-                                        <TableCell colSpan={1}>
-                                          {dividDed(sumData, sumDataWork).toString().slice(0,1)},{dividDed(sumData, sumDataWork).toString().slice(1,3)} Jam
-                                        </TableCell>
-                                        : null
-                                      }
-                                      {dividDed(sumData, sumDataWork).toString().length === 4 ?
-                                        <TableCell colSpan={1}>
-                                          {dividDed(sumData, sumDataWork).toString().slice(0,2)},{dividDed(sumData, sumDataWork).toString().slice(2,4)} Jam
-                                        </TableCell>
-                                        : null
-                                      }
-                                      {dividDed(sumData, sumDataWork).toString().length === 5 ?
-                                        <TableCell colSpan={1}>
-                                          {dividDed(sumData, sumDataWork).toString().slice(0,3)},{dividDed(sumData, sumDataWork).toString().slice(3,5)} Jam
-                                        </TableCell>
-                                        : null
-                                      }
+                                    <TableCell align="center" colSpan={1}>
+                                      <h6>
+                                        {dividDed(sumData, sumDataWork).toString().length !== 0 ?
+                                            totalWorkHour(dividDed(sumData, sumDataWork))
+                                          : ''
+                                        }
+                                      </h6>
+                                    </TableCell>
+                                    <TableCell align='center' colSpan={1}>
+                                      <h6>
+                                        {lemburTotal.toString().length === 2 ?
+                                            totalWorkHour(lemburTotal)
+                                            : ''
+                                        }
 
-                                    <TableCell colSpan={1}>
-                                      {lemburTotal.toString().length === 2 ?
-                                          lemburTotal.toString() +' Menit'
-                                          : null
-                                      }
-                                
-                                    {lemburTotal.toString().length === 3 ?
-                                          lemburTotal.toString().slice(0,1)+":"+
-                                          lemburTotal.toString().slice(1,3)+" Jam"
-                                        : null
-                                      }
-                                    
-                                    {lemburTotal.toString().length === 4 ?
-                                          lemburTotal.toString().slice(0,2)+':'+
-                                          lemburTotal.toString().slice(2,4) +' Jam'
-                                        : null
-                                      }
-                                      {lemburTotal.toString().length === 5 ?
-                                          lemburTotal.toString().slice(0,3)+':'+
-                                          lemburTotal.toString().slice(3,5) +' Jam'
-                                        : null
-                                      }
+                                      </h6>
                                     </TableCell>
                                                                     
                                 </TableRow> 
@@ -272,138 +213,38 @@ function SelfEmployeeAnalisisPresence() {
                                 </TableRow> 
                                 <TableRow>
                                     <TableCell colSpan={8}>Jumlah Jam Kerja Efektif</TableCell>
-                                      {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)) === 0 ?
-                                      <TableCell colSpan={3}></TableCell> : null
-                                    }
-                                    {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().length === 3 ?
-                                    <TableCell colSpan={3}>
-                                      {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,1)}: 
-                                      {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(1,3)} Jam
-                                      </TableCell>
-                                      : null
-                                    }
-
-                                    {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().length === 4 ?
-                                    <TableCell colSpan={3}>
-                                      {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,2)}: 
-                                      {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(2,4)} Jam
-                                      </TableCell>
-                                      : null
-                                    }
-
-                                  {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().length === 5 ?
-                                    <TableCell colSpan={3}>
-                                      {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,3)}: 
-                                      {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(3,5)} Jam
-                                      </TableCell>
-                                      : null
-                                    }                                
-                                      
+                                      <TableCell colSpan={3}>
+                                      {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)) !== 0 ?
+                                        totalWorkHour(sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)))
+                                        : ''
+                                      }
+                                      </TableCell> 
                                 </TableRow> 
                                 <TableRow>
                                     <TableCell colSpan={8}>Jumlah Jam Kerja Aktual</TableCell>
-                                    {/* {dividDed(sumData, sumDataWork) === 0 ?
-                                        <TableCell colSpan={3}>
+                                    <TableCell colSpan={3}>
+                                      {dividDed(sumData, sumDataWork).toString().length !== 0 ?
+                                          totalWorkHour(dividDed(sumData, sumDataWork))
+                                          : ''
+                                        }
                                         </TableCell>
-                                        : null
-                                      } */}
-                                      {dividDed(sumData, sumDataWork).toString().length === 1 ?
-                                        <TableCell colSpan={3}>
-                                          {dividDed(sumData, sumDataWork).toString()} Menit
-                                        </TableCell>
-                                        : null
-                                      }
-                                      {dividDed(sumData, sumDataWork).toString().length === 2 ?
-                                        <TableCell colSpan={3}>
-                                          {dividDed(sumData, sumDataWork).toString()} Menit
-                                        </TableCell>
-                                        : null
-                                      }
-                                    {dividDed(sumData, sumDataWork).toString().length === 3 ?
-                                        <TableCell colSpan={3}>
-                                          {dividDed(sumData, sumDataWork).toString().slice(0,1)}:
-                                          {dividDed(sumData, sumDataWork).toString().slice(1,3)} Jam
-                                        </TableCell>
-                                        : null
-                                      }
-                                    {dividDed(sumData, sumDataWork).toString().length === 4 ?
-                                        <TableCell colSpan={3}>
-                                          {dividDed(sumData, sumDataWork).toString().slice(0,2)}:
-                                          {dividDed(sumData, sumDataWork).toString().slice(2,4)} Jam
-                                        </TableCell>
-                                        : null
-                                      }
-                                      {dividDed(sumData, sumDataWork).toString().length === 5 ?
-                                        <TableCell colSpan={3}>
-                                          {dividDed(sumData, sumDataWork).toString().slice(0,3)}:
-                                          {dividDed(sumData, sumDataWork).toString().slice(3,5)} Jam
-                                        </TableCell>
-                                        : null
-                                      }
                                 </TableRow> 
                                 <TableRow>
                                     <TableCell colSpan={8}>Jumlah Jam Lembur</TableCell>
-                                    {lemburTotal.toString().length === 0 ?
-                                        <TableCell colSpan={3}>
-                                          
-                                        </TableCell>
-                                        : null
-                                      }
-                                      {lemburTotal.toString().length === 1 ?
-                                        <TableCell colSpan={3}>
-                                          {lemburTotal.toString()} Menit
-                                        </TableCell>
-                                        : null
-                                      }
-                                      {lemburTotal.toString().length === 2 ?
-                                        <TableCell colSpan={3}>
-                                          {lemburTotal.toString()} Menit
-                                        </TableCell>
-                                        : null
-                                      }
-                                      {lemburTotal.toString().length === 3 ?
-                                        <TableCell colSpan={3}>
-                                          {lemburTotal.toString().slice(0,1)}:
-                                          {lemburTotal.toString().slice(1,3)} Jam
-                                        </TableCell>
-                                        : null
-                                      }
-                                      {lemburTotal.toString().length === 4 ?
-                                        <TableCell colSpan={3}>
-                                          {lemburTotal.toString().slice(0,2)}:
-                                          {lemburTotal.toString().slice(2,4)} Jam
-                                        </TableCell>
-                                        : null
-                                      }
+                                    <TableCell colSpan={3}>
+                                      {lemburTotal.toString().length !== 0 ?
+                                          totalWorkHour(lemburTotal)
+                                          : ''
+                                        }
+                                    </TableCell>
                                 </TableRow> 
                                 <TableRow>
                                     <TableCell colSpan={8}>Jam Kerja Aktual - lembur</TableCell>
                                     <TableCell colSpan={3}>
-                                    {aktualLem.toString().length === 1?
-                                      aktualLem.toString().slice(0,1)+' Menit' :
-                                      null
+                                    {aktualLem.toString().length !== 1?
+                                      totalWorkHour(aktualLem) :
+                                      ''
                                     }
-                                    {aktualLem.toString().length === 2?
-                                      aktualLem.toString().slice(0,1)+':'+
-                                      aktualLem.toString().slice(1,3) + ' Menit' :
-                                      null
-                                    }
-                                      {aktualLem.toString().length === 3?
-                                      aktualLem.toString().slice(0,1)+':'+
-                                      aktualLem.toString().slice(1,3) + ' Jam' :
-                                      null
-                                    }
-
-                                    {aktualLem.toString().length === 4?
-                                      aktualLem.toString().slice(0,2)+':'+
-                                      aktualLem.toString().slice(2,4) + ' Jam' :
-                                      null
-                                    } 
-                                    {aktualLem.toString().length === 5?
-                                      aktualLem.toString().slice(0,3)+':'+
-                                      aktualLem.toString().slice(3,5) + ' Jam' :
-                                      null
-                                    } 
                                     </TableCell>
                                 </TableRow> 
                                 <TableRow>
@@ -456,9 +297,7 @@ function SelfEmployeeAnalisisPresence() {
                                 
                             </TableBody>
                           </Table>
-                          </div>
-                        </div>
-
+                        </TableContainer>
                         }
                       </div>
 

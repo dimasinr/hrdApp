@@ -8,8 +8,9 @@ import Table from 'react-bootstrap/Table';
 import { CircularProgress, Tooltip } from '@mui/material'
 import { useDownloadExcel } from 'react-export-table-to-excel'
 import { bulan } from '../../../Components/utilsFunction/arrayFunction'
-import { sumTotal, sumHE, totalAtt, aktualLembur, leb, asce, ascr, dividDed, getWeekendDates, mergedDataPresence } from './utlis/utlis'
-import { changeDayName, datesUpt, workHour } from '../../../Components/utilsFunction/functionUtils'
+import { sumTotal, sumHE, totalAtt, aktualLembur, leb, asce, ascr, dividDed, getWeekendDates, mergedDataPresence, countDataKeterangan } from './utlis/utlis'
+import { changeDayName, datesUpt, workHour, totalWorkHour, totalWorking } from '../../../Components/utilsFunction/functionUtils'
+// import { Table, TableHead, TableBody, td, } from '@mui/material'
 
 function AnalisaPresence() {
   const tableRef = React.useRef("");
@@ -100,7 +101,7 @@ function AnalisaPresence() {
     const lemburTotal = dividDed(sumDataLembur, sumHourLembur)
     const jamKerjaA = dividDed(sumData, sumDataWork)
     
-    const jamKerjaS = sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur))
+    const jamKerjaS = sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur), countDataKeterangan(attendance, 'tidak masuk') )
     
     const aktualLem = aktualLembur(jamKerjaA, lemburTotal)
     
@@ -118,13 +119,19 @@ function AnalisaPresence() {
   })
 
   const lastWorkingDate = attendance[attendance.length - 1]?.working_date;
-  console.log(lastWorkingDate)
   const startDate = new Date(`2023-${month_id}-01`);
   const endDate = new Date(lastWorkingDate);
   const weekendDates = getWeekendDates(startDate, endDate);
 
     
   const actualDate = mergedDataPresence(attendance, weekendDates)
+  function namesE(name){
+    if(name.replace(/%20/g, " ") === 'Kunut Catur'){
+      return 9
+    }else{
+      return 8
+    }
+  }
     
   return (
     <div className='d-flex'>
@@ -140,361 +147,135 @@ function AnalisaPresence() {
                             <h4 style={{ marginTop:'8px' }}>Analisa Absensi {name_id && name_id.replace(/%20/g, " ")} Bulan {bulan[month_a].month} </h4>
                           </span>
                         </button>
-                        {/* <DownloadTableExcel
-                            filename={`Analisa Absensi ${name_id && name_id.replace(/%20/g, " ")} Bulan ${bulan[month_a].month}`}
-                            sheet={`Analisa Absensi ${name_id && name_id.replace(/%20/g, " ")} Bulan ${bulan[month_a].month}`}
-                            currentTableRef={tableRef.current}
-                        > */}
                           <Tooltip title='Export to excel'>
                             <button onClick={onDownload} className='btn'> <GetApp /> </button>
                           </Tooltip>
-
-                        {/* </DownloadTableExcel> */}
-
                     </div>
                       <div className="col-md-12">
                         {loading && loading ? 
                         <CircularProgress />
                         : 
-                        <Table ref={tableRef} bordered hover responsive>
-                        <thead>
-                            <tr>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>Tanggal</th>
-                            <th>Hari</th>
-                            <th>Masuk</th>
-                            <th>Pulang</th>
-                            <th>LemburS</th>
-                            <th>LemburE</th>
-                            <th>Keterangan</th>
-                            <th>Total Jam Kerja</th>
-                            <th>Total Jam Lembur</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {actualDate.map((att, index) => {
-                                return(
-                                    <tr key={index}>
-                                    <td style={{ color: '#4932A7' }}>
-                                      {ROLES === 'hrd' ?
-                                      <Link to={att.id ? `/employee/absensi/${att.id}` : `/absensi/${name_id}/${user_id}/${month_id}/${year_id}`} className='unlink'>
-                                        {index + 1}
-                                      </Link>:
-                                      index+1
+                              <Table ref={tableRef} bordered hover responsive>
+                              <thead>
+                                  <tr>
+                                  <th>No</th>
+                                  <th>Nama</th>
+                                  <th>Tanggal</th>
+                                  <th>Hari</th>
+                                  <th>Masuk</th>
+                                  <th>Pulang</th>
+                                  <th>LemburS</th>
+                                  <th>LemburE</th>
+                                  <th>Keterangan</th>
+                                  <th>Total Jam Kerja</th>
+                                  <th>Total Jam Lembur</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  {actualDate.map((att, index) => {
+                                      return(
+                                          <tr key={index}>
+                                          <th style={{ color: '#4932A7' }} sx={{ border: '1px solid #ddd' }}>
+                                            {ROLES === 'hrd' ?
+                                            <Link to={att.id ? `/employee/absensi/${att.id}` : `/absensi/${name_id}/${user_id}/${month_id}/${year_id}`} className='unlink'>
+                                              {index + 1}
+                                            </Link>:
+                                            index+1
+                                            }
+                                          </th>
+                                          <td>{att.employee && att.employee.name ? att.employee.name : "Nawastra Employee" }</td>
+                                          <td>{att.working_date ? datesUpt(att.working_date) : ''}</td>
+                                          <td>{att.days ? changeDayName(att.days) : ""}</td>
+                                          <td>{att.start_from ? workHour(att.start_from) : ""}</td>
+                                          <td>{att.end_from ? workHour(att.end_from) : ""}</td>
+                                          <td>{att.lembur_start ? workHour(att.lembur_start) : ""}</td>
+                                          <td>{att.lembur_end ? workHour(att.lembur_end) : ""}</td>
+                                            <Tooltip title={att.ket} arrow>
+                                          <td>
+                                            {att.ket ? 
+                                          att.ket.toString().length > 5 ?
+                                          att.ket.toString().slice(0,5) + '...' : att.ket
+                                          : null}
+                                          </td>
+                                          </Tooltip>
+                                          <td>{att.working_hour === 0 || att.working_hour > 0 ? totalWorking(att.working_hour) : " "}</td>
+                                          <td>{att.lembur_hour === 0 || att.lembur_hour > 0 ? totalWorkHour(att.lembur_hour) : " "}</td>
+                                        </tr>   
+                                      )
+                                  })}
+                                  <tr>
+                                      <td colSpan={9}><h6>Total</h6></td>
+                                      <td colSpan={1}>
+                                        <h6>
+                                          {dividDed(sumData, sumDataWork) === 0 || dividDed(sumData, sumDataWork) > 0 ? totalWorking(dividDed(sumData, sumDataWork)) : " "}
+                                        </h6>
+                                      </td>
+                                      {/* Total Lembur */}
+                                      <td colSpan={1}>
+                                        <h6>
+                                          {lemburTotal === 0 || lemburTotal > 0 ? totalWorkHour(lemburTotal) : null}
+                                        </h6>
+                                      </td>
+                                  </tr> 
+                                  <tr>
+                                      <td colSpan={11}><h5>Analisa Absensi</h5></td>
+                                  </tr>
+                                  <tr>
+                                      <td colSpan={8}>Hari Kerja Efektif</td>
+                                      <td colSpan={3}>
+                                        {countDataKeterangan(attendance, 'tidak masuk') === 0 ?
+                                        totalAtt(attendance.length, TotalAttendance.employee_lembur) :
+                                        totalAtt(attendance.length, TotalAttendance.employee_lembur)
                                       }
-                                    </td>
-                                    <td>{att.employee && att.employee.name ? att.employee.name : "Nawastra Employee" }</td>
-                                    <td>{att.working_date ? datesUpt(att.working_date) : ''}</td>
-                                    <td>{att.days ? changeDayName(att.days) : ""}</td>
-                                    <td>{att.start_from ? workHour(att.start_from) : ""}</td>
-                                    <td>{att.end_from ? workHour(att.end_from) : ""}</td>
-                                    <td>{att.lembur_start ? workHour(att.lembur_start) : ""}</td>
-                                    <td>{att.lembur_end ? workHour(att.lembur_end) : ""}</td>
-                                    <td>{att.ket ? att.ket : null}</td>
-                                   
-                                    <td>
-                                      {/* Total Jam Kerja */}
-                                      {att.working_hour ? att.working_hour.toString().length === 1 ?
-                                      att.working_hour.toString() + ' Menit'
-                                      : null : null
-                                    }
-                                      {att.working_hour ? att.working_hour.toString().length === 2 ?
-                                      att.working_hour.toString() + ' Menit'
-                                      : null : null
-                                    }
-                                    {att.working_hour ? att.working_hour.toString().length === 3 ?
-                                      att.working_hour.toString().slice(0,1) + ':'+ att.working_hour.toString().slice(1,3) + ' Jam'
-                                      : null : null
-                                    }
-                                    {att.working_hour ? att.working_hour.toString().length === 4 ?
-                                      att.working_hour.toString().slice(0,2) + ':' + att.working_hour.toString().slice(2,4) + ' Jam'
-                                    : null : null
-                                    }
-                                      {/* </td> */}
-                                      {/* <td> */}
-                                    </td>
-                                    <td>
-                                      {/* Total Jam Lembur */}
-
-                                      {att.lembur_hour ? att.lembur_hour.toString().length === 2 ?
-                                        att.lembur_hour + ' Menit'
-                                        : null : null
-                                      }
-                                      {att.lembur_hour ? att.lembur_hour.toString().length === 3 ?
-                                        att.lembur_hour.toString().slice(0,1) + ':'+ att.lembur_hour.toString().slice(1,3) + ' Jam'
-                                        : null : null
-                                      }
-                                      {att.lembur_hour ? att.lembur_hour.toString().length === 4 ?
-                                        att.lembur_hour.toString().slice(0,2) + ':' + att.lembur_hour.toString().slice(2,4) + ' Jam'
-                                      : null : null
-                                      }
-                                    </td>
-                                    
-                                  </tr>   
-                                )
-                            })}
-                            <tr>
-                                <td colSpan={9}>Total</td>
-                                
-                                  {dividDed(sumData, sumDataWork).toString().length === 1 ?
-                                    <td colSpan={1}>
-                                      {dividDed(sumData, sumDataWork).toString()} Menit
-                                    </td>
-                                    : null
-                                  }
-                                  {dividDed(sumData, sumDataWork).toString().length === 2 ?
-                                    <td colSpan={1}>
-                                      {dividDed(sumData, sumDataWork).toString()} Menit
-                                    </td>
-                                    : null
-                                  }
-                                  {dividDed(sumData, sumDataWork).toString().length === 3 ?
-                                    <td colSpan={1}>
-                                      {dividDed(sumData, sumDataWork).toString().slice(0,1)},{dividDed(sumData, sumDataWork).toString().slice(1,3)} Jam
-                                    </td>
-                                    : null
-                                  }
-                                  {dividDed(sumData, sumDataWork).toString().length === 4 ?
-                                    <td colSpan={1}>
-                                      {dividDed(sumData, sumDataWork).toString().slice(0,2)},{dividDed(sumData, sumDataWork).toString().slice(2,4)} Jam
-                                    </td>
-                                    : null
-                                  }
-                                  {dividDed(sumData, sumDataWork).toString().length === 5 ?
-                                    <td colSpan={1}>
-                                      {dividDed(sumData, sumDataWork).toString().slice(0,3)},{dividDed(sumData, sumDataWork).toString().slice(3,5)} Jam
-                                    </td>
-                                    : null
-                                  }
-                                  {/* {dividDed(sumData, sumDataWork) === 0 ?
-                                    <td colSpan={1}>
-                                      
-                                    </td>
-                                    : null
-                                  } */}
-
-                                {/* Total Lembur */}
-
-                                <td colSpan={1}>
-                                  {lemburTotal.toString().length === 2 ?
-                                      lemburTotal.toString() +' Menit'
-                                      : null
-                                  }
-                            
-                                {lemburTotal.toString().length === 3 ?
-                                      lemburTotal.toString().slice(0,1)+":"+
-                                      lemburTotal.toString().slice(1,3)+" Jam"
-                                    : null
-                                  }
-                                 
-                                {lemburTotal.toString().length === 4 ?
-                                      lemburTotal.toString().slice(0,2)+':'+
-                                      lemburTotal.toString().slice(2,4) +' Jam'
-                                    : null
-                                  }
-                                   {lemburTotal.toString().length === 5 ?
-                                      lemburTotal.toString().slice(0,3)+':'+
-                                      lemburTotal.toString().slice(3,5) +' Jam'
-                                    : null
-                                  }
-                                </td>
-                                                                
-                            </tr> 
-                            <tr>
-                                <td colSpan={11}>Analisa Absensi</td>
-                            </tr>
-                            <tr>
-                                <td colSpan={8}>Hari Kerja Efektif</td>
-                                <td colSpan={3}>{totalAtt(attendance.length, TotalAttendance.employee_lembur)} Hari</td>
-                            </tr> 
-                            <tr>
-                                <td colSpan={8}>Jumlah Jam Kerja Efektif</td>
-                                  {sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur)) === 0 ?
-                                  <td colSpan={3}></td> : null
-                                }
-                                {sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().length === 3 ?
-                                <td colSpan={3}>
-                                  {sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,1)}: 
-                                  {sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(1,3)} Jam
-                                  </td>
-                                  : null
-                                }
-
-                                {sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().length === 4 ?
-                                <td colSpan={3}>
-                                  {sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,2)}: 
-                                  {sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(2,4)} Jam
-                                  </td>
-                                  : null
-                                }
-
-                              {sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().length === 5 ?
-                                <td colSpan={3}>
-                                  {sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(0,3)}: 
-                                  {sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur)).toString().slice(3,5)} Jam
-                                  </td>
-                                  : null
-                                }                                
+                                      Hari
+                                      </td>
+                                  </tr> 
+                                  <tr>
+                                      <td colSpan={8}>Tidak masuk/Sakit/Izin/Cuti</td>
+                                      <td colSpan={3}>{countDataKeterangan(attendance, 'tidak masuk')}/{countDataKeterangan(attendance, 'sakit')}/
+                                        {countDataKeterangan(attendance, 'izin')}/{countDataKeterangan(attendance, 'cuti')}
+                                        </td>
+                                  </tr> 
+                                  <tr>
+                                    <Tooltip title={`${namesE(name_id)} Jam kerja anda di kali dengan Hari kerja anda yang seharusnya dalam 1 bulan`} arrow>
+                                      <td colSpan={8}>Jumlah Jam Kerja Efektif</td>
+                                    </Tooltip>
+                                      <td colSpan={3}>
+                                      {totalWorkHour(
+                                        sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur), countDataKeterangan(attendance, 'tidak masuk'))
+                                      )}
+                                      </td>
+                                  </tr> 
+                                  <tr>
+                                      <td colSpan={8}>Jumlah Jam Kerja Aktual</td>
+                                      <td colSpan={3}>
+                                        {totalWorkHour(
+                                        dividDed(sumData, sumDataWork) 
+                                        )}
+                                      </td>
+                                  </tr> 
+                                  <tr>
+                                      <td colSpan={8}>Jumlah Jam Lembur</td>
+                                      <td colSpan={3}>{totalWorkHour(lemburTotal)}</td>
+                                  </tr> 
+                                  <tr>
+                                      <td colSpan={8}>Jam Kerja Aktual - lembur</td>
+                                      <td colSpan={3}>
+                                      {totalWorkHour(aktualLem)} 
+                                      </td>
+                                  </tr> 
+                                  <tr>
+                                      <td colSpan={8}>(Kurang/Lebih) Jam Kerja</td>
+                                      {kurangLeb.toString().length !== 0 ?
+                                          <td colSpan={3}>
+                                            {totalWorkHour(kurangLeb)} 
+                                          </td>
+                                          : null
+                                        } 
+                                  </tr> 
                                   
-                            </tr> 
-                            <tr>
-                                <td colSpan={8}>Jumlah Jam Kerja Aktual</td>
-                                {/* {dividDed(sumData, sumDataWork) === 0 ?
-                                    <td colSpan={3}>
-                                    </td>
-                                    : null
-                                  } */}
-                                  {dividDed(sumData, sumDataWork).toString().length === 1 ?
-                                    <td colSpan={3}>
-                                      {dividDed(sumData, sumDataWork).toString()} Menit
-                                    </td>
-                                    : null
-                                  }
-                                  {dividDed(sumData, sumDataWork).toString().length === 2 ?
-                                    <td colSpan={3}>
-                                      {dividDed(sumData, sumDataWork).toString()} Menit
-                                    </td>
-                                    : null
-                                  }
-                                {dividDed(sumData, sumDataWork).toString().length === 3 ?
-                                    <td colSpan={3}>
-                                      {dividDed(sumData, sumDataWork).toString().slice(0,1)}:
-                                      {dividDed(sumData, sumDataWork).toString().slice(1,3)} Jam
-                                    </td>
-                                    : null
-                                  }
-                                {dividDed(sumData, sumDataWork).toString().length === 4 ?
-                                    <td colSpan={3}>
-                                      {dividDed(sumData, sumDataWork).toString().slice(0,2)}:
-                                      {dividDed(sumData, sumDataWork).toString().slice(2,4)} Jam
-                                    </td>
-                                    : null
-                                  }
-                                  {dividDed(sumData, sumDataWork).toString().length === 5 ?
-                                    <td colSpan={3}>
-                                      {dividDed(sumData, sumDataWork).toString().slice(0,3)}:
-                                      {dividDed(sumData, sumDataWork).toString().slice(3,5)} Jam
-                                    </td>
-                                    : null
-                                  }
-                            </tr> 
-                            <tr>
-                                <td colSpan={8}>Jumlah Jam Lembur</td>
-                                {lemburTotal.toString().length === 0 ?
-                                    <td colSpan={3}>
-                                      
-                                    </td>
-                                    : null
-                                  }
-                                  {lemburTotal.toString().length === 1 ?
-                                    <td colSpan={3}>
-                                      {lemburTotal.toString()} Menit
-                                    </td>
-                                    : null
-                                  }
-                                  {lemburTotal.toString().length === 2 ?
-                                    <td colSpan={3}>
-                                      {lemburTotal.toString()} Menit
-                                    </td>
-                                    : null
-                                  }
-                                  {lemburTotal.toString().length === 3 ?
-                                    <td colSpan={3}>
-                                      {lemburTotal.toString().slice(0,1)}:
-                                      {lemburTotal.toString().slice(1,3)} Jam
-                                    </td>
-                                    : null
-                                  }
-                                  {lemburTotal.toString().length === 4 ?
-                                    <td colSpan={3}>
-                                      {lemburTotal.toString().slice(0,2)}:
-                                      {lemburTotal.toString().slice(2,4)} Jam
-                                    </td>
-                                    : null
-                                  }
-                            </tr> 
-                            <tr>
-                                <td colSpan={8}>Jam Kerja Aktual - lembur</td>
-                                <td colSpan={3}>
-                                {aktualLem.toString().length === 1?
-                                  aktualLem.toString().slice(0,1)+' Menit' :
-                                  null
-                                }
-                                {aktualLem.toString().length === 2?
-                                  aktualLem.toString().slice(0,1)+':'+
-                                  aktualLem.toString().slice(1,3) + ' Menit' :
-                                  null
-                                }
-                                  {aktualLem.toString().length === 3?
-                                  aktualLem.toString().slice(0,1)+':'+
-                                  aktualLem.toString().slice(1,3) + ' Jam' :
-                                  null
-                                }
-
-                                 {aktualLem.toString().length === 4?
-                                  aktualLem.toString().slice(0,2)+':'+
-                                  aktualLem.toString().slice(2,4) + ' Jam' :
-                                  null
-                                } 
-                                 {aktualLem.toString().length === 5?
-                                  aktualLem.toString().slice(0,3)+':'+
-                                  aktualLem.toString().slice(3,5) + ' Jam' :
-                                  null
-                                } 
-                                </td>
-                            </tr> 
-                            <tr>
-                                <td colSpan={8}>(Kurang/Lebih) Jam Kerja</td>
-                                {kurangLeb.toString().length === 0 ?
-                                    <td colSpan={3}>
-                                    </td>
-                                    : null
-                                  } 
-                                  {kurangLeb.toString().length === 1 ?
-                                    <td colSpan={3}>
-                                      {kurangLeb.toString().slice(0,2)} Menit
-                                   
-                                    </td>
-                                    : null
-                                  }
-
-                                {kurangLeb.toString().length === 2 ?
-                                    <td colSpan={3}>
-                                      {kurangLeb.toString().slice(0,2)} Menit
-                                    </td>
-                                    : null
-                                  }
-                                {kurangLeb.toString().length === 3 ?
-                                    <td colSpan={3}>
-                                      {kurangLeb.toString().slice(0,1)},
-                                      {kurangLeb.toString().slice(1,3)} 
-                                      {kurangLeb.toString().slice(0,1) === '-' ?
-                                      " Menit"
-                                      :
-                                      " Jam"
-                                      } 
-                                    </td>
-                                    : null
-                                  }
-                                  {kurangLeb.toString().length === 4 ?
-                                    <td colSpan={3}>
-                                      {kurangLeb.toString().slice(0,2)},{kurangLeb.toString().slice(2,4)} Jam
-                                    </td>
-                                    : null
-                                  }
-                                  {kurangLeb.toString().length === 5 ?
-                                    <td colSpan={3}>
-                                      {kurangLeb.toString().slice(0,3)},
-                                      {kurangLeb.toString().slice(3,5)} Jam
-                                    </td>
-                                    : null
-                                  }
-                            </tr> 
-                            
-                        </tbody>
-                        </Table>
-
+                              </tbody>
+                              </Table>
                         }
                       </div>
 

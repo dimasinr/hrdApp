@@ -38,7 +38,14 @@ export const EmployeeTableComponents = ({ tableData }) => {
                 <TableCell align="center">{row.lembur_start ? workHour(row.lembur_start) : "-"}</TableCell>
                 <TableCell align="center">{row.lembur_end ? workHour(row.lembur_end) : "-"}</TableCell>
                 <TableCell align="center">{row.lembur_hour === 0 || row.lembur_hour > 0 ? totalWorkHour(row.lembur_hour) : "-"}</TableCell>
-                <TableCell align="left">{row.ket ? row.ket : "-"}</TableCell>
+                <Tooltip title={row.ket} arrow>
+                  <TableCell>
+                    {row.ket ? 
+                      row.ket.toString().length > 5 ?
+                      row.ket.toString().slice(0,5) + '...' : row.ket
+                    : null}
+                  </TableCell>
+                </Tooltip>
                 </TableRow>
             ))}
             </TableBody>
@@ -78,12 +85,19 @@ export const HRTableComponents = ({ tableData, link }) => {
                 <TableCell component="th" scope="row" >{row.employee ? row.employee && row.employee.name : "ex karyawan"}</TableCell>
                 <TableCell align="center">{row.working_date ? datesUpt(row.working_date) : "Tanggal tidak tertera"}</TableCell>
                 <TableCell align="center">{row.days ? changeDayName(row.days) : "Hari tidak diketahui"}</TableCell>
-                <TableCell align="center">{row.start_from ? workHour(row.start_from) : "-"}</TableCell>
-                <TableCell align="center">{row.end_from ? workHour(row.end_from) : "-"}</TableCell>
-                <TableCell align="center">{row.working_hour === 0 || row.working_hour > 0 ? totalWorking(row.working_hour) : "-"}</TableCell>
-                <TableCell align="center">{row.lembur_start ? workHour(row.lembur_start) : "-"}</TableCell>
-                <TableCell align="center">{row.lembur_end ? workHour(row.lembur_end) : "-"}</TableCell>
-                <TableCell align="center">{row.ket ? row.ket : "-"}</TableCell>
+                <TableCell align="center">{row.start_from ? workHour(row.start_from) : ""}</TableCell>
+                <TableCell align="center">{row.end_from ? workHour(row.end_from) : ""}</TableCell>
+                <TableCell align="center">{row.working_hour === 0 || row.working_hour > 0 ? totalWorking(row.working_hour) : ""}</TableCell>
+                <TableCell align="center">{row.lembur_start ? workHour(row.lembur_start) : ""}</TableCell>
+                <TableCell align="center">{row.lembur_end ? workHour(row.lembur_end) : ""}</TableCell>
+                <Tooltip title={row.ket} arrow>
+                  <TableCell>
+                    {row.ket ? 
+                      row.ket.toString().length > 5 ?
+                      row.ket.toString().slice(0,5) + '...' : row.ket
+                    : null}
+                  </TableCell>
+                </Tooltip>
                 <TableCell align="center">
                     <Tooltip title="Detail">
                       <Link to={`${link}/${row.id}`}>
@@ -127,12 +141,15 @@ export const HRTableNotesComponents = ({ tableData, link }) => {
                 <TableCell align="left">{row.date_note ? datesUpt(row.date_note) : "Tanggal tidak tertera"}</TableCell>
                 <TableCell align="left">{row.name_day ? changeDayName(row.name_day) : "Hari tidak diketahui"}</TableCell>
                 <TableCell align="left">{row.type_notes ? row.type_notes : "Tidak ada"}</TableCell>
-                <TableCell align="left">{row.notes ? 
-                    row.notes.toString().length < 30 ? 
-                        row.notes : 
-                          row.notes.toString().slice(0,30)+"..." 
-                    : "Tidak ada Notes"}
-                </TableCell>                <TableCell align="center">
+                <Tooltip title={row.notes} arrow>
+                  <TableCell align="left">{row.notes ? 
+                      row.notes.toString().length < 17 ? 
+                      row.notes : 
+                      row.notes.toString().slice(0,17)+"..." 
+                      : "Tidak ada Notes"}
+                  </TableCell>                
+                </Tooltip>
+                <TableCell align="center">
                     <Tooltip title="Detail">
                       <Link to={`${link}/${row.id}`}>
                         <Visibility />
@@ -175,12 +192,14 @@ export const EmployeeTableNotesComponents = ({ tableData }) => {
                 <TableCell align="center">{row.date_note ? datesUpt(row.date_note) : "Tanggal tidak tertera"}</TableCell>
                 <TableCell align="center">{row.name_day ? changeDayName(row.name_day) : "Hari tidak diketahui"}</TableCell>
                 <TableCell align="center">{row.type_notes ? row.type_notes : "Tidak ada"}</TableCell>
-                <TableCell align="left">{row.notes ? 
-                    row.notes.toString().length < 30 ? 
-                        row.notes : 
-                          row.notes.toString().slice(0,30)+"..." 
-                    : "Tidak ada Notes"}
-                </TableCell>                
+                <Tooltip title={row.notes} arrow>
+                  <TableCell align="left">{row.notes ? 
+                      row.notes.toString().length < 17 ? 
+                      row.notes : 
+                      row.notes.toString().slice(0,17)+"..." 
+                      : "Tidak ada Notes"}
+                  </TableCell>                
+                </Tooltip>            
               </TableRow>
             )) :
             <TableRow>
@@ -278,12 +297,14 @@ export const SubmissionTableComponents = ({ tableData, link }) => {
                 <TableCell align="center">{row.employee ? row.employee.name : "No name"}</TableCell>
                 <TableCell align="center">{row.employee ? row.employee.division : "Tidak ada divisi"}</TableCell>
                 <TableCell align="center">{row.permission_type ? row.permission_type : "Tidak ada izin"}</TableCell>
-                <TableCell align="center">{row.reason ? 
-                    row.reason.toString().length < 12 ? 
-                        row.reason : 
-                          row.reason.toString().slice(0,13)+"..." 
+                <Tooltip title={row.reason} arrow>
+                  <TableCell align="center">{row.reason ? 
+                    row.reason.toString().length < 7 ? 
+                    row.reason : 
+                    row.reason.toString().slice(0,7)+"..." 
                     : "Tidak ada Alasan"}
-                </TableCell>
+                  </TableCell>
+                </Tooltip>
                 <TableCell align="center">{row.start_date ? datesUpt(row.start_date) : "Tanggal tidak tertera"}</TableCell>
                 <TableCell align="center">{row.end_date ? datesUpt(row.end_date) : "Tanggal tidak tertera"}</TableCell>
                 <TableCell align="center">{row.jumlah_hari ? row.jumlah_hari + ' hari' : "1 hari"}</TableCell>
@@ -336,12 +357,15 @@ export const EmployeeTableAnalisisComponents = ({ tableData, attendance }) => {
                 <TableCell align="center">{row.end_from ? workHour(row.end_from) : "-"}</TableCell>
                 <TableCell align="center">{row.lembur_start ? workHour(row.lembur_start) : "-"}</TableCell>
                 <TableCell align="center">{row.lembur_end ? workHour(row.lembur_end) : "-"}</TableCell>
-                <TableCell align="center">{row.ket ? 
-                    row.ket.toString().length < 12 ? 
-                        row.ket : 
-                          row.ket.toString().slice(0,13)+"..." 
-                    : "-"}
-                </TableCell>                <TableCell align="center">{row.working_hour === 0 || row.working_hour > 0 ? totalWorking(row.working_hour) : "-"}</TableCell>
+                <Tooltip title={row.ket} arrow>
+                  <TableCell align="center">{row.ket ? 
+                    row.ket.toString().length < 5 ? 
+                    row.ket : 
+                    row.ket.toString().slice(0,5)+"..." 
+                    : ""}
+                  </TableCell>
+                </Tooltip>
+                <TableCell align="center">{row.working_hour === 0 || row.working_hour > 0 ? totalWorking(row.working_hour) : "-"}</TableCell>
                 <TableCell align="center">{row.lembur_hour === 0 || row.lembur_hour > 0 ? totalWorkHour(row.lembur_hour) : "-"}</TableCell>
                 </TableRow>
             ))}

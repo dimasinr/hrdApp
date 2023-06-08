@@ -131,11 +131,11 @@ export function sumTotal(arr){
       return results
   }
 
-export function sumHE(name, he){
+export function sumHE(name, he, tidakmasuk){
     if(name.replace(/%20/g, " ") === 'Kunut Catur'){
-      return he*900
+      return (he+tidakmasuk)*900
     }else{
-      return he*800
+      return (he+tidakmasuk)*800
     }
   }
 
@@ -278,4 +278,63 @@ export function mergedDataPresence(data1, data2) {
   mergedData.sort((a, b) => new Date(a.working_date) - new Date(b.working_date));
 
   return mergedData;
+}
+
+export function countDataKeterangan(data, ketValue) {
+  let count = 0;
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].ket === ketValue) {
+      count++;
+    }
+  }
+  return count;
+}
+
+
+
+export function kurlebs(jamFaktual, jamAktual){
+  let calc = (jamFaktual - jamAktual);
+  let tle = calc.toString().length;
+  let taw;
+  if(tle === 1){
+      taw = tle;
+  } else if(tle > 1){
+      taw = tle-2;
+  }
+  let slic = calc.toString().slice(taw,tle);
+  let dig = calc.toString();
+  let finn = dig.slice(slic);
+  let lenstart = jamAktual.toString().length;
+  let lenend = jamFaktual.toString().length;
+  let tlestr = lenstart-2;
+  let tleend = lenend-2;
+  let slicstr = jamAktual.toString().slice(tlestr,lenstart);
+  let digstr = jamAktual.toString();
+  let finnstr = digstr.slice(slicstr);
+  let slicend = jamFaktual.toString().slice(tleend,lenend);
+  let digend = jamFaktual.toString();
+  let finnend = digend.slice(slicend);
+  let working_hour;
+  if(finn > '59'){
+      let ef = jamFaktual-100+60;
+      working_hour = (ef - jamAktual);
+  } else if(tle > 1 ){
+      if(finn > '59'){
+          working_hour = calc-100+60;
+      } else if(finn < '60'){
+          if(finnend < finnstr){
+              working_hour = calc-40;
+          } else { 
+              working_hour = calc;
+          }
+      } else {
+          working_hour = calc-40;
+      }
+  } else if(tle === 2 ){
+      working_hour = calc-100+60;
+  } else {
+      working_hour = calc;
+  }
+  return working_hour;
+  
 }

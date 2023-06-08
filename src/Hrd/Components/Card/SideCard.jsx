@@ -1,6 +1,7 @@
 import React from "react"
 import { CircularProgress } from "@mui/material"
 import { datesUpt } from "../../../Components/utilsFunction/functionUtils";
+import { Link } from "react-router-dom";
 
 var dates = new Date().getFullYear()
 var startDate = new Date(`01/01/${dates}`);
@@ -113,3 +114,34 @@ export const SideCardBirthday = ({ data, loading }) => {
             </div>
         </div>
     }
+
+export const SideCardContractEnd = ({ data, loading }) => {
+        return <div className="col-md-12 mb-2">
+            <div className="card shadow-card" style={{ border:'none' }}>
+                <div className="card-title text-center top_card_color">Contract Employee End</div>
+                    <div className="card-body">
+                        <ol>
+                        {loading && loading ?
+                            <React.Fragment>
+                            {data ? data.map((employee, index) =>{
+                                return(
+                                    <li key={index}>
+                                        <Link to={`/list-karyawan/detail/${employee.pk}`} className="unlink">
+                                            <div className='d-flex justify-content-between'>
+                                                <span style={{ color: 'black' }}>{employee.name.toString().length > 10 ? employee.name.toString().slice(0,10) + '...' : employee.name}</span>
+                                                <span className='text-secondary'>{datesUpt(employee.contract_end)}</span>
+                                            </div>
+                                        </Link>
+                                    </li>
+                                )
+                            }) : <small className="text-secondary">Tidak ada data</small>
+                            }
+                            </React.Fragment>
+                            :
+                            <CircularProgress />  
+                            }
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        }

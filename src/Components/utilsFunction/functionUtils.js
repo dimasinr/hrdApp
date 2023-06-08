@@ -48,7 +48,7 @@ export function totalWorkHour(totalwork){
     let timeString = totalwork.toString();
 
     if (timeString.length === 3) {
-      timeString = "0" + timeString; // tambahkan 0 di depan string jika panjangnya 3 karakter
+      timeString = "0" + timeString; 
     }
 
     const hours = timeString.slice(0, -2);
@@ -67,11 +67,10 @@ export function totalWorkHour(totalwork){
   }
 
 export function totalWorking(hourTotal) {
-    let jam = Math.floor(hourTotal / 100); // Mengambil nilai jam
-    let menit = hourTotal % 100; // Mengambil nilai menit
-    let waktu; // Variabel untuk menyimpan waktu
+    let jam = Math.floor(hourTotal / 100); 
+    let menit = hourTotal % 100; 
+    let waktu; 
   
-    // Mengonversi jam dan menit menjadi format waktu
     if (jam > 0 && menit > 0) {
       waktu = jam + '.' + (menit < 10 ? '0' + menit : menit) + ' Jam';
     } else if (jam > 0 && menit === 0) {

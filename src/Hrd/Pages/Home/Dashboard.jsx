@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React,{useState, useEffect} from 'react'
 import './dashboard.css'
 import SideBar from '../../Components/SideBar'
@@ -11,7 +12,7 @@ import { useNavigate } from 'react-router-dom'
 import { Pagination, Stack, Chip } from '@mui/material'
 import TopBar from '../../Components/MainDashboard/TopBar'
 import MainDashboard from '../../Components/MainDashboard/MainDashboard'
-import { SideCardTop, SideCardLow, SideCardBirthday } from '../../Components/Card/SideCard'
+import { SideCardTop, SideCardLow, SideCardBirthday, SideCardContractEnd } from '../../Components/Card/SideCard'
 import { DateRange } from '@mui/icons-material'
 
 const StyledPagination = styled(Pagination)({
@@ -36,11 +37,13 @@ function Dashboard() {
 
     const navigate = useNavigate()
     const monthToday = new Date().getMonth()+1
+    const yearToday = new Date().getFullYear()
 
     const [offDay , setOffDay] = useState([])
     const [top_emp, setTopEmp ] = useState([])
     const [low_emp, setLowEmp ] = useState([])
     const [birth_emp, setBirthEmp ] = useState([])
+    const [contract_emp, setContractEmp ] = useState([])
 
     const [loading, setLoading] = useState(false)
     const [loadingMonth, setLoadingMonth] = useState(false)
@@ -65,7 +68,6 @@ function Dashboard() {
           console.log(res)
         })
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       useEffect(() => getOffDay(), [offSet])
 
     const getTopFive = () => {
@@ -82,7 +84,6 @@ function Dashboard() {
           console.log(res)
         })
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => getTopFive(), [])
 
     const getBirthdayEmployee = () => {
@@ -98,8 +99,24 @@ function Dashboard() {
         console.log(res)
       })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => getBirthdayEmployee(), [monthToday])
+
+    const getContractEndEmployee = () => {
+      axios.get(`${BASE_URL}/api/dashboard/contract-end/${monthToday}/${yearToday}/`,{
+        headers: {
+          "Authorization" : `Token ${USER_TOKEN}`
+        }
+      })
+      .then((response) => {
+        const res = response.data
+        setLoadingMonth(true)
+        setContractEmp(res)
+        console.log(res)
+      })
+    }
+  useEffect(() => {
+    getBirthdayEmployee()
+    getContractEndEmployee()
+  }, [monthToday, yearToday])
 
   console.log(monthToday)
       
@@ -174,6 +191,7 @@ function Dashboard() {
                     <SideCardTop data={top_emp} loading={loading} />
                     <SideCardLow data={low_emp} loading={loading} />  
                     <SideCardBirthday data={birth_emp} loading={loadingMonth} />
+                    <SideCardContractEnd data={contract_emp} loading={loadingMonth} />
 
                         <div className="col-md-12 mb-2">
                             <div className="card shadow-card" style={{ border:'none' }}>
