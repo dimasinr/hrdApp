@@ -1,9 +1,11 @@
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import { BASE_URL, USER_TOKEN } from '../../../fetch/fetch'
+import { useNavigate } from 'react-router-dom'
 
 export default function TopBar() {
 
+    const navigate = useNavigate()
     const [topDash , setTopDash] = useState([])
     const yearToday = new Date().getFullYear()
 
@@ -50,7 +52,10 @@ export default function TopBar() {
             </div>
 
             <div className="col-md-3 mb-2">
-                <div className="card shadow-card" style={{ border:'none', marginLeft:'10px' }}>
+                <div className="card shadow-card" 
+                onClick={() => {navigate('/dashboard/list-employee/active')}} 
+                style={{ border:'none', marginLeft:'10px', cursor:'pointer' }}
+                >
                     <div className='card-title text-center top_card_color'>Total Active Employee</div>
                     <div className="card-body text-center">
                         <span><h4>{topDash.employee && topDash.employee.active_employee} Employee</h4></span>
@@ -59,7 +64,11 @@ export default function TopBar() {
             </div>
 
             <div className="col-md-3 mb-2">
-                <div className="card shadow-card" style={{ border:'none', marginLeft:'10px' }}>
+                <div 
+                className="card shadow-card" 
+                onClick={() => {navigate('/dashboard/list-employee/inactive')}} 
+                style={{ border:'none', marginLeft:'10px', cursor:'pointer' }}
+                >
                     <div className='card-title text-center top_card_color'>Total Resign Employee</div>
                     <div className="card-body text-center">
                         <span><h4>{topDash.employee && topDash.employee.inactive_employee} Employee</h4></span>

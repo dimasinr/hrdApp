@@ -18,6 +18,7 @@ import CalendarCuti from "../Hrd/Pages/Home/CalendarCuti";
 import ListKaryawan from "../Hrd/Pages/Employee/ListKaryawan";
 import DetailEmployee from "../Hrd/Pages/Employee/DetailEmployee"; 
 import EmployeeContract from "../Hrd/Pages/Employee/EmployeeContract";
+import ListActiveEmployee from "../Hrd/Pages/Employee/Dash/ListActiveEmployee";
 
 import Note from "../Hrd/Pages/Notes/Note";
 import NoteDetail from "../Hrd/Pages/Notes/NoteDetail";
@@ -69,16 +70,20 @@ export const AppRouter = () => {
                 <Route path='/home' element={<Dashboard />} />
                 <Route path='/my/test' element={<Test />} />
                 <Route path='/calendar-cuti' element={<CalendarCuti />} />
+                {/* Notes */}
                 <Route path='/notes' element={<Note />} />
                 <Route path='/notes/detail/:id' element={<NoteDetail />} />
+                {/* Pengajuan */}
                 <Route path='/list-pengajuan' element={<ListPengajuanHrd />} />
                 <Route path='/perizinan/detail/:id' element={<DetailPerizinan />} />
                 <Route path='/pengajuan' element={<PengajuanKaryawan />} />
                 <Route path='/pengajuan/me' element={<ListPerizinanKaryawan />} />
+                {/* Employee */}
                 <Route path='/list-karyawan' element={<ListKaryawan />} />
                 <Route path='/list-karyawan/detail/:id' element={<DetailEmployee />} />
                 <Route path='/contract/employee' element={<EmployeeContract />} />
                 <Route path='/employee/contract/:id' element={<EmployeeContract />} />
+                
                 {/* Presensi */}
                 <Route path='/employee/absensi' element={<ListPresence />} />
                 <Route path='/employee/absensi/:id' element={<DetailPresence />} />
@@ -86,9 +91,10 @@ export const AppRouter = () => {
                 <Route path='/absensi/:name_id/:id' element={<EmployeePresence />} />
                 <Route path='/absensi/:name_id/:id/:month_id/:year_id' element={<AnalisaPresence />} />
                 <Route path='/absensi/periode/:name_id/:emp_id/:start_date/:end_date' element={<PresencePeriode />} />
-
+                {/* Dashboard */}
                 <Route path='/dashboard/day-off/' element={<DayOff />} />
                 <Route path='/dashboard/day-off/:id' element={<DayOffDetail />} />
+                <Route path='/dashboard/list-employee/:active_id' element={<ListActiveEmployee />} />
             </React.Fragment>
             : null
         } 
