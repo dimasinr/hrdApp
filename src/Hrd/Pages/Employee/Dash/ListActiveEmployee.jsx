@@ -8,17 +8,6 @@ import { Box, Skeleton, TextField, Tooltip } from '@mui/material';
 import SideBar from '../../../Components/SideBar';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { PersonAddAlt1 } from '@mui/icons-material';
-
-const columns = [
-      { field: 'pk', headerName: 'UId', width: 50 },
-      { field: 'employee_code', headerName: 'Emp Code', width: 90 },
-      { field: 'first_name', headerName: 'Nama Depan', width: 130 },
-      { field: 'last_name', headerName: 'Nama Belakang', width: 150 },
-      { field: 'username', headerName: 'Username', width: 150 },
-      { field: 'email', headerName: 'Email', width: 270 },
-      { field: 'sisa_cuti', headerName: 'Sisa Cuti', width: 120 },
-      { field: 'roles', headerName: 'Roles', width: 140 },
-  ];
   
   const LoadingSkeleton = () => (
     <Box
@@ -56,8 +45,10 @@ function ListActiveEmployee() {
       setOpen(!open);
     };
 
+    const userA = usersActive(activeUser)
+
     const getListEmployee = () => {
-      axios.get(`${BASE_URL}/users/employee/search/?name=${searchEmployee}&active=${usersActive(activeUser)}`,{
+      axios.get(`${BASE_URL}/users/employee/search/?name=${searchEmployee}&active=${userA}`,{
         headers: {
           "Authorization" : 'Token ' + USER_TOKEN
         }
@@ -71,18 +62,42 @@ function ListActiveEmployee() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     React.useEffect(() => {
-      const interval = setInterval(() => {
         getListEmployee();
-      }, 1000);
-  
-      return () => {
-        clearInterval(interval); 
-      };
     }, [searchEmployee, activeUser]);  
 
     const handleRowClick = (params) => {
       navigate(`/list-karyawan/detail/${params.row.pk}`)
     };
+
+    function arrs(act){
+        if(act === 'active'){
+            return [
+                { field: 'pk', headerName: 'UId', width: 50 },
+                { field: 'employee_code', headerName: 'Emp Code', width: 90 },
+                { field: 'first_name', headerName: 'Nama Depan', width: 130 },
+                { field: 'last_name', headerName: 'Nama Belakang', width: 150 },
+                { field: 'username', headerName: 'Username', width: 150 },
+                { field: 'email', headerName: 'Email', width: 270 },
+                { field: 'sisa_cuti', headerName: 'Sisa Cuti', width: 120 },
+                { field: 'roles', headerName: 'Roles', width: 140 },
+            ];
+        }else{
+            return [
+                { field: 'pk', headerName: 'UId', width: 50 },
+                { field: 'employee_code', headerName: 'Emp Code', width: 90 },
+                { field: 'first_name', headerName: 'Nama Depan', width: 130 },
+                { field: 'last_name', headerName: 'Nama Belakang', width: 150 },
+                { field: 'username', headerName: 'Username', width: 150 },
+                { field: 'email', headerName: 'Email', width: 270 },
+                { field: 'employee_joined', headerName: 'Bergabung', width: 270 },
+                { field: 'employee_ended', headerName: 'Berhenti', width: 270 },
+                { field: 'roles', headerName: 'Roles', width: 140 },
+            ];
+        }
+    }
+
+    let columns = arrs(activeUser)
+    
 
   return (
     <React.Fragment>

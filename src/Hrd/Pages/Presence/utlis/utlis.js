@@ -123,6 +123,20 @@ export function totalKurLeb(end_from, start_from){
   //     }
 
   // }
+// function swapl(jam1) {
+//     let jam = "";
+//     let menit = "";
+    
+//     if (jam1 >= 100) {
+//       jam = Math.floor(jam1 / 100) * 100;
+//       menit = ("0" + (jam1 % 100)).slice(-2);
+//     }
+    
+//     return {
+//       jam: jam,
+//       menit: menit
+//     };
+//   }
 
 export function sumTotal(arr){
      const results = arr.reduce((a, b) => {

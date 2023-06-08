@@ -23,7 +23,6 @@ const columns = [
       format: (value) => value.toLocaleString('en-US'),
     },
     { id: 'contract_time', label: 'Lama Kontrak', align: 'center', minWidth: 100 },
-    
   ];
   
   function createData(pk, name, employee_code, contract_start, contract_end, contract_time) {

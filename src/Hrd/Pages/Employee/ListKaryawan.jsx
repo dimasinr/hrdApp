@@ -58,11 +58,7 @@ function NotesHrd() {
       setOpen(!open);
     };
 
-    // const [searchFist, setSearchFirst] = useState('')
-    // const [searchRoles, setSearchRoles] = useState('')
-
-
-    const getListPengajuan = () => {
+    const getListEmployee = () => {
       axios.get(`${BASE_URL}/users/employee/search/?name=${searchEmployee}`,{
         headers: {
           "Authorization" : 'Token ' + USER_TOKEN
@@ -77,13 +73,7 @@ function NotesHrd() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     React.useEffect(() => {
-      const interval = setInterval(() => {
-        getListPengajuan();
-      }, 1000);
-  
-      return () => {
-        clearInterval(interval); 
-      };
+      getListEmployee();
     }, [searchEmployee]);  
 
     const handleRowClick = (params) => {
@@ -115,7 +105,7 @@ function NotesHrd() {
             timer: 1500
           })
           setLoadingBut('simpan')
-          getListPengajuan()
+          getListEmployee()
     }catch(error){
         if( error.response &&
             error.response.status >= 400 &&
@@ -128,7 +118,7 @@ function NotesHrd() {
             })
             setLoadingBut('simpan')
             setOpen(false)
-            getListPengajuan()
+            getListEmployee()
         }
     }
 };

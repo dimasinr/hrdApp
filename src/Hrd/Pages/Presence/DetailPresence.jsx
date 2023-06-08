@@ -17,12 +17,12 @@ function DetailPresence() {
   const id_att = location.pathname.split('/')[3]
 
   const [employeeName, setEmployeeName] = useState('')
-  const [jam_masuk, setJamMasuk] = useState('')
-  const [jam_keluar, setJamKeluar] = useState('')
+  const [jam_masuk, setJamMasuk] = useState(null)
+  const [jam_keluar, setJamKeluar] = useState(null)
   const [total_jam, setTotalJam] = useState('')
   const [lembur_total, setLemburTotal] = useState('')
-  const [lembur_start, setLemburStart] = useState('')
-  const [lembur_end, setLemburEnd] = useState('')
+  const [lembur_start, setLemburStart] = useState(null)
+  const [lembur_end, setLemburEnd] = useState(null)
   const [keterangan, setKeterangan] = useState('')
   const [working_date, setWorkingDate] = useState(new Date())
 
@@ -61,6 +61,8 @@ function DetailPresence() {
   
   console.log(keterangan)
   console.log(working_date)
+  console.log(jam_masuk)
+  console.log(lembur_start)
 
   const saveAttendance = async e => {
     try{
@@ -76,7 +78,6 @@ function DetailPresence() {
           formData.append("lembur_end", lembur_end);
         }
         formData.append("ket", keterangan)
-
        await axios({
             method: 'put',
             url:`${BASE_URL}/api/presence/employees/${id_att}/`,
@@ -88,7 +89,7 @@ function DetailPresence() {
         setSnack(true)
         setStatus('success')
         setMessage('data berhasil di perbaharui')
-        getEmployeeData()
+        getAttendanceEmp()
         }catch(error){
             if( error.response &&
                 error.response.status >= 400 &&

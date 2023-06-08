@@ -35,6 +35,7 @@ function DetailEmployee() {
     const [religion, setReligion] = React.useState([])
     const [gender, setGender] = React.useState('Laki-Laki')
     const [date_join, setDateJoin] = React.useState(new Date().toISOString().slice(0,10))
+    const [date_ended, setDateEnded] = React.useState(new Date().toISOString().slice(0,10))
     const [birth_date, setBirthDate] = React.useState(new Date().toISOString().slice(0,10))
     const [awal_kontrak, setAwalKontrak] = React.useState(new Date().toISOString().slice(0,10))
     const [akhir_kontrak, setAkhirKontrak] = React.useState(new Date().toISOString().slice(0,10))
@@ -70,6 +71,7 @@ function DetailEmployee() {
           setReligion(res.religion)
           setGender(res.gender)
           setDateJoin(res.employee_joined)
+          setDateEnded(res.employee_ended)
           setBirthDate(res.birth_date)
           setAwalKontrak(res.contract_start)
           setAkhirKontrak(res.contract_end)
@@ -95,9 +97,6 @@ function DetailEmployee() {
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
       React.useEffect(() => getRolesEmployee(), [])
-
-      const url = `${BASE_URL}/users/employee/cuti/${user_id}/${yearToday}/`
-      console.log(url)
 
       const getUserDataCuti = () => {
         axios.get(`${BASE_URL}/users/employee/cuti/${user_id}/${yearToday}/`,{
@@ -158,6 +157,7 @@ function DetailEmployee() {
             formData.append("roles", roles);
             formData.append("sisa_cuti", sisa_cuti);
             formData.append("employee_joined", date_join);
+            formData.append("employee_ended", date_ended);
             formData.append("division", division);
             formData.append("gender", gender);
             formData.append("religion", religion);
@@ -296,6 +296,12 @@ const postNewPassword = async e => {
     setDateJoin(dated.slice(1, 11))
   }
 
+  const convDateEnd = (newdate) => {
+    let event = new Date(newdate);
+    let dated = JSON.stringify(event);
+    setDateEnded(dated.slice(1, 11))
+  }
+
   const convDated = (newdate) => {
     let event = new Date(newdate);
     let dated = JSON.stringify(event);
@@ -374,6 +380,17 @@ const postNewPassword = async e => {
                                                     }}
                                                     renderInput={(params) => <TextField variant='outlined' sx={{ mt:3 }} {...params} />}
                                                     />
+                                                    {active_user !== true ? 
+                                                    <MobileDatePicker
+                                                    label="Berhenti Bekerja"
+                                                    inputFormat="DD MMMM YYYY"
+                                                    value={new Date(date_ended)}
+                                                    onChange={(newValue) => {
+                                                      convDateEnd(newValue);
+                                                    }}
+                                                    renderInput={(params) => <TextField variant='outlined' sx={{ mt:3, ml:1 }} {...params} />}
+                                                    /> : null
+                                                    }
                                                 </LocalizationProvider>
                                                 <FormControl sx={{ mt: 3, ml:1, minWidth: 220 }}>
                                                     <InputLabel id="role-label" variant='outlined'>Roles</InputLabel>
