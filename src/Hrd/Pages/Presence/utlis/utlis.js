@@ -45,6 +45,38 @@ export function leb(x,y){
 
   }
 
+export function actualHours(x,y){
+    let varD = x-y
+    const varX = varD.toString()
+    const len = varX.length
+    const data1 =len-2
+    const slics = varX.slice(data1, len)
+    let slicsInt = parseInt(slics)
+    console.log(slics)
+    console.log(len)
+    const var4 = varD+40
+    console.log(var4.toString().slice(-2))
+    const pars = parseInt(var4.toString().slice(-2))
+    
+    if(slicsInt > 59){
+      if(pars < 40){
+        return var4
+      }else{
+        return varD-40
+      }
+    }else{
+      if(pars > 59){
+        return x-y
+      }else{
+        if(pars < 59){
+          return varD
+        }else{
+          return varD+40
+        }
+      }
+    }
+  }
+
 export function totalKurLeb(end_from, start_from){
   var calc, tle, taw, finn, lenstart, lenend, tlestr, tleend, digstr, finnstr, digend, finnend
   var ef

@@ -8,7 +8,7 @@ import Table from 'react-bootstrap/Table';
 import { CircularProgress, Tooltip } from '@mui/material'
 import { useDownloadExcel } from 'react-export-table-to-excel'
 import { bulan } from '../../../Components/utilsFunction/arrayFunction'
-import { sumTotal, sumHE, totalAtt, aktualLembur, leb, asce, ascr, dividDed, getWeekendDates, mergedDataPresence, countDataKeterangan } from './utlis/utlis'
+import { sumTotal, sumHE, totalAtt, aktualLembur, actualHours, asce, ascr, dividDed, getWeekendDates, mergedDataPresence, countDataKeterangan } from './utlis/utlis'
 import { changeDayName, datesUpt, workHour, totalWorkHour, totalWorking } from '../../../Components/utilsFunction/functionUtils'
 // import { Table, TableHead, TableBody, td, } from '@mui/material'
 
@@ -105,7 +105,7 @@ function AnalisaPresence() {
     
     const aktualLem = aktualLembur(jamKerjaA, lemburTotal)
     
-    const kurangLeb = leb(aktualLem, jamKerjaS)
+    const kurangLeb = actualHours(aktualLem, jamKerjaS)
     console.log("aktual lemb : ", aktualLem)
     console.log("jam kerja : ", jamKerjaS)
 

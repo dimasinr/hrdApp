@@ -8,7 +8,7 @@ import axios from 'axios'
 import { CircularProgress, Tooltip, Table, TableHead, TableBody, TableCell, TableRow, TableContainer, Paper  } from '@mui/material'
 import { useDownloadExcel } from 'react-export-table-to-excel'
 import { bulan } from '../../Components/utilsFunction/arrayFunction'
-import { sumTotal, sumHE, totalAtt, aktualLembur, leb, asce, ascr, dividDed } from './utlis/utlis'
+import { sumTotal, sumHE, totalAtt, aktualLembur, actualHours, asce, ascr, dividDed } from './utlis/utlis'
 import { NAMES, USER_ID } from '../../fetch/fetch'
 import { changeDayName, datesUpt, workHour, totalWorkHour } from '../../Components/utilsFunction/functionUtils'
 import { getWeekendDates, mergedDataPresence } from '../../Hrd/Pages/Presence/utlis/utlis'
@@ -101,7 +101,7 @@ function SelfEmployeeAnalisisPresence() {
 
     const aktualLem = aktualLembur(jamKerjaA, lemburTotal)
     
-    const kurangLeb = leb(aktualLem, jamKerjaS)
+    const kurangLeb = actualHours(aktualLem, jamKerjaS)
 
     const { onDownload } = useDownloadExcel({
       currentTableRef: tableRef.current,

@@ -45,36 +45,37 @@ export function leb(x,y){
 
   }
 
-
-  // function sumTotaled(arr){
-  //     let results = arr.reduce((a, b) => {
-  //         return a+b;
-  //     }, 0);
-  //     const lent = results.toString().length 
-  //     var ce = lent-2
-  //     const sliced = results.toString().slice(ce, lent)
-  //     const ac = results+70
-  //     // if(sliced < 60 ){
-  //     //   return results
-  //     // }else{
-  //     //   return results-100+60
-  //     // }
-  //     if(sliced > 59){
-  //       return ac-100+60
-  //     }else if(lent > 1){
-  //       if(sliced > 59){
-  //         return ac-40
-  //       }else{
-  //         const av = ac-40
-  //         return av
-  //       }
-  //     }else if(lent === 2){
-  //       return ac-40
-  //     }else{
-  //       return ac + 0
-  //     }
-
-  // }
+  export function actualHours(x,y){
+    let varD = x-y
+    const varX = varD.toString()
+    const len = varX.length
+    const data1 =len-2
+    const slics = varX.slice(data1, len)
+    let slicsInt = parseInt(slics)
+    console.log(slics)
+    console.log(len)
+    const var4 = varD+40
+    console.log(var4.toString().slice(-2))
+    const pars = parseInt(var4.toString().slice(-2))
+    
+    if(slicsInt > 59){
+      if(pars < 40){
+        return var4
+      }else{
+        return varD-40
+      }
+    }else{
+      if(pars > 59){
+        return x-y
+      }else{
+        if(pars < 59){
+          return varD
+        }else{
+          return varD+40
+        }
+      }
+    }
+  }
 
 export function sumTotal(arr){
      const results = arr.reduce((a, b) => {
