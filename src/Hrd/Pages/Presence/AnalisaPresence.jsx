@@ -8,7 +8,7 @@ import Table from 'react-bootstrap/Table';
 import { CircularProgress, Tooltip } from '@mui/material'
 import { useDownloadExcel } from 'react-export-table-to-excel'
 import { bulan } from '../../../Components/utilsFunction/arrayFunction'
-import { sumTotal, sumHE, totalAtt, aktualLembur, actualHours, asce, ascr, dividDed, getWeekendDates, mergedDataPresence, countDataKeterangan } from './utlis/utlis'
+import { sumTotal, sumHE, totalAtt, actualHours, asce, ascr, dividDed, getWeekendDates, mergedDataPresence, countDataKeterangan } from './utlis/utlis'
 import { changeDayName, datesUpt, workHour, totalWorkHour, totalWorking } from '../../../Components/utilsFunction/functionUtils'
 // import { Table, TableHead, TableBody, td, } from '@mui/material'
 
@@ -52,10 +52,6 @@ function AnalisaPresence() {
       setMinutesWorking(res.map((ab) => {
         return(asce(ab.working_hour))
         }))
-
-      // setResultsLembur(res.map((ab) => {
-      //   return(ab.lembur_hour)
-      //   }))
 
       setHourLembur(res.map((ab) => {
           return(ascr(ab.lembur_hour))
@@ -103,10 +99,9 @@ function AnalisaPresence() {
     
     const jamKerjaS = sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur), countDataKeterangan(attendance, 'tidak masuk') )
     
-    const aktualLem = aktualLembur(jamKerjaA, lemburTotal)
+    // const aktualLem = aktualLembur(jamKerjaA, lemburTotal)
     
-    const kurangLeb = actualHours(aktualLem, jamKerjaS)
-    console.log("aktual lemb : ", aktualLem)
+    const kurangLeb = actualHours(jamKerjaA, jamKerjaS)
     console.log("jam kerja : ", jamKerjaS)
 
     console.log("sum data: ", sumData, "sum data work", sumDataWork )
@@ -257,12 +252,6 @@ function AnalisaPresence() {
                                   <tr>
                                       <td colSpan={8}>Jumlah Jam Lembur</td>
                                       <td colSpan={3}>{totalWorkHour(lemburTotal)}</td>
-                                  </tr> 
-                                  <tr>
-                                      <td colSpan={8}>Jam Kerja Aktual - lembur</td>
-                                      <td colSpan={3}>
-                                      {totalWorkHour(aktualLem)} 
-                                      </td>
                                   </tr> 
                                   <tr>
                                       <td colSpan={8}>(Kurang/Lebih) Jam Kerja</td>

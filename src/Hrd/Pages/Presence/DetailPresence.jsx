@@ -59,11 +59,6 @@ function DetailPresence() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => getAttendanceEmp(), [id_att])
   
-  console.log(keterangan)
-  console.log(working_date)
-  console.log(jam_masuk)
-  console.log(lembur_start)
-
   const saveAttendance = async e => {
     try{
         const formData = new FormData();

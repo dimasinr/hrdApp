@@ -8,7 +8,7 @@ import axios from 'axios'
 import { CircularProgress, Tooltip, Table, TableHead, TableBody, TableCell, TableRow, TableContainer, Paper  } from '@mui/material'
 import { useDownloadExcel } from 'react-export-table-to-excel'
 import { bulan } from '../../Components/utilsFunction/arrayFunction'
-import { sumTotal, sumHE, totalAtt, aktualLembur, actualHours, asce, ascr, dividDed } from './utlis/utlis'
+import { sumTotal, sumHE, totalAtt, actualHours, asce, ascr, dividDed } from './utlis/utlis'
 import { NAMES, USER_ID } from '../../fetch/fetch'
 import { changeDayName, datesUpt, workHour, totalWorkHour } from '../../Components/utilsFunction/functionUtils'
 import { getWeekendDates, mergedDataPresence } from '../../Hrd/Pages/Presence/utlis/utlis'
@@ -99,9 +99,9 @@ function SelfEmployeeAnalisisPresence() {
 
     const jamKerjaS = sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur))
 
-    const aktualLem = aktualLembur(jamKerjaA, lemburTotal)
+    // const aktualLem = aktualLembur(jamKerjaA, lemburTotal)
     
-    const kurangLeb = actualHours(aktualLem, jamKerjaS)
+    const kurangLeb = actualHours(jamKerjaA, jamKerjaS)
 
     const { onDownload } = useDownloadExcel({
       currentTableRef: tableRef.current,
@@ -110,7 +110,7 @@ function SelfEmployeeAnalisisPresence() {
   })
 
   const lastWorkingDate = attendance[attendance.length - 1]?.working_date;
-  const startDate = new Date(`2023-${month_id}-01`);
+  const startDate = new Date(`${year_id}-${month_id}-01`);
   const endDate = new Date(lastWorkingDate);
   const weekendDates = getWeekendDates(startDate, endDate);
 
@@ -170,12 +170,12 @@ function SelfEmployeeAnalisisPresence() {
                                         <TableCell align="center">{att.lembur_start ? workHour(att.lembur_start) : "-"}</TableCell>
                                         <TableCell align="center">{att.lembur_end ? workHour(att.lembur_end) : "-"}</TableCell>
                                         <Tooltip title={att.ket} arrow>
-                                          <td>
+                                          <TableCell align='center'>
                                             {att.ket ? 
                                           att.ket.toString().length > 5 ?
                                           att.ket.toString().slice(0,5) + '...' : att.ket
-                                          : null}
-                                          </td>
+                                          : '-'}
+                                          </TableCell>
                                           </Tooltip>
                                         <TableCell align="center">{att.working_hour ? workHour(att.working_hour) : '-'}</TableCell>
                                         <TableCell align="center">{att.lembur_hour ? workHour(att.lembur_hour) : '-'} </TableCell>
@@ -209,14 +209,17 @@ function SelfEmployeeAnalisisPresence() {
                                 </TableRow>
                                 <TableRow>
                                     <TableCell colSpan={8}>Hari Kerja Efektif</TableCell>
-                                    <TableCell colSpan={3}>{totalAtt(attendance.length, TotalAttendance.employee_lembur)} Hari</TableCell>
+                                    <TableCell colSpan={3}>{
+                                      totalAtt(attendance.length, TotalAttendance.employee_lembur) >= 0 ?
+                                      totalAtt(attendance.length, TotalAttendance.employee_lembur) : '0'
+                                    } Hari</TableCell>
                                 </TableRow> 
                                 <TableRow>
                                     <TableCell colSpan={8}>Jumlah Jam Kerja Efektif</TableCell>
                                       <TableCell colSpan={3}>
-                                      {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)) !== 0 ?
+                                      {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)) >= 0 ?
                                         totalWorkHour(sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)))
-                                        : ''
+                                        : '0 Hari'
                                       }
                                       </TableCell> 
                                 </TableRow> 
@@ -225,7 +228,7 @@ function SelfEmployeeAnalisisPresence() {
                                     <TableCell colSpan={3}>
                                       {dividDed(sumData, sumDataWork).toString().length !== 0 ?
                                           totalWorkHour(dividDed(sumData, sumDataWork))
-                                          : ''
+                                          : '0 Menit'
                                         }
                                         </TableCell>
                                 </TableRow> 
@@ -234,65 +237,17 @@ function SelfEmployeeAnalisisPresence() {
                                     <TableCell colSpan={3}>
                                       {lemburTotal.toString().length !== 0 ?
                                           totalWorkHour(lemburTotal)
-                                          : ''
+                                          : '0 Menit'
                                         }
                                     </TableCell>
                                 </TableRow> 
                                 <TableRow>
-                                    <TableCell colSpan={8}>Jam Kerja Aktual - lembur</TableCell>
-                                    <TableCell colSpan={3}>
-                                    {aktualLem.toString().length !== 1?
-                                      totalWorkHour(aktualLem) :
-                                      ''
-                                    }
-                                    </TableCell>
-                                </TableRow> 
-                                <TableRow>
                                     <TableCell colSpan={8}>(Kurang/Lebih) Jam Kerja</TableCell>
-                                    {kurangLeb.toString().length === 0 ?
-                                        <TableCell colSpan={3}>
-                                        </TableCell>
-                                        : null
-                                      } 
-                                      {kurangLeb.toString().length === 1 ?
-                                        <TableCell colSpan={3}>
-                                          {kurangLeb.toString().slice(0,2)} Menit
-                                      
-                                        </TableCell>
-                                        : null
-                                      }
-
-                                    {kurangLeb.toString().length === 2 ?
-                                        <TableCell colSpan={3}>
-                                          {kurangLeb.toString().slice(0,2)} Menit
-                                        </TableCell>
-                                        : null
-                                      }
-                                    {kurangLeb.toString().length === 3 ?
-                                        <TableCell colSpan={3}>
-                                          {kurangLeb.toString().slice(0,1)},
-                                          {kurangLeb.toString().slice(1,3)} 
-                                          {kurangLeb.toString().slice(0,1) === '-' ?
-                                          " Menit"
-                                          :
-                                          " Jam"
+                                    <TableCell colSpan={3}>
+                                        {kurangLeb.toString().length !== 0 ?
+                                         totalWorkHour(kurangLeb)   : '0 Menit'
                                           } 
-                                        </TableCell>
-                                        : null
-                                      }
-                                      {kurangLeb.toString().length === 4 ?
-                                        <TableCell colSpan={3}>
-                                          {kurangLeb.toString().slice(0,2)},{kurangLeb.toString().slice(2,4)} Jam
-                                        </TableCell>
-                                        : null
-                                      }
-                                      {kurangLeb.toString().length === 5 ?
-                                        <TableCell colSpan={3}>
-                                          {kurangLeb.toString().slice(0,3)},
-                                          {kurangLeb.toString().slice(3,5)} Jam
-                                        </TableCell>
-                                        : null
-                                      }
+                                      </TableCell>
                                 </TableRow> 
                                 
                             </TableBody>

@@ -142,7 +142,6 @@ function NoteDetail() {
          setSnack(true)
          setStatus("info")
          setMessage("Data Berhasil dihapus")
-         
       }catch(error){
           if( error.response &&
               error.response.status >= 400 &&
@@ -150,8 +149,9 @@ function NoteDetail() {
               ){
               setSnack(true)
               setStatus("error")
-              setMessage("Data Berhasil dihapus")
+              setMessage("Gagal Menghapus data")
           }
+          console.log(error)
       }
   };
 
