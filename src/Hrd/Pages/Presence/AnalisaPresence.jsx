@@ -162,8 +162,8 @@ function AnalisaPresence() {
                                   <th>LemburS</th>
                                   <th>LemburE</th>
                                   <th>Keterangan</th>
-                                  <th>Total Jam Kerja</th>
-                                  <th>Total Jam Lembur</th>
+                                  <th>Total JK</th>
+                                  <th>Total JL</th>
                                   </tr>
                               </thead>
                               <tbody>
@@ -188,8 +188,8 @@ function AnalisaPresence() {
                                             <Tooltip title={att.ket} arrow>
                                           <td>
                                             {att.ket ? 
-                                          att.ket.toString().length > 5 ?
-                                          att.ket.toString().slice(0,5) + '...' : att.ket
+                                          att.ket.toString().length > 25 ?
+                                          att.ket.toString().slice(0,25) + '...' : att.ket
                                           : null}
                                           </td>
                                           </Tooltip>

@@ -11,7 +11,7 @@ import { bulan } from '../../Components/utilsFunction/arrayFunction'
 import { sumTotal, sumHE, totalAtt, actualHours, asce, ascr, dividDed } from './utlis/utlis'
 import { NAMES, USER_ID } from '../../fetch/fetch'
 import { changeDayName, datesUpt, workHour, totalWorkHour } from '../../Components/utilsFunction/functionUtils'
-import { getWeekendDates, mergedDataPresence } from '../../Hrd/Pages/Presence/utlis/utlis'
+import { getWeekendDates, mergedDataPresence, countDataKeterangan } from '../../Hrd/Pages/Presence/utlis/utlis'
 
 function SelfEmployeeAnalisisPresence() {
   const tableRef = React.useRef("");
@@ -153,8 +153,8 @@ function SelfEmployeeAnalisisPresence() {
                                 <TableCell align="center">LemburS</TableCell>
                                 <TableCell align="center">LemburE</TableCell>
                                 <TableCell align="center">Keterangan</TableCell>
-                                <TableCell align="center">Total Jam</TableCell>
-                                <TableCell align="center">Total Lembur</TableCell>
+                                <TableCell align="center">Total JK</TableCell>
+                                <TableCell align="center">Total JL</TableCell>
                             </TableRow>
                             </TableHead>
                             <TableBody>
@@ -172,8 +172,8 @@ function SelfEmployeeAnalisisPresence() {
                                         <Tooltip title={att.ket} arrow>
                                           <TableCell align='center'>
                                             {att.ket ? 
-                                          att.ket.toString().length > 5 ?
-                                          att.ket.toString().slice(0,5) + '...' : att.ket
+                                          att.ket.toString().length > 10 ?
+                                          att.ket.toString().slice(0,10) + '...' : att.ket
                                           : '-'}
                                           </TableCell>
                                           </Tooltip>
@@ -214,6 +214,12 @@ function SelfEmployeeAnalisisPresence() {
                                       totalAtt(attendance.length, TotalAttendance.employee_lembur) : '0'
                                     } Hari</TableCell>
                                 </TableRow> 
+                                <TableRow>
+                                    <TableCell colSpan={8}>Tidak masuk/Sakit/Izin/Cuti</TableCell>
+                                    <TableCell colSpan={3}>{countDataKeterangan(attendance, 'tidak masuk')}/{countDataKeterangan(attendance, 'sakit')}/
+                                      {countDataKeterangan(attendance, 'izin')}/{countDataKeterangan(attendance, 'cuti')}
+                                      </TableCell>
+                                  </TableRow> 
                                 <TableRow>
                                     <TableCell colSpan={8}>Jumlah Jam Kerja Efektif</TableCell>
                                       <TableCell colSpan={3}>
