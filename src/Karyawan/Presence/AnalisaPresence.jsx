@@ -111,7 +111,7 @@ function SelfEmployeeAnalisisPresence() {
 
   const lastWorkingDate = attendance[attendance.length - 1]?.working_date;
   const startDate = new Date(`${year_id}-${month_id}-01`);
-  const endDate = new Date(lastWorkingDate);
+  const endDate = new Date(`${year_id}-${month_id}-31`);
   const weekendDates = getWeekendDates(startDate, endDate);
 
     
