@@ -17,12 +17,12 @@ function DetailPresence() {
   const id_att = location.pathname.split('/')[3]
 
   const [employeeName, setEmployeeName] = useState('')
-  const [jam_masuk, setJamMasuk] = useState(null)
-  const [jam_keluar, setJamKeluar] = useState(null)
+  const [jam_masuk, setJamMasuk] = useState('')
+  const [jam_keluar, setJamKeluar] = useState('')
   const [total_jam, setTotalJam] = useState('')
   const [lembur_total, setLemburTotal] = useState('')
-  const [lembur_start, setLemburStart] = useState(null)
-  const [lembur_end, setLemburEnd] = useState(null)
+  const [lembur_start, setLemburStart] = useState('')
+  const [lembur_end, setLemburEnd] = useState('')
   const [keterangan, setKeterangan] = useState('')
   const [working_date, setWorkingDate] = useState(new Date())
 
@@ -69,11 +69,11 @@ function DetailPresence() {
         const formData = new FormData();
         formData.append("employee", employeeName);
         formData.append("working_date", working_date);
-        if(jam_masuk !== null & jam_keluar !== null){
+        if(jam_masuk !== '' & jam_keluar !== ''){
           formData.append("start_from", jam_masuk);
           formData.append("end_from", jam_keluar);
         }
-        if(lembur_start !== null & lembur_end !== null){
+        if(lembur_start !== '' & lembur_end !== ''){
           formData.append("lembur_start", lembur_start);
           formData.append("lembur_end", lembur_end);
         }
@@ -215,14 +215,49 @@ function DetailPresence() {
                               
                               </Select>
                           </FormControl>
-                            <TextField sx={{ mr:2 }} value={jam_masuk} onChange={e => setJamMasuk(e.target.value)} fullWidth type='text' label='Jam Masuk' />
-                            <TextField sx={{ mr:2 }} value={jam_keluar} onChange={e => setJamKeluar(e.target.value)} fullWidth type='text' label='Jam Pulang' />
+                            <TextField
+                             sx={{ mr:2 }} 
+                             fullWidth 
+                             value={jam_masuk} 
+                             onChange={e => setJamMasuk(e.target.value)} 
+                             type='text' 
+                             label='Jam Masuk' 
+                             />
+                            <TextField 
+                              sx={{ mr:2 }} 
+                              fullWidth 
+                              value={jam_keluar} 
+                              onChange={e => setJamKeluar(e.target.value)} 
+                              type='text' 
+                              label='Jam Pulang' 
+                              />
                             <TextField fullWidth disabled value={total_jam} type='text' label='Total Jam Kerja' />
                          </Box>
                          <Box sx={{ display:'flex', mr:2, mb:2 }}>
-                            <TextField sx={{ mr:2 }} value={lembur_start} onChange={e => setLemburStart(e.target.value)} fullWidth type='text' label='Jam Awal Lembur' />
-                            <TextField sx={{ mr:2 }} value={lembur_end} onChange={e => setLemburEnd(e.target.value)} fullWidth type='text' label='Jam Akhir Lembur' />
-                            <TextField sx={{ mr:2 }} value={lembur_total} disabled fullWidth type='text' label='Total Jam Lembur' />
+                            <TextField
+                             sx={{ mr:2 }} 
+                             fullWidth 
+                             value={lembur_start} 
+                             onChange={e => setLemburStart(e.target.value)} 
+                             type='text' 
+                             label='Jam Awal Lembur' 
+                             />
+                            <TextField
+                             sx={{ mr:2 }} 
+                             fullWidth 
+                             value={lembur_end} 
+                             onChange={e => setLemburEnd(e.target.value)} 
+                             type='text' 
+                             label='Jam Akhir Lembur' 
+                             />
+                            <TextField 
+                              sx={{ mr:2 }} 
+                              fullWidth 
+                              value={lembur_total} 
+                              disabled 
+                              type='text' 
+                              label='Total Jam Lembur' 
+                              />
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DesktopDatePicker
                                 label="Working Date"
