@@ -109,7 +109,6 @@ function SelfEmployeeAnalisisPresence() {
       sheet: `Analisa Absensi ${NAMES && NAMES.replace(/%20/g, " ")} Bulan ${bulan[month_a].month}`,
   })
 
-  const lastWorkingDate = attendance[attendance.length - 1]?.working_date;
   const startDate = new Date(`${year_id}-${month_id}-01`);
   const endDate = new Date(`${year_id}-${month_id}-31`);
   const weekendDates = getWeekendDates(startDate, endDate);
