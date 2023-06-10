@@ -64,15 +64,17 @@ function DetailPresence() {
         const formData = new FormData();
         formData.append("employee", employeeName);
         formData.append("working_date", working_date);
-        if(jam_masuk !== '' & jam_keluar !== ''){
+        if(jam_masuk !== null & jam_keluar !== null){
           formData.append("start_from", jam_masuk);
           formData.append("end_from", jam_keluar);
         }
-        if(lembur_start !== '' & lembur_end !== ''){
+        if(lembur_start !== null & lembur_end !== null){
           formData.append("lembur_start", lembur_start);
           formData.append("lembur_end", lembur_end);
         }
-        formData.append("ket", keterangan)
+        if(keterangan != null){
+          formData.append("ket", keterangan)
+        }
        await axios({
             method: 'put',
             url:`${BASE_URL}/api/presence/employees/${id_att}/`,
