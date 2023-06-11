@@ -187,3 +187,50 @@ export function zeta(x){
       return data.replace(':', '')
     }
 }
+
+export function formulaSumActual(x,y){
+  let varD = x-y
+  const varX = varD.toString()
+  const len = varX.length
+  const data1 =len-2
+  const slics = varX.slice(data1, len)
+  let slicsInt = parseInt(slics)
+  console.log(slics)
+  console.log(len)
+  const var4 = varD+40
+  console.log(var4.toString().slice(-2))
+  const pars = parseInt(var4.toString().slice(-2))
+  
+  if(slicsInt > 59){
+    if(varD < 40){
+      console.log("if 1.1")
+      return var4
+    }else{
+      console.log("else 1")
+      return varD-40
+    }
+  }else{
+    if(pars > 59){
+      if(pars > 40){
+        console.log("if 1")
+        return x-y-40
+      }else{
+        console.log("if 1.2")
+        return x-y
+      }
+    }else{
+      if(pars < 59){
+        if(varD < 40){
+          console.log("if 2")
+          return varD+40
+        }else{
+          console.log("if 2.2")
+          return varD
+        }
+      }else{
+        console.log("else 3")
+        return varD+40
+      }
+    }
+  }
+}
