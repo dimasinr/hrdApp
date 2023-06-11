@@ -211,9 +211,11 @@ export function formulaSumActual(x,y){
     }
   }else{
     if(pars > 59){
-      if(pars > 40){
+      if(pars > 60){
         console.log("if 1")
-        return x-y-40
+        return varD
+      }else if(pars > 40){
+        return varD-40
       }else{
         console.log("if 1.2")
         return x-y
