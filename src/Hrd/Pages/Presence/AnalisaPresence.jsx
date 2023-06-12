@@ -227,8 +227,14 @@ function AnalisaPresence() {
                                   </tr> 
                                   <tr>
                                       <td colSpan={8}>Tidak masuk/Sakit/Izin/Cuti</td>
-                                      <td colSpan={3}>{countDataKeterangan(attendance, 'tidak masuk')}/{countDataKeterangan(attendance, 'sakit')}/
-                                        {countDataKeterangan(attendance, 'izin')}/{countDataKeterangan(attendance, 'cuti')}
+                                      <td colSpan={3}>
+                                        {countDataKeterangan(attendance, 'tidak masuk')}
+                                        /
+                                        {countDataKeterangan(attendance, 'sakit')}
+                                        /
+                                        {countDataKeterangan(attendance, 'izin')}
+                                        /
+                                        {countDataKeterangan(attendance, 'cuti')}
                                         </td>
                                   </tr> 
                                   <tr>

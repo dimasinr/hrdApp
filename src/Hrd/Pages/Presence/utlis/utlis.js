@@ -363,7 +363,7 @@ export function mergedDataPresence(data1, data2) {
     const index = mergedData.findIndex((item1) => item1.working_date === item2.working_date);
     if (index === -1) {
       const newItem = { ...item2 };
-      newItem.employee = { ...data1[0].employee };
+      newItem.employee = { ...data1[0]?.employee };
       mergedData.push(newItem);
     } else {
       mergedData[index].days = item2.days;
