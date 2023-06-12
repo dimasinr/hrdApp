@@ -6,7 +6,7 @@ import { BASE_URL, API_KEY } from '../../../fetch/fetch'
 import axios from 'axios'
 import { AuthContext } from '../../../Context/AuthContext'
 import { VisibilityOff, Visibility } from '@mui/icons-material'
-import { nawastraIcon } from '../../../Components/images/images'
+// import { nawastraIcon } from '../../../Components/images/images'
 import './login.css'
 
 function LoginHrd() {
@@ -67,11 +67,11 @@ function LoginHrd() {
         <div className='background_login'>
           <Col md={4}>
             <Form onSubmit={LoginUser}>
-                <div className="card shadow-card h-login-card" style={{ border:'none', borderRadius:'12px' }}>
+                <div className="card shadow-card h-login-card" style={{ border:'none', borderRadius:'10px' }}>
                   <div className="card-body">
-                    <div className="d-flex justify-content-center">
+                    {/* <div className="d-flex justify-content-center">
                         <img src={nawastraIcon} className='image_login' alt="" />
-                    </div>
+                    </div> */}
                     <div className="card-title"><h5>Login</h5>
                     <small className="text-secondary">
                       Login dengan username & password yang sudah diberikan
@@ -87,13 +87,13 @@ function LoginHrd() {
                             )
                         }
                         </span>
+                    <small className='text-danger mb-1'>{errors && errors}</small>
                     </Box>
-                    <small className='text-danger'>{errors && errors}</small>
-                    <div className="d-flex justify-content-end mb-3">
-                      <button className='button_login' onClick={LoginUser}>Login</button>
+                    {/* <div className="d-flex justify-content-end mb-3"> */}
+                      <button className='button_login mb-1' onClick={LoginUser}>Login</button>
                       {/* <button className='btn btn-primary' onClick={da}>das</button> */}
                       
-                    </div>
+                    {/* </div> */}
                   </div>
                 </div>
             </Form>
