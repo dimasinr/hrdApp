@@ -22,6 +22,7 @@ function DashboardKaryawan() {
       const res = response.data
       setUsers(res[0])
       console.log(res)
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     })
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps

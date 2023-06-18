@@ -2,7 +2,7 @@ import React from 'react'
 import { Col, Container } from 'react-bootstrap'
 import axios from 'axios'
 import { BASE_URL, USER_TOKEN, NAMES } from '../../fetch/fetch'
-import { FormControl, MenuItem, Select} from '@mui/material';
+import { FormControl, MenuItem, Select, CircularProgress} from '@mui/material';
 import { tahun } from '../../Components/utilsFunction/arrayFunction'
 import { ColumnChartKeterangan, ColumnChartPresence } from '../../Components/Chart/ChartColumn'
 
@@ -12,8 +12,8 @@ export default function StatistikUser() {
   const [years, setYears] = React.useState(new Date().getFullYear())
   const [statistikPresence, setStatistikPresence] = React.useState([])
 
-  const getListPengajuan = () => {
-    axios.get(`${BASE_URL}/api/dashboard/statistik-submission/${years}/`,{
+  const getStatistikPengajuan = () => {
+    axios.get(`${BASE_URL}/api/dashboard/statistik-presence/${years}/`,{
       headers: {
         "Authorization" : 'Token ' + USER_TOKEN
       }
@@ -25,10 +25,10 @@ export default function StatistikUser() {
     })
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  React.useEffect(() => getListPengajuan(), [years])
+  React.useEffect(() => getStatistikPengajuan(), [years])
   
-  const getPermission = () => {
-    axios.get(`${BASE_URL}/api/dashboard/statistik-presence/${years}/`,{
+  const getStatistikPresence = () => {
+    axios.get(`${BASE_URL}/api/dashboard/statistik-submission/${years}/`,{
       headers: {
         "Authorization" : 'Token ' + USER_TOKEN
       }
@@ -40,11 +40,28 @@ export default function StatistikUser() {
     })
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  React.useEffect(() => getPermission(), [years])
+  React.useEffect(() => getStatistikPresence(), [years])
 
   const handleGend = (event) => {
     setYears(event.target.value);
   };
+
+  const data = [
+    { Jan: 20 },
+    { Feb: 18 },
+    { Mar: 19 },
+    { Apr: 12 },
+    { May: 20 },
+    { Jun: 0 },
+    { Jul: 0 },
+    { Aug: 0 },
+    { Sep: 0 },
+    { Oct: 0 },
+    { Nov: 0 },
+    { Dec: 0 },
+  ];
+
+  console.log(data)
 
   return (
     <div className="card shadow-card mt-3" style={{ border:'none', borderRadius:'10px' }}>
@@ -75,8 +92,22 @@ export default function StatistikUser() {
                 <Col md={11} sm={5}>
                   <div className="card shadow-card" style={{ borderRadius:'10px', border:'none'}}>
                     <div className="card-body">
+                    {data && data.map((c, index) => {
+                        return(
+                          <span>
+                            {index+1}
+                          </span>
+                        )
+                      })}
                         <h6>Statistik Absensi {years}</h6>
+                        {
+                          statistikPresence && statistikPresence ? 
                           <ColumnChartPresence data={statistikPresence} />
+                          :
+                          <center>
+                            <CircularProgress />
+                          </center>
+                        }
                     </div>
                   </div>
                 </Col>
@@ -86,8 +117,15 @@ export default function StatistikUser() {
                 <Col md={11} sm={5} className='mt-2'>
                   <div className="card shadow-card" style={{ borderRadius:'10px', border:'none' }}>
                     <div className="card-body">
+                      
                       <h6>Statistik Izin {years}</h6>
-                      <ColumnChartKeterangan data={presenceSubmission} />
+                      {presenceSubmission && presenceSubmission ?
+                        <ColumnChartKeterangan data={presenceSubmission && presenceSubmission} />
+                        :
+                        <center>
+                          <CircularProgress />
+                        </center>
+                      }
                     </div>
                   </div>
                 </Col>

@@ -26,6 +26,7 @@ function ListPerizinanKaryawan() {
       setListPengajuan(res.results)
       setSubmissionPaginate(res)
       // setLoading(false)
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       console.log(res)
     })
   }

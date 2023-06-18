@@ -25,6 +25,7 @@ function NotesKaryawan() {
         setListNotes(res.results)
         setNotesPaginate(res.count)
         setLoading(false)
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         console.log(res)
       })
     }
