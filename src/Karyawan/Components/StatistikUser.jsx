@@ -46,23 +46,6 @@ export default function StatistikUser() {
     setYears(event.target.value);
   };
 
-  const data = [
-    { Jan: 20 },
-    { Feb: 18 },
-    { Mar: 19 },
-    { Apr: 12 },
-    { May: 20 },
-    { Jun: 0 },
-    { Jul: 0 },
-    { Aug: 0 },
-    { Sep: 0 },
-    { Oct: 0 },
-    { Nov: 0 },
-    { Dec: 0 },
-  ];
-
-  console.log(data)
-
   return (
     <div className="card shadow-card mt-3" style={{ border:'none', borderRadius:'10px' }}>
           <div className="card-body">
@@ -92,13 +75,6 @@ export default function StatistikUser() {
                 <Col md={11} sm={5}>
                   <div className="card shadow-card" style={{ borderRadius:'10px', border:'none'}}>
                     <div className="card-body">
-                    {data && data.map((c, index) => {
-                        return(
-                          <span>
-                            {index+1}
-                          </span>
-                        )
-                      })}
                         <h6>Statistik Absensi {years}</h6>
                         {
                           statistikPresence && statistikPresence ? 
