@@ -94,7 +94,7 @@ export const SideCardBirthday = ({ data, loading }) => {
                     <ol>
                     {loading && loading ?
                         <React.Fragment>
-                        {data ? data.map((employee, index) =>{
+                        {data.length !== 0  ? data.map((employee, index) =>{
                             return(
                                 <li key={index}>
                                     <div className='d-flex justify-content-between'>
@@ -123,7 +123,7 @@ export const SideCardContractEnd = ({ data, loading }) => {
                         <ol>
                         {loading && loading ?
                             <React.Fragment>
-                            {data ? data.map((employee, index) =>{
+                            {data.length !== 0 ? data.map((employee, index) =>{
                                 return(
                                     <li key={index}>
                                         <Link to={`/list-karyawan/detail/${employee.pk}`} className="unlink">
@@ -134,7 +134,7 @@ export const SideCardContractEnd = ({ data, loading }) => {
                                         </Link>
                                     </li>
                                 )
-                            }) : <small className="text-secondary">Tidak ada data</small>
+                            }) : <small className="text-secondary">Tidak ada kontrak karyawan yang berakhir bulan ini</small>
                             }
                             </React.Fragment>
                             :

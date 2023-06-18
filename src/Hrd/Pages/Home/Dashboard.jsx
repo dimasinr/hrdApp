@@ -160,16 +160,18 @@ function Dashboard() {
                 <div className="col-md-8" style={{ marginRight:'55px' }}>
                   {main ? 
                 <Stack direction="row" spacing={1} sx={{ mb:2 }}>
-                  <Chip label="Calendar Dashboard" onClick={changeMainDisplay} color="primary" />
-                  <Chip label="Statistik Dashboard" onClick={changeMainDisplay} color="primary" variant="outlined"  />
+                  <Chip label="Statistik Dashboard" onClick={changeMainDisplay} color="primary" />
+                  <Chip label="Calendar Dashboard" onClick={changeMainDisplay} color="primary"  variant="outlined" />
                 </Stack>
                   :
                 <Stack direction="row" spacing={1} sx={{ mb:2 }}>
-                  <Chip label="Calendar Dashboard" onClick={changeMainDisplay} color="primary" variant="outlined" />
-                  <Chip label="Statistik Dashboard" onClick={changeMainDisplay} color="primary" />
+                  <Chip label="Statistik Dashboard" onClick={changeMainDisplay} color="primary" variant="outlined"  />
+                  <Chip label="Calendar Dashboard" onClick={changeMainDisplay} color="primary"  />
                 </Stack>
                 }
                {main ?
+                <MainDashboard />
+                :
                <Calendar
                 fullYear
                 {...initialProps}
@@ -180,8 +182,6 @@ function Dashboard() {
                 disableYearPicker
                 readOnly
                 /> 
-                :
-              <MainDashboard />
               }
                 </div>
 
