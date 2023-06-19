@@ -12,6 +12,11 @@ code {
     monospace;
 }
 
+text.highcharts-credits{
+  display: none;
+  visibility: hidden;
+}
+
 #image__background{
   align-items: center;
   /* background-image: url('./Components/images/background.jpg'); */

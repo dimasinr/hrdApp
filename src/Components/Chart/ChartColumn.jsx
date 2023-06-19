@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Highcharts from 'highcharts';
 
 export const ColumnChartKeterangan = ({data}) => {
   const categories = Object.keys(data);
   const seriesData = Object.values(data).map((value) => Object.values(value));
+  console.log(seriesData)
 
   useEffect(() => {
     const options = {
@@ -22,10 +23,11 @@ export const ColumnChartKeterangan = ({data}) => {
         },
       },
       series: [
-        { name: 'Tidak Masuk', data: seriesData.map((value) => value[0]) },
-        { name: 'Sakit', data: seriesData.map((value) => value[1]) },
-        { name: 'Izin', data: seriesData.map((value) => value[2]) },
-        { name: 'Cuti', data: seriesData.map((value) => value[3]) },
+        { name: 'Masuk', data: seriesData.map((value) => value[0]) },
+        { name: 'Tidak Masuk', data: seriesData.map((value) => value[1]) },
+        { name: 'Sakit', data: seriesData.map((value) => value[2]) },
+        { name: 'Izin', data: seriesData.map((value) => value[3]) },
+        { name: 'Cuti', data: seriesData.map((value) => value[4]) },
       ],
     };
 
@@ -65,4 +67,35 @@ export const ColumnChartPresence = ({ data }) => {
   }, [data]);
 
   return <div id="column-chart-presence"></div>;
+};
+
+export const ChartsColumnAbsensiPerkaryawan = ({ data }) => {
+  const chartRef = useRef(null);
+
+  useEffect(() => {
+    if (chartRef.current && data) {
+      Highcharts.chart(chartRef.current, {
+        chart: {
+          type: 'column',
+        },
+        title: {
+          text: 'Attendance Chart',
+        },
+        xAxis: {
+          categories: data.map(item => Object.keys(item)[0]),
+        },
+        yAxis: {
+          title: {
+            text: 'Total Attendance',
+          },
+        },
+        series: [{
+          name: 'Total Attendance',
+          data: data.map(item => Object.values(item)[0]),
+        }],
+      });
+    }
+  }, [data]);
+
+  return <div ref={chartRef} />;
 };
