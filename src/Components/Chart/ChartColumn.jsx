@@ -12,7 +12,7 @@ export const ColumnChartKeterangan = ({data}) => {
         type: 'column',
       },
       title: {
-        text: 'Grafik Data Perizinan',
+        text: 'Grafik Data Karyawan',
       },
       xAxis: {
         categories: categories,
@@ -23,7 +23,6 @@ export const ColumnChartKeterangan = ({data}) => {
         },
       },
       series: [
-        { name: 'Masuk', data: seriesData.map((value) => value[0]) },
         { name: 'Tidak Masuk', data: seriesData.map((value) => value[1]) },
         { name: 'Sakit', data: seriesData.map((value) => value[2]) },
         { name: 'Izin', data: seriesData.map((value) => value[3]) },
@@ -45,7 +44,7 @@ export const ColumnChartPresence = ({ data }) => {
         type: 'column',
       },
       title: {
-        text: 'Grafik Jumlah Presensi per Bulan',
+        text: 'Grafik Data Presensi per Bulan',
       },
       xAxis: {
         categories: data.map(item => Object.keys(item)[0]),
@@ -79,7 +78,7 @@ export const ChartsColumnAbsensiPerkaryawan = ({ data }) => {
           type: 'column',
         },
         title: {
-          text: 'Attendance Chart',
+          text: 'Grafik Data Presensi Per Karyawan dalam satu bulan ',
         },
         xAxis: {
           categories: data.map(item => Object.keys(item)[0]),
