@@ -23,10 +23,10 @@ export const ColumnChartKeterangan = ({data}) => {
         },
       },
       series: [
-        { name: 'Tidak Masuk', data: seriesData.map((value) => value[1]) },
-        { name: 'Sakit', data: seriesData.map((value) => value[2]) },
-        { name: 'Izin', data: seriesData.map((value) => value[3]) },
-        { name: 'Cuti', data: seriesData.map((value) => value[4]) },
+        { name: 'Tidak Masuk', data: seriesData.map((value) => value[0]) },
+        { name: 'Sakit', data: seriesData.map((value) => value[1]) },
+        { name: 'Izin', data: seriesData.map((value) => value[2]) },
+        { name: 'Cuti', data: seriesData.map((value) => value[3]) },
       ],
     };
 

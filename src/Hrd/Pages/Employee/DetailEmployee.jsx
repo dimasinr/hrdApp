@@ -157,7 +157,9 @@ function DetailEmployee() {
             formData.append("roles", roles);
             formData.append("sisa_cuti", sisa_cuti);
             formData.append("employee_joined", date_join);
-            formData.append("employee_ended", date_ended);
+            if(active_user !== true){
+              formData.append("employee_ended", date_ended);
+            }
             formData.append("division", division);
             formData.append("gender", gender);
             formData.append("religion", religion);
