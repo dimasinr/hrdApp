@@ -1,6 +1,5 @@
 import React from 'react'
 import { Col } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { BASE_URL, USER_TOKEN, ROLES } from '../fetch/fetch'
 import {  FormControl, InputLabel, Select, MenuItem, TextField, Backdrop, CircularProgress } from '@mui/material';
@@ -12,7 +11,6 @@ import { StyledPagination } from '../Karyawan/Components/Pagination/PaginationEm
 
 function ListPengajuan() {
 
-    const navigate = useNavigate()
     const [open, setOpen] = React.useState(false)
     const [perizinan, setPerizinan] = React.useState('')
     const [start_dates, setStartDates] = React.useState('')
