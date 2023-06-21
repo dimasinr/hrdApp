@@ -28,8 +28,8 @@ function DetailPerizinan() {
     const [permission_pi, setPermissionPi] = useState('');
     const [jumlah_hari, setJumlHari] = useState('');
     
-    const [lembur_start, setLemburStart] = useState('');
-    const [lembur_end, setLemburEnd] = useState('');
+    const [lembur_start, setLemburStart] = useState(0);
+    const [lembur_end, setLemburEnd] = useState(0);
     const [work_hour, setWorkHour] = useState('');
 
     const [permission_pil, setPermissionPil] = useState('');
@@ -94,15 +94,17 @@ function DetailPerizinan() {
             formData.append("reason", reason);
             formData.append("return_date", return_date);
             formData.append("permission_pil", permission_pil);
+            if(permissionType === 'lembur'){
+                formData.append("from_hour", lembur_start);
+                formData.append("end_hour", lembur_end);
+            }
             if(permission_pil === "ditangguhkan"){
                 formData.append("suspended_start", suspended_start);
                 formData.append("suspended_end", suspended_end);
             }else if(permission_pil === 'ditolak'){
                 formData.append("reason_rejected", reason_rejected);
             }
-            if(permissionType !== 'lembur'){
-                formData.append("jumlah_hari", jumlah_hari);
-            }
+            formData.append("jumlah_hari", jumlah_hari);
             const res = await axios({
                 method: 'put',
                 url:`${BASE_URL}/api/submission/employees/${id}/`,
@@ -134,6 +136,7 @@ function DetailPerizinan() {
             }
         }
       };
+      console.log(jumlah_hari)
     
       const pengajuanDelete = async e => {
         try{
@@ -211,17 +214,21 @@ function DetailPerizinan() {
               })
               }
 
-      function hours(x){
-        if(x !== null){
-            const delta = x.toString().length
-            if(delta === 4){
-                let hour = x.toString()
-                const diAw = hour.slice(0,2)
-                const diAk = hour.slice(2,4)
-                return diAw + ':' + diAk
-            }
+    function hours(value) {
+    if (value !== null) {
+        const stringValue = value.toString();
+        if (stringValue.length === 4) {
+        const hour = stringValue.slice(0, 2);
+        const minute = stringValue.slice(2);
+        return hour + ':' + minute;
+        }else if (stringValue.length === 3) {
+            return '0'+stringValue.slice(0, 1)+ ':' + stringValue.slice(1,3);
+        } else if (stringValue.length === 2) {
+        return '00:' + stringValue;
         }
-      }
+    }
+    return '';
+    }
 
       function dateHours(y){
         if(y !== null){
@@ -241,6 +248,8 @@ function DetailPerizinan() {
         }
       }
 
+      console.log(lembur_start)
+    
   return (
     <React.Fragment>
         <Navbars />
@@ -327,7 +336,7 @@ function DetailPerizinan() {
                                {permissionType === 'lembur' ?
                             <React.Fragment>
                                  <Box sx={{ mt:1, display:'flex' }}>
-                             <TextField value={hours(lembur_start)} sx={{ mr:1 }} onChange={e => setLemburStart(e.target.value)} disabled fullWidth type="text" label='Dari Jam' variant='filled' />
+                             <TextField value={hours(lembur_start)} onChange={e => setLemburEnd(e.target.value)} disabled fullWidth type="text" label='Dari Jam' variant='filled' />
                              <TextField value={hours(lembur_end)} onChange={e => setLemburEnd(e.target.value)} disabled fullWidth type="text" label='Sampai Jam' variant='filled' />
                                 </Box>
 
@@ -382,7 +391,7 @@ function DetailPerizinan() {
                                     </FormControl>
                                 </Box>
                                 {permission_pil === 'ditolak' ?
-                                <TextField value={reason_rejected} onChange={e => setReasonRejected(e.target.value)} fullWidth variant='filled' label='Alasan' />
+                                <TextField value={reason_rejected} onChange={e => setReasonRejected(e.target.value)} fullWidth variant='standard' label='Alasan' />
                                 : null
                                 }
                                 {permission_pil === 'bersyarat' ?

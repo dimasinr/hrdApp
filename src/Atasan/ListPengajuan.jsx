@@ -65,11 +65,6 @@ function ListPengajuan() {
     setEndDates(dated.slice(1, 11))
   }
 
-  if(ROLES === 'employee' || ROLES === 'atasan' ){
-    localStorage.clear()
-    navigate('/')
-  }
-
   return (
     <React.Fragment>
         <div className="d-flex">
@@ -80,7 +75,7 @@ function ListPengajuan() {
                 <Col md={12} sm={12}>
                             <div className="card shadow_card" style={{ border:'none', borderRadius:'12px' }}>
                                 <div className="card-body">
-                                    {ROLES === 'hrd' || ROLES === 'superuser' ? 
+                                    {ROLES === 'hrd' || ROLES === 'atasan' ? 
                                     <React.Fragment>
                                     <h5>List Pengajuan</h5>
 

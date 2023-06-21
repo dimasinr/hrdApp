@@ -86,6 +86,7 @@ function PengajuanKaryawan() {
     const tanggal_awal = start_date.toISOString().slice(0,10)
     const tanggal_akhir = end_date.toISOString().slice(0,10)
     const masuk_kembali = back_date.toISOString().slice(0,10)
+    console.log(lembur_str, lembur_end)
 
     const submitPetitions = async e => {
         try{

@@ -15,6 +15,7 @@ function DetailPerizinanAtasan() {
   const location = useLocation()
   const navigate = useNavigate()
   const id = location.pathname.split('/')[3]
+  const [employee_id, setEmployeeId] = useState('');
   const [employee_names, setEmployeeName] = useState('');
   const [division, setDivision] = useState('');
   const [jenis, setJenis] = useState('');
@@ -32,9 +33,9 @@ function DetailPerizinanAtasan() {
   const [suspended_start, setSuspendedStart] = useState(new Date().toISOString().slice(0,10));
   const [suspended_end, setSuspendedEnd] = useState(new Date().toISOString().slice(0,10));
 
-  const [lemburHour, setLemburHour] = useState([])
-  const [fromHour, setFromHour] = useState([])
-  const [endHour, setEndHour] = useState([])
+  const [lemburHour, setLemburHour] = useState(0)
+  const [fromHour, setFromHour] = useState(0)
+  const [endHour, setEndHour] = useState(0)
 
   const convDate = (newdate) => {
       let event = new Date(newdate);
@@ -63,6 +64,7 @@ function DetailPerizinanAtasan() {
     })
     .then((response) => {
       const res = response.data
+      setEmployeeId(res.employee.pk)
       setEmployeeName(res.employee.name)
       setDivision(res.employee.division)
       setJenis(res.permission_type)
@@ -90,7 +92,18 @@ function DetailPerizinanAtasan() {
   const perizinanAdm = async e => {
       try{
           const formData = new FormData();
+          formData.append("employee", employee_id)
+          formData.append("permission_type", jenis);
           formData.append("permission_pil", permission_pil);
+          formData.append("jumlah_hari", jumlah_hari);
+          formData.append("start_date", start_date);
+          formData.append("end_date", end_date);
+          formData.append("return_date", return_date);
+          formData.append("reason", reason);
+          if(jenis === 'lembur'){
+            formData.append("from_hour", fromHour);
+            formData.append("end_hour", endHour);
+          }
           if(permission_pil === "ditangguhkan"){
               formData.append("suspended_start", suspended_start);
               formData.append("suspended_end", suspended_end);
@@ -98,7 +111,7 @@ function DetailPerizinanAtasan() {
               formData.append("reason_rejected", reason_rejected);
           }else if(permission_pil === 'bersyarat'){
               formData.append("conditional_reasons", conditional_reason);
-        }
+          }
           const res = await axios({
               method: 'put',
               url:`${BASE_URL}/api/submission/employees/${id}/`,

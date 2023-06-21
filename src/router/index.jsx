@@ -13,7 +13,7 @@ import Test from "../Hrd/Pages/Test/Test";
 import LoginHrd from "../Hrd/Pages/Auth/LoginHrd";
 import Dashboard from "../Hrd/Pages/Home/Dashboard";
 import ListPengajuanHrd from "../Hrd/Pages/Home/ListPengajuanHrd";
-import DetailPerizinan from "../Hrd/Pages/Home/DetailPerizinan";
+// import DetailPerizinan from "../Hrd/Pages/Home/DetailPerizinan";
 import CalendarCuti from "../Hrd/Pages/Home/CalendarCuti";
 import ListKaryawan from "../Hrd/Pages/Employee/ListKaryawan";
 import DetailEmployee from "../Hrd/Pages/Employee/DetailEmployee"; 
@@ -75,7 +75,7 @@ export const AppRouter = () => {
                 <Route path='/notes/detail/:id' element={<NoteDetail />} />
                 {/* Pengajuan */}
                 <Route path='/list-pengajuan' element={<ListPengajuanHrd />} />
-                <Route path='/perizinan/detail/:id' element={<DetailPerizinan />} />
+                <Route path='/perizinan/detail/:id' element={<DetailPerizinanAtasan />} />
                 <Route path='/pengajuan' element={<PengajuanKaryawan />} />
                 <Route path='/pengajuan/me' element={<ListPerizinanKaryawan />} />
                 {/* Employee */}

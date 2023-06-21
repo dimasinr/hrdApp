@@ -55,6 +55,16 @@ function Dashboard() {
     const itemsPerPage = 50;
     const pageCount = Math.ceil(presence_paginate.count / itemsPerPage);
 
+    function dateContract(x){
+      if(x > 12){
+        return 1
+      }else{
+        return x
+      }
+    }
+
+    const contractmonth = dateContract(monthToday)
+
       const getOffDay = () => {
         axios.get(`${BASE_URL}/api/dashboard/employee-dashboard/?limit=50&offset=${offSet}`,{
           headers: {
@@ -101,7 +111,7 @@ function Dashboard() {
     }
 
     const getContractEndEmployee = () => {
-      axios.get(`${BASE_URL}/api/dashboard/contract-end/${monthToday}/${yearToday}/`,{
+      axios.get(`${BASE_URL}/api/dashboard/contract-end/${contractmonth}/${yearToday}/`,{
         headers: {
           "Authorization" : `Token ${USER_TOKEN}`
         }
