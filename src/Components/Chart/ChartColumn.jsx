@@ -42,6 +42,9 @@ export const ColumnChartKeterangan = ({data}) => {
           text: 'Jumlah',
         },
       },
+      legend: {
+        enabled: true,
+      },
       series: [
         { name: `${dataHasil[0]} Tidak Masuk`, data: seriesData.map((value) => value[0]) },
         { name: `${dataHasil[1]} Sakit`, data: seriesData.map((value) => value[1]) },
