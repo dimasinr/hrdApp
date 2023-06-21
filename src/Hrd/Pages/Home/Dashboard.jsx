@@ -59,11 +59,12 @@ function Dashboard() {
       if(x > 12){
         return 1
       }else{
-        return x
+        return x+1
       }
     }
 
     const contractmonth = dateContract(monthToday)
+    console.log(contractmonth)
 
       const getOffDay = () => {
         axios.get(`${BASE_URL}/api/dashboard/employee-dashboard/?limit=50&offset=${offSet}`,{
