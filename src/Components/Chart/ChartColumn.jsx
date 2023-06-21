@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
 
 function calculateCol(data) {
   var hasil = [];
@@ -22,42 +23,35 @@ function calculateCol(data) {
 export const ColumnChartKeterangan = ({data}) => {
   const categories = Object.keys(data);
   const seriesData = Object.values(data).map((value) => Object.values(value));
-  console.log(seriesData)
-  const dataHasil = calculateCol(seriesData)
-  console.log(dataHasil)
+  // const dataHasil = calculateCol(seriesData);
 
-  useEffect(() => {
-    const options = {
-      chart: {
-        type: 'column',
-      },
+  const options = {
+    chart: {
+      type: 'column',
+    },
+    title: {
+      text: 'Grafik Data Karyawan',
+    },
+    xAxis: {
+      categories: categories,
+    },
+    yAxis: {
       title: {
-        text: 'Grafik Data Karyawan',
+        text: 'Jumlah',
       },
-      xAxis: {
-        categories: categories,
-      },
-      yAxis: {
-        title: {
-          text: 'Jumlah',
-        },
-      },
-      legend: {
-        enabled: true,
-      },
-      series: [
-        { name: `${dataHasil[0]} Tidak Masuk`, data: seriesData.map((value) => value[0]) },
-        { name: `${dataHasil[1]} Sakit`, data: seriesData.map((value) => value[1]) },
-        { name: `${dataHasil[2]} Izin`, data: seriesData.map((value) => value[2]) },
-        { name: `${dataHasil[3]} Cuti`, data: seriesData.map((value) => value[3]) },
-      ],
-    };
+    },
+    legend: {
+      enabled: true,
+    },
+    series: [
+      { name: `Tidak Masuk`, data: seriesData.map((value) => value[0]) },
+      { name: `Sakit`, data: seriesData.map((value) => value[1]) },
+      { name: `Izin`, data: seriesData.map((value) => value[2]) },
+      { name: `Cuti`, data: seriesData.map((value) => value[3]) },
+    ],
+  };
 
-    // Membuat grafik kolom menggunakan konfigurasi yang telah ditentukan
-    Highcharts.chart('column-chart-container', options);
-  }, [categories, dataHasil, seriesData]);
-
-  return <div id="column-chart-container"></div>;
+  return <HighchartsReact highcharts={Highcharts} options={options} />;
 };
 
 export const ColumnChartPresence = ({ data }) => {
