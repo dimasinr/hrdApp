@@ -7,9 +7,11 @@ import { BASE_URL, USER_TOKEN, NAMES } from '../fetch/fetch'
 import StatistikUser from './Components/StatistikUser'
 import { datesUpt } from '../Components/utilsFunction/functionUtils'
 import { hitungDurasi } from './Components/Utils/utils'
+import { useNavigate } from 'react-router-dom'
 
 function DashboardKaryawan() {
 
+  const navigate = useNavigate()
   const [users, setUsers] = React.useState([])
   
   const getListPengajuan = () => {
@@ -45,6 +47,11 @@ function DashboardKaryawan() {
                   <br />
                   Sudah Bekerja Selama : {hitungDurasi(users.employee_joined)}
               </Col>
+              <div className="d-flex justify-content-end">
+                <button onClick={() => {
+                  navigate('/change-password/employee/')
+                }} className="btn text-primary">Change Password</button>
+              </div>
           </div>
         </div>
 

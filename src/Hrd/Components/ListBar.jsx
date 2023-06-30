@@ -209,9 +209,9 @@ return (
       </Link>
       <Divider />
         <small className='text-secondary container'>Pengaturan</small>
-        {/* <Link to="/settings/" style={{ textDecoration:'none', color:'black' }}> */}
-        <ListItem disablePadding>
-          <Tooltip title='Belum tersedia'>
+        {/* <Link to="/settings/employee/" style={{ textDecoration:'none', color:'black' }}>
+        <ListItem disablePadding className={side_name === 'settings' ? "side_col" : "side_no_col" }>
+          <Tooltip title='Pengaturan Akun'>
             <ListItemButton>
               <ListItemIcon>
                 <Settings sx={{ color:'#A8A8A8' }} />
@@ -220,7 +220,7 @@ return (
             </ListItemButton>
           </Tooltip>
           </ListItem>
-        {/* </Link> */}
+        </Link> */}
         <ListItem disablePadding>
           <ListItemButton onClick={logout}>
             <ListItemIcon>

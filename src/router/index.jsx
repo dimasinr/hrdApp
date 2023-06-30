@@ -47,6 +47,7 @@ import SelfListPresence from "../Karyawan/Presence/ListPresence";
 import SelfEmployeePresence from "../Karyawan/Presence/EmployeePresenceAnalysis";
 import SelfEmployeeAnalisisPresence from "../Karyawan/Presence/AnalisaPresence";
 import NotesKaryawan from "../Karyawan/NotesKaryawan";
+import ChangePassword from "../Karyawan/ChangePassword";
 
 import { AuthContext } from "../Context/AuthContext";
 
@@ -121,6 +122,7 @@ export const AppRouter = () => {
                 <Route path='/employee/presence/' element={<SelfEmployeePresence />} />
                 <Route path='/employee/presence/:month_id/:year_id' element={<SelfEmployeeAnalisisPresence />} />
                 <Route path='/notes/employee/' element={<NotesKaryawan />} />
+                <Route path='/change-password/employee/' element={<ChangePassword />} />
             </React.Fragment>
             : null
        } 
