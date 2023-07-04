@@ -153,7 +153,7 @@ const handlePas = () => {
                                
                                     <Col md={12} className='mb-2 text-secondary d-flex justify-content-between'>
                                       <Box>
-                                        <TextField placeholder='Nama Karyawan' sx={{ mt:1, mr:2 }} value={searchEmployee} onChange={e => setSearchEmployee(e.target.value)} />
+                                        <TextField placeholder='Nama Karyawan' sx={{ mt:1, mr:2 }} value={searchEmployee} autoComplete='off' onChange={e => setSearchEmployee(e.target.value)} />
                                       </Box>
                                       <Tooltip sx={{ mt:1 }} title='Tambah Karyawan'>
                                         <button onClick={handleClickOpen} className='btn text-primary' style={{ borderRadius: '12px' }}><PersonAddAlt1 /></button>
