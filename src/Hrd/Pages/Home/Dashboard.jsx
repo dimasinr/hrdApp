@@ -55,16 +55,6 @@ function Dashboard() {
     const itemsPerPage = 50;
     const pageCount = Math.ceil(presence_paginate.count / itemsPerPage);
 
-    function dateContract(x){
-      if(x > 12){
-        return 1
-      }else{
-        return x+1
-      }
-    }
-
-    const contractmonth = dateContract(monthToday)
-
       const getOffDay = () => {
         axios.get(`${BASE_URL}/api/dashboard/employee-dashboard/?limit=50&offset=${offSet}`,{
           headers: {
