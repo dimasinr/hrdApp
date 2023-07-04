@@ -64,7 +64,6 @@ function Dashboard() {
     }
 
     const contractmonth = dateContract(monthToday)
-    console.log(contractmonth)
 
       const getOffDay = () => {
         axios.get(`${BASE_URL}/api/dashboard/employee-dashboard/?limit=50&offset=${offSet}`,{
@@ -112,7 +111,7 @@ function Dashboard() {
     }
 
     const getContractEndEmployee = () => {
-      axios.get(`${BASE_URL}/api/dashboard/contract-end/${contractmonth}/${yearToday}/`,{
+      axios.get(`${BASE_URL}/api/dashboard/contract-end/${yearToday}/`,{
         headers: {
           "Authorization" : `Token ${USER_TOKEN}`
         }
