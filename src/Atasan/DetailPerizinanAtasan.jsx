@@ -2,7 +2,7 @@ import React,{useState} from 'react'
 import SideBar from '../Hrd/Components/SideBar'
 import { useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
-import { BASE_URL, USER_TOKEN } from '../fetch/fetch'
+import { BASE_URL, ROLES, USER_TOKEN } from '../fetch/fetch'
 import Swal from 'sweetalert2'
 import { TextField, Box, RadioGroup, Radio, FormControl, FormControlLabel, Tooltip, CircularProgress } from '@mui/material'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -173,6 +173,63 @@ function DetailPerizinanAtasan() {
       return 0
     }
 }
+
+const pengajuanDelete = async e => {
+  try{
+      const res = await axios({
+          method: 'delete',
+          url:`${BASE_URL}/api/submission/employees/${id}/`,
+          headers: {
+              "Authorization" : `Token ${USER_TOKEN}`
+            }
+      })
+      console.log(res)
+      Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          showConfirmButton: false,
+          timer: 1500
+          })
+      navigate(-1)
+  }catch(error){
+      if( error.response &&
+          error.response.status >= 400 &&
+          error.response.status <= 500
+          ){
+          Swal.fire({
+              icon: 'error',
+              title: 'Failed',
+              showConfirmButton: false,
+              timer: 1500
+              })
+          console.log(error)
+      }
+  }
+};
+
+
+const handlePenghapusan = () => {
+      Swal.fire({
+          title: 'Anda Menyetujui Ini?',
+          text: "Anda tidak dapat mengembalikan data ini lagi",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire(
+              'Berhasil!',
+              `Berhasil menghapus Perizinan`,
+              'success'
+            )
+            pengajuanDelete()
+          }
+        })
+      }
+
+
 
   return (
     <div id='image__backgrounds' className='d-flex'>
@@ -348,7 +405,10 @@ function DetailPerizinanAtasan() {
 
                     {
                         permission_pi === 'disetujui'?
-                        null
+                        ROLES === 'hrd' ?
+                        <div className="d-flex justify-content-end">
+                          <button onClick={handlePenghapusan} className='btn text-danger'>Hapus Pengajuan</button>
+                        </div>: null
                         : 
                         <button onClick={perizinanAdm} className='btn btn-primary'>Submit</button>
                     }

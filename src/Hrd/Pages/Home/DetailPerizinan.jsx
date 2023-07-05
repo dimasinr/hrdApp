@@ -212,7 +212,7 @@ function DetailPerizinan() {
                   pengajuanDelete()
                 }
               })
-              }
+            }
 
     function hours(value) {
     if (value !== null) {
