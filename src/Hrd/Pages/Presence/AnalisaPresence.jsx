@@ -116,8 +116,8 @@ function AnalisaPresence() {
   const startDate = new Date(`${year_id}-${month_id}-01`);
   const endDate = new Date(`${year_id}-${month_id}-${getEndDate(year_id, month_id)}`);
   const weekendDates = getWeekendDates(startDate, endDate);
-
-    
+  console.log(startDate, endDate, getEndDate(year_id, month_id))
+  console.log(weekendDates)
   const actualDate = mergedDataPresence(attendance, weekendDates)
   function namesE(name){
     if(name.replace(/%20/g, " ") === 'Kunut Catur'){
