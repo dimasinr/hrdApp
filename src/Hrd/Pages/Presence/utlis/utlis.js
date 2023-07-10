@@ -433,3 +433,11 @@ export function kurlebs(jamFaktual, jamAktual){
   return working_hour;
   
 }
+
+export function getEndDate(year_id, month_id) {
+  var endDate = new Date(`${year_id}-${month_id}-31`);
+  endDate.setMonth(endDate.getMonth() + 1);
+  endDate.setDate(endDate.getDate() - 1);
+  var tanggalTerakhir = endDate.getDate();
+  return tanggalTerakhir;
+}

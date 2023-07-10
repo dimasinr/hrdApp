@@ -11,7 +11,7 @@ import { bulan } from '../../Components/utilsFunction/arrayFunction'
 import { sumTotal, sumHE, totalAtt, formulaSumActual, asce, ascr, dividDed } from './utlis/utlis'
 import { NAMES, USER_ID } from '../../fetch/fetch'
 import { changeDayName, datesUpt, workHour, totalWorkHour } from '../../Components/utilsFunction/functionUtils'
-import { getWeekendDates, mergedDataPresence, countDataKeterangan } from '../../Hrd/Pages/Presence/utlis/utlis'
+import { getWeekendDates, mergedDataPresence, countDataKeterangan, getEndDate } from '../../Hrd/Pages/Presence/utlis/utlis'
 
 function SelfEmployeeAnalisisPresence() {
   const tableRef = React.useRef("");
@@ -109,8 +109,22 @@ function SelfEmployeeAnalisisPresence() {
       sheet: `Analisa Absensi ${NAMES && NAMES.replace(/%20/g, " ")} Bulan ${bulan[month_a].month}`,
   })
 
+  var tanggalSekarang = new Date();
+
+  // Mengatur tanggal ke 1 untuk bulan berikutnya
+  tanggalSekarang.setDate(1);
+  tanggalSekarang.setMonth(month_id + 1);
+
+  // Mengurangi 1 hari dari tanggal saat ini untuk mendapatkan tanggal terakhir bulan ini
+  tanggalSekarang.setDate(tanggalSekarang.getDate() - 1);
+
+  // Mengambil tanggal terakhir bulan ini
+  var tanggalTerakhir = tanggalSekarang.getDate();
+
+  console.log(tanggalTerakhir);
+
   const startDate = new Date(`${year_id}-${month_id}-01`);
-  const endDate = new Date(`${year_id}-${month_id}-31`);
+  const endDate = new Date(`${year_id}-${month_id}-${getEndDate(year_id, month_id)}`);
   const weekendDates = getWeekendDates(startDate, endDate);
 
     

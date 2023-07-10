@@ -8,7 +8,7 @@ import Table from 'react-bootstrap/Table';
 import { CircularProgress, Tooltip } from '@mui/material'
 import { useDownloadExcel } from 'react-export-table-to-excel'
 import { bulan } from '../../../Components/utilsFunction/arrayFunction'
-import { sumTotal, sumHE, totalAtt, formulaSumActual, asce, ascr, dividDed, getWeekendDates, mergedDataPresence, countDataKeterangan } from './utlis/utlis'
+import { sumTotal, sumHE, totalAtt, formulaSumActual, asce, ascr, dividDed, getWeekendDates, mergedDataPresence, countDataKeterangan, getEndDate } from './utlis/utlis'
 import { changeDayName, datesUpt, workHour, totalWorkHour, totalWorking } from '../../../Components/utilsFunction/functionUtils'
 // import { Table, TableHead, TableBody, td, } from '@mui/material'
 
@@ -113,9 +113,8 @@ function AnalisaPresence() {
       sheet: `Analisa Absensi ${name_id && name_id.replace(/%20/g, " ")} Bulan ${bulan[month_a].month}`,
   })
 
-  const lastWorkingDate = attendance[attendance.length - 1]?.working_date;
-  const startDate = new Date(`2023-${month_id}-01`);
-  const endDate = new Date(lastWorkingDate);
+  const startDate = new Date(`${year_id}-${month_id}-01`);
+  const endDate = new Date(`${year_id}-${month_id}-${getEndDate(year_id, month_id)}`);
   const weekendDates = getWeekendDates(startDate, endDate);
 
     
