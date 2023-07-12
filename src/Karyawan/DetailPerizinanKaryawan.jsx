@@ -32,6 +32,7 @@ function DetailPerizinanKaryawan() {
     const [suspended_end, setSuspendedEnd] = useState([])
 
     const pengajuan_id = location.pathname.split('/')[3]
+    console.log(pengajuan_id)
 
     function DateTimes(x){
       let deta = x.toString()
@@ -95,15 +96,38 @@ function DetailPerizinanKaryawan() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     React.useEffect(() => getPerizinan(), [])
 
-    const JumlahCut = () =>{
-        Swal.fire({
-            icon: 'error',
-            title: `Gagal`,
-            text: `Jumlah cuti tidak mencukupi`,
-            showConfirmButton: false,
-            timer: 2500
+    const pengajuanDelete = async e => {
+      try{
+          const res = await axios({
+              method: 'delete',
+              url:`${BASE_URL}/api/submission/employees/${pengajuan_id}/`,
+              headers: {
+                  "Authorization" : `Token ${USER_TOKEN}`
+                }
           })
-    }
+          console.log(res)
+          Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              showConfirmButton: false,
+              timer: 1500
+              })
+          navigate(-1)
+      }catch(error){
+          if( error.response &&
+              error.response.status >= 400 &&
+              error.response.status <= 500
+              ){
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Failed',
+                  showConfirmButton: false,
+                  timer: 1500
+                  })
+              console.log(error)
+          }
+      }
+    };
 
     const getCuti = () => {
         axios.get(`${BASE_URL}/users/employees/${USER_ID}/`,{
@@ -118,12 +142,6 @@ function DetailPerizinanKaryawan() {
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
       React.useEffect(() => getCuti(), [])
-
-      function fax(x,y){
-        return x-y
-      }
-
-      const har = fax(sisaCuti, jumlah_hari)
 
       function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
@@ -271,7 +289,7 @@ function DetailPerizinanKaryawan() {
                 </div>
                 {permission === null ?
                 <div className="d-flex justify-content-end mt-2 mb-4">
-                    <button onClick={har < '1' ? JumlahCut : JumlahCut} className='btn text-danger'>Hapus Pengajuan</button>
+                    <button onClick={pengajuanDelete} className='btn text-danger'>Hapus Pengajuan</button>
                 </div>
                   : null
                   }
