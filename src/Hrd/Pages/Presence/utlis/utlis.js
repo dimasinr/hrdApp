@@ -454,3 +454,14 @@ export function getEndDate(year_id, month_id) {
   var tanggalTerakhir = endDate.getDate();
   return tanggalTerakhir;
 };
+
+export function validateMonthToday(year_id, month_id){
+  const date = new Date()
+  let month = date.getMonth()
+  let year = date.getFullYear()
+  if(year <= year_id & month <= month_id){
+    return true
+  }else{
+    return false
+  }
+}

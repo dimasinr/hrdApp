@@ -8,7 +8,7 @@ import Table from 'react-bootstrap/Table';
 import { CircularProgress, Tooltip } from '@mui/material'
 import { useDownloadExcel } from 'react-export-table-to-excel'
 import { bulan } from '../../../Components/utilsFunction/arrayFunction'
-import { sumTotal, sumHE, totalAtt, formulaSumActual, asce, ascr, dividDed, getWeekendDates, mergedDataPresence, countDataKeterangan, getEndDate } from './utlis/utlis'
+import { sumTotal, sumHE, totalAtt, formulaSumActual, asce, ascr, dividDed, getWeekendDates, validateMonthToday, mergedDataPresence, countDataKeterangan, getEndDate } from './utlis/utlis'
 import { changeDayName, datesUpt, workHour, totalWorkHour, totalWorking } from '../../../Components/utilsFunction/functionUtils'
 // import { Table, TableHead, TableBody, td, } from '@mui/material'
 
@@ -214,59 +214,66 @@ function AnalisaPresence() {
                                   <tr>
                                       <td colSpan={11}><h5>Analisa Absensi</h5></td>
                                   </tr>
-                                  <tr>
-                                      <td colSpan={8}>Hari Kerja Efektif</td>
-                                      <td colSpan={3}>
-                                        {countDataKeterangan(attendance, 'tidak masuk') === 0 ?
-                                        totalAtt(attendance.length, TotalAttendance.employee_lembur) :
-                                        totalAtt(attendance.length, TotalAttendance.employee_lembur)
-                                      }
-                                      Hari
-                                      </td>
-                                  </tr> 
-                                  <tr>
-                                      <td colSpan={8}>Tidak masuk/Sakit/Izin/Cuti</td>
-                                      <td colSpan={3}>
-                                        {countDataKeterangan(attendance, 'tidak masuk')}
-                                        /
-                                        {countDataKeterangan(attendance, 'sakit')}
-                                        /
-                                        {countDataKeterangan(attendance, 'izin')}
-                                        /
-                                        {countDataKeterangan(attendance, 'cuti')}
-                                        </td>
-                                  </tr> 
-                                  <tr>
-                                    <Tooltip title={`${namesE(name_id)} Jam kerja anda di kali dengan Hari kerja anda yang seharusnya dalam 1 bulan`} arrow>
-                                      <td colSpan={8}>Jumlah Jam Kerja Efektif</td>
-                                    </Tooltip>
-                                      <td colSpan={3}>
-                                      {totalWorkHour(
-                                        sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur), countDataKeterangan(attendance, 'tidak masuk'))
-                                      )}
-                                      </td>
-                                  </tr> 
-                                  <tr>
-                                      <td colSpan={8}>Jumlah Jam Kerja Aktual</td>
-                                      <td colSpan={3}>
-                                        {totalWorkHour(
-                                        dividDed(sumData, sumDataWork) 
-                                        )}
-                                      </td>
-                                  </tr> 
-                                  <tr>
-                                      <td colSpan={8}>Jumlah Jam Lembur</td>
-                                      <td colSpan={3}>{totalWorkHour(lemburTotal)}</td>
-                                  </tr> 
-                                  <tr>
-                                      <td colSpan={8}>(Kurang/Lebih) Jam Kerja</td>
-                                      {kurangLeb.toString().length !== 0 ?
-                                          <td colSpan={3}>
-                                            {totalWorkHour(kurangLeb)} 
-                                          </td>
-                                          : null
-                                        } 
-                                  </tr> 
+                                 {validateMonthToday(year_id, month_id) === false ? 
+                                     <React.Fragment>
+                                     <tr>
+                                         <td colSpan={8}>Hari Kerja Efektif</td>
+                                         <td colSpan={3}>
+                                           {countDataKeterangan(attendance, 'tidak masuk') === 0 ?
+                                           totalAtt(attendance.length, TotalAttendance.employee_lembur) :
+                                           totalAtt(attendance.length, TotalAttendance.employee_lembur)
+                                         }
+                                         Hari
+                                         </td>
+                                     </tr> 
+                                     <tr>
+                                         <td colSpan={8}>Tidak masuk/Sakit/Izin/Cuti</td>
+                                         <td colSpan={3}>
+                                           {countDataKeterangan(attendance, 'tidak masuk')}
+                                           /
+                                           {countDataKeterangan(attendance, 'sakit')}
+                                           /
+                                           {countDataKeterangan(attendance, 'izin')}
+                                           /
+                                           {countDataKeterangan(attendance, 'cuti')}
+                                           </td>
+                                     </tr> 
+                                     <tr>
+                                       <Tooltip title={`${namesE(name_id)} Jam kerja anda di kali dengan Hari kerja anda yang seharusnya dalam 1 bulan`} arrow>
+                                         <td colSpan={8}>Jumlah Jam Kerja Efektif</td>
+                                       </Tooltip>
+                                         <td colSpan={3}>
+                                         {totalWorkHour(
+                                           sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur), countDataKeterangan(attendance, 'tidak masuk'))
+                                         )}
+                                         </td>
+                                     </tr> 
+                                     <tr>
+                                         <td colSpan={8}>Jumlah Jam Kerja Aktual</td>
+                                         <td colSpan={3}>
+                                           {totalWorkHour(
+                                           dividDed(sumData, sumDataWork) 
+                                           )}
+                                         </td>
+                                     </tr> 
+                                     <tr>
+                                         <td colSpan={8}>Jumlah Jam Lembur</td>
+                                         <td colSpan={3}>{totalWorkHour(lemburTotal)}</td>
+                                     </tr> 
+                                     <tr>
+                                         <td colSpan={8}>(Kurang/Lebih) Jam Kerja</td>
+                                         {kurangLeb.toString().length !== 0 ?
+                                             <td colSpan={3}>
+                                               {totalWorkHour(kurangLeb)} 
+                                             </td>
+                                             : null
+                                           } 
+                                     </tr> 
+                                     </React.Fragment>
+                                     : <React.Fragment>
+                                      <tr><td>Tidak ada Analisa</td></tr>
+                                     </React.Fragment>
+                                  }
                                   
                               </tbody>
                               </Table>

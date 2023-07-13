@@ -11,7 +11,7 @@ import { bulan } from '../../Components/utilsFunction/arrayFunction'
 import { sumTotal, sumHE, totalAtt, formulaSumActual, asce, ascr, dividDed } from './utlis/utlis'
 import { NAMES, USER_ID } from '../../fetch/fetch'
 import { changeDayName, datesUpt, workHour, totalWorkHour } from '../../Components/utilsFunction/functionUtils'
-import { getWeekendDates, mergedDataPresence, countDataKeterangan, getEndDate } from '../../Hrd/Pages/Presence/utlis/utlis'
+import { getWeekendDates, mergedDataPresence, countDataKeterangan, getEndDate, validateMonthToday } from '../../Hrd/Pages/Presence/utlis/utlis'
 
 function SelfEmployeeAnalisisPresence() {
   const tableRef = React.useRef("");
@@ -220,7 +220,9 @@ function SelfEmployeeAnalisisPresence() {
                                 <TableRow>
                                     <TableCell colSpan={11}><h5>Analisa Absensi</h5></TableCell>
                                 </TableRow>
-                                <TableRow>
+                                {validateMonthToday(year_id, month_id) === false ?
+                                <React.Fragment>
+                                  <TableRow>
                                     <TableCell colSpan={8}>Hari Kerja Efektif</TableCell>
                                     <TableCell colSpan={3}>{
                                       totalAtt(attendance.length, TotalAttendance.employee_lembur) >= 0 ?
@@ -268,6 +270,13 @@ function SelfEmployeeAnalisisPresence() {
                                           } 
                                       </TableCell>
                                 </TableRow> 
+                                </React.Fragment>
+                                :
+                                <TableRow>
+                                <TableCell colSpan={11}><h6>Tidak ada analisa Absensi</h6></TableCell>
+                            </TableRow>
+                                }
+                                
                                 
                             </TableBody>
                           </Table>
