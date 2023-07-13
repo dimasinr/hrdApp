@@ -337,23 +337,38 @@ function getDayOfWeek(dayNumber) {
 
 // data tanggal weekend
 export function getWeekendDates(startDate, endDate) {
-  const weekendDates = [];
+  const allDates = [];
   const currentDate = new Date(startDate);
 
   while (currentDate <= endDate) {
-    if (currentDate.getDay() === 6 || currentDate.getDay() === 0) {
-      const date = currentDate.getDate();
-      const month = currentDate.getMonth() + 1;
-      const year = currentDate.getFullYear();
-      const formattedDate = `${year}-${month < 10 ? '0' + month : month}-${date < 10 ? '0' + date : date}`;
-      const day = getDayOfWeek(currentDate.getDay());
+    const date = currentDate.getDate();
+    const month = currentDate.getMonth() + 1;
+    const year = currentDate.getFullYear();
+    const formattedDate = `${year}-${month < 10 ? '0' + month : month}-${date < 10 ? '0' + date : date}`;
+    const day = getDayOfWeek(currentDate.getDay());
       
-      weekendDates.push({ working_date: formattedDate, days: day });
-    }
+    allDates.push({ working_date: formattedDate, days: day });
     currentDate.setDate(currentDate.getDate() + 1);
   }
 
-  return weekendDates;
+  return allDates;
+  // const weekendDates = [];
+  // const currentDate = new Date(startDate);
+
+  // while (currentDate <= endDate) {
+  //   if (currentDate.getDay() === 6 || currentDate.getDay() === 0) {
+  //     const date = currentDate.getDate();
+  //     const month = currentDate.getMonth() + 1;
+  //     const year = currentDate.getFullYear();
+  //     const formattedDate = `${year}-${month < 10 ? '0' + month : month}-${date < 10 ? '0' + date : date}`;
+  //     const day = getDayOfWeek(currentDate.getDay());
+      
+  //     weekendDates.push({ working_date: formattedDate, days: day });
+  //   }
+  //   currentDate.setDate(currentDate.getDate() + 1);
+  // }
+
+  // return weekendDates;
 }
 
 export function mergedDataPresence(data1, data2) {
