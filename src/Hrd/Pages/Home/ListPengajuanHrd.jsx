@@ -44,7 +44,7 @@ function ListPengajuanHrd() {
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    React.useEffect(() => getListPengajuan(), [perizinan, start_dates, end_dates, employees])
+    React.useEffect(() => getListPengajuan(), [perizinan, start_dates, end_dates, employees, offSet, itemsPerPage])
   
     const handleChange = (event) => {
       setPerizinan(event.target.value);
@@ -106,7 +106,6 @@ function ListPengajuanHrd() {
                                                 <MenuItem value={'ijin'}>Ijin</MenuItem>
                                                 <MenuItem value={'sakit'}>Sakit</MenuItem>
                                                 <MenuItem value={'cuti'}>Cuti</MenuItem>
-                                                <MenuItem value={'lembur'}>Lembur</MenuItem>
                                                 <MenuItem value={''}>All</MenuItem>
                                               </Select>
                                             </FormControl>

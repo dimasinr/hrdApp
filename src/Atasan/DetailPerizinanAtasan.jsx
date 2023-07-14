@@ -267,7 +267,6 @@ const handlePenghapusan = () => {
                         <Col md={8}>
                             <FormControlLabel disabled value="izin" control={<Radio />} label="Izin" />
                             <FormControlLabel disabled value="cuti" control={<Radio />} label="Cuti" />
-                            <FormControlLabel disabled value="lembur" control={<Radio />} label="Lembur" />
                             <FormControlLabel disabled value="sakit" control={<Radio />} label="Sakit" />
                         </Col>
                     </RadioGroup>

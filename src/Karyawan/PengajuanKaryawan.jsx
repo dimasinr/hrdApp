@@ -177,7 +177,6 @@ function PengajuanKaryawan() {
                         <Col md={8}>
                             <FormControlLabel value="izin" control={<Radio />} label="Izin" />
                             <FormControlLabel value="cuti" control={<Radio />} label="Cuti" />
-                            <FormControlLabel value="lembur" control={<Radio />} label="Lembur" />
                             <FormControlLabel value="sakit" control={<Radio />} label="Sakit" />
                         </Col>
                     </RadioGroup>

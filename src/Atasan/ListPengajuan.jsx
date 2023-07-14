@@ -94,7 +94,6 @@ function ListPengajuan() {
                                                 <MenuItem value={'ijin'}>Ijin</MenuItem>
                                                 <MenuItem value={'sakit'}>Sakit</MenuItem>
                                                 <MenuItem value={'cuti'}>Cuti</MenuItem>
-                                                <MenuItem value={'lembur'}>Lembur</MenuItem>
                                                 <MenuItem value={''}>All</MenuItem>
                                               </Select>
                                             </FormControl>

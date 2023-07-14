@@ -174,7 +174,6 @@ function DetailPerizinanKaryawan() {
                         <Col md={8}>
                             <FormControlLabel value="izin" disabled control={<Radio />} label="Izin" />
                             <FormControlLabel value="cuti" disabled control={<Radio />} label="Cuti" />
-                            <FormControlLabel value="lembur" disabled control={<Radio />} label="Lembur" />
                             <FormControlLabel value="sakit" disabled control={<Radio />} label="Sakit" />
                         </Col>
                     </RadioGroup>

@@ -175,7 +175,7 @@ return (
       </Link>
         <Divider />
         <small className='text-secondary container'>Absensi</small>
-        <Link to='/presence/list' style={{ textDecoration:'none', color:'black' }}>
+        {/* <Link to='/presence/list' style={{ textDecoration:'none', color:'black' }}>
         <ListItem disablePadding className={side_name === 'presence' ? "side_col" : "side_no_col" }>
           <ListItemButton>
             <ListItemIcon>
@@ -184,7 +184,7 @@ return (
             <ListItemText primary='Absensi Karyawan' />
           </ListItemButton>
         </ListItem>
-      </Link>
+      </Link> */}
       <Link to='/employee/presence' style={{ textDecoration:'none', color:'black' }}>
         <ListItem disablePadding className={side_name === 'employee' ? "side_col" : "side_no_col" }>
           <ListItemButton>
@@ -203,7 +203,7 @@ return (
             <ListItemIcon>
               <AutoStories sx={side_name === 'notes' ? {color: '#ffffff'} : { color:'#0B305A' }} />
             </ListItemIcon>
-            <ListItemText primary='Catatan Cuti' />
+            <ListItemText primary='Catatan Admin Hrd' />
           </ListItemButton>
         </ListItem>
       </Link>
