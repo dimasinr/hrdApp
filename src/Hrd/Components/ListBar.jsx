@@ -203,7 +203,7 @@ return (
             <ListItemIcon>
               <AutoStories sx={side_name === 'notes' ? {color: '#ffffff'} : { color:'#0B305A' }} />
             </ListItemIcon>
-            <ListItemText primary='Catatan Admin Hrd' />
+            <ListItemText primary='Catatan Admin HRD' />
           </ListItemButton>
         </ListItem>
       </Link>
