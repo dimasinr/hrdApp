@@ -268,7 +268,7 @@ function DetailPresence() {
                             </LocalizationProvider>
                          </Box>
                          <Box sx={{ display:'flex', mr:2, mb:2 }}>
-                          <TextField sx={{ mr:2 }} value={keterangan} onChange={e => setKeterangan(e.target.value)} type='text' label='Keterangan' />
+                          <TextField sx={{ mr:2 }} value={keterangan} onChange={e => setKeterangan(e.target.value)} type='text' disabled label='Keterangan' />
                          </Box>
                       <div className="d-flex justify-content-end">
                             <button onClick={saveAttendance} className="btn text-primary" style={{ marginRight:'20px' }}>Simpan</button>

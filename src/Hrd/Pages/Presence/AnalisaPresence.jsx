@@ -271,7 +271,7 @@ function AnalisaPresence() {
                                      </tr> 
                                      </React.Fragment>
                                      : <React.Fragment>
-                                      <tr><td>Tidak ada Analisa</td></tr>
+                                      <tr><td colSpan={8}>Tidak ada Analisa</td></tr>
                                      </React.Fragment>
                                   }
                                   
