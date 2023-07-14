@@ -371,7 +371,7 @@ const postNewPassword = async e => {
                                             </Box>
                                             <Box sx={{ mr:2 }}>
                                                 <TextField value={email} onChange={e => setEmail(e.target.value)} id='email' label='Email' sx={{ mt:3, mr:1 }} variant='outlined' />
-                                                <TextField value={sisa_cuti} onChange={e => setSisaCuti(e.target.value)} type='number' label='Jatah Cuti' sx={{ mt:3, mr:1 }} variant='outlined' />
+                                                <TextField value={sisa_cuti} onChange={e => setSisaCuti(e.target.value)} type='number' label='Sisa Cuti' sx={{ mt:3, mr:1 }} variant='outlined' />
                                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                     <MobileDatePicker
                                                     label="Tanggal Masuk"
