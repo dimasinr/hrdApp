@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import SideBar from '../Hrd/Components/SideBar'
-import { API_KEY, BASE_URL } from '../fetch/fetch'
+import { BASE_URL, USER_TOKEN } from '../fetch/fetch'
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -29,7 +29,7 @@ function ChangePassword() {
                 url:`${BASE_URL}/users/employee/change-password/`,
                 data: formData,
                 headers: {
-                    "Authorization" : `Token ${API_KEY}`
+                    "Authorization" : `Token ${USER_TOKEN}`
                   }
             })
             console.log(res)
