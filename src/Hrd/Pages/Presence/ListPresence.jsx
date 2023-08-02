@@ -75,7 +75,7 @@ export default function ListPresence() {
   };
 
   const getEmployeeData = () => {
-    axios.get(`${BASE_URL}/users/employee/search/`,{
+    axios.get(`${BASE_URL}/users/employee/search/?active=true`,{
       headers: {
         "Authorization" : 'Token ' + USER_TOKEN
       }
