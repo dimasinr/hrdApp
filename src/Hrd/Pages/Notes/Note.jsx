@@ -129,7 +129,7 @@ function Note() {
 
   const [employees, setEmployees] = React.useState([])
   const getEmployees = () => {
-    axios.get(`${BASE_URL}/users/employee/name/`,{
+    axios.get(`${BASE_URL}/users/employee/search/?active=True`,{
       headers: {
         "Authorization" : 'Token ' + USER_TOKEN
       }
