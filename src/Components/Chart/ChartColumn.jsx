@@ -48,6 +48,7 @@ export const ColumnChartKeterangan = ({data}) => {
         { name: `${dataHasil[1]} Sakit`, data: seriesData.map((value) => value[1]) },
         { name: `${dataHasil[2]} Izin`, data: seriesData.map((value) => value[2]) },
         { name: `${dataHasil[3]} Cuti`, data: seriesData.map((value) => value[3]) },
+        { name: `${dataHasil[4]} Wfh`, data: seriesData.map((value) => value[4]) },
       ],
     };
 
