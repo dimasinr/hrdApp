@@ -25,6 +25,7 @@ export default function ListPresence() {
   const [search_month, setSearchMonth] = useState([])
   const [loading, setLoading] = useState(true)
   const [open, setOpen] = useState(false)
+  const [openWfh, setOpenWfh] = useState(false)
   const [loadingBut, setLoadingBut] = useState('Tambah')
 
   const [employee_id, setEmployeeName] = React.useState('')
@@ -32,6 +33,9 @@ export default function ListPresence() {
   const [lembur_hour, setLemburHour] = React.useState('')
   const [dates, setDates] = React.useState(new Date().toISOString().slice(0,10))
   const keterangan = ""
+
+  const [start_date, setStartDate] = useState(new Date().toISOString().slice(0,10))
+  const [end_date, setEndDate] = useState(new Date().toISOString().slice(0,10))
 
   const [employeeS, setEmployeeS] = useState([])
   const [list_presence, setListPresence] = useState([])
@@ -72,6 +76,10 @@ export default function ListPresence() {
 
   const handleClickOpen = () => {
     setOpen(!open);
+  };
+
+  const handleClickOpenWFH = () => {
+    setOpenWfh(!openWfh);
   };
 
   const getEmployeeData = () => {
@@ -140,15 +148,69 @@ export default function ListPresence() {
       }
     };
 
+  const addNewAttendanceWFH = async e => {
+      try{
+          const formData = new FormData();
+          formData.append("user_id", employee_id);
+          formData.append("start_date", start_date);
+          formData.append("end_date", end_date);
+         const res = await axios({
+              method: 'post',
+              url:`${BASE_URL}/api/presence/generate-wfh/`,
+              data: formData,
+              headers: {
+                  "Authorization" : `Token ${USER_TOKEN}`
+                }
+          })
+          setOpen(false)
+          setMessage(`${res.data.message}`)
+          setStatus('info')
+          setSnack(true)
+          setLoadingBut('simpan')
+          getListPresence()
+          console.log(res)
+          }catch(error){
+              if( error.response &&
+                  error.response.status >= 400 &&
+                  error.response.status <= 500
+                  ){
+                  setLoadingBut('Tambah')
+                  setOpen(false)
+                  setMessage(`${error.response.data.message}`)
+                  setStatus('info')
+                  setSnack(true)
+                  getListPresence()
+                  console.log(error)
+              }
+          }
+        };
+
     const loadAttendance =() =>{
     setLoadingBut('loading ...')
     addNewAttendance()
     }
 
+    const loadAttendanceWFH =() =>{
+      setLoadingBut('loading ...')
+      addNewAttendanceWFH()
+      }
+
     const convDate = (newdate) => {
       let event = new Date(newdate);
       let dated = JSON.stringify(event);
       setDates(dated.slice(1, 11))
+    }
+
+    const convDateStartWFH = (newdate) => {
+      let event = new Date(newdate);
+      let dated = JSON.stringify(event);
+      setStartDate(dated.slice(1, 11))
+    }
+
+    const convDateEndWFH = (newdate) => {
+      let event = new Date(newdate);
+      let dated = JSON.stringify(event);
+      setEndDate(dated.slice(1, 11))
     }
 
     const handleGend = (event) => {
@@ -172,7 +234,7 @@ export default function ListPresence() {
                     <h4>List Absensi Karyawan</h4>
                     <small className='text-secondary'>Klik tanda dibagian action untuk detail absensinya.</small>
                   </div>
-                  <Col md={12} className='mb-2 text-secondary d-flex justify-content-between'>
+                  <Col md={12} className='mb-2 text-secondary d-flex justify-content-between align-items-center'>
                     <Box sx={{ display: 'flex' }}>
                         <TextField placeholder='Nama Lengkap' sx={{ mt:3, mr:2, mb:1 }} value={search_name} onChange={e => setSearchName(e.target.value)} />
                         <FormControl sx={{ mr:1, mt:3, minWidth: 220 }}>
@@ -197,7 +259,7 @@ export default function ListPresence() {
                       </Box>
                      
                       <Box>
-                      {/* <button className='btn btn-primary'>Search Pages</button> */}
+                      <button onClick={handleClickOpenWFH} className='btn btn-primary' style={{ marginLeft:'5px' }}>Tambah Data WFH</button>
                       <button onClick={handleClickOpen} className='btn btn-primary' style={{ marginLeft:'5px' }}>Tambah Data</button>
                       </Box>
                     </Col>
@@ -285,6 +347,68 @@ export default function ListPresence() {
               <DialogActions>
                 <Button onClick={handleClickOpen}>Tutup</Button>
                 <Button onClick={loadAttendance}>{loadingBut && loadingBut}</Button>
+              </DialogActions>
+            </Dialog>
+
+            <Dialog
+              open={openWfh}
+              TransitionComponent={Transition}
+              keepMounted
+              onClose={handleClickOpenWFH}
+              aria-describedby="alert-dialog-slide-description"
+            >
+              <DialogTitle>{"Tambah Data Karyawan WFH"}</DialogTitle>
+              <DialogContent sx={{ width:520 }}>
+                  <Box sx={{ mt:2}}>
+                    <FormControl fullWidth sx={{ mr:1, minWidth: 220 }}>
+                        <InputLabel id="division-label">Nama Karyawan</InputLabel>
+                        <Select
+                        fullWidth
+                        labelId="division"
+                        id="division"
+                        value={employee_id}
+                        onChange={handleChanged}
+                        label="Divisi"
+                        >
+                            {employeeS && employeeS.map((emp, index) => {
+                                return(
+                                    <MenuItem  value={emp.pk} key={index}>{emp.name}</MenuItem>
+                                )
+                            })}
+                        
+                        </Select>
+                    </FormControl>
+                    {/* <TextField value={employee_id} fullWidth onChange={e => setEmployeeName(e.target.value)} sx={{ mr:1 }} label='Nama Karyawan' /> */}
+                  </Box>
+                  <Box>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DesktopDatePicker
+                          label="Start WFH"
+                          inputFormat="DD MMMM YYYY"
+                          value={new Date(start_date)}
+                          onChange={(newValue) => {
+                              convDateStartWFH(newValue);
+                          }}
+                          renderInput={(params) => <TextField sx={{ mt: 2}} fullWidth variant='outlined' {...params} />}
+                          />
+                      </LocalizationProvider>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DesktopDatePicker
+                          label="End WFH"
+                          inputFormat="DD MMMM YYYY"
+                          value={new Date(end_date)}
+                          onChange={(newValue) => {
+                              convDateEndWFH(newValue);
+                          }}
+                          renderInput={(params) => <TextField sx={{ mt: 2}} fullWidth variant='outlined' {...params} />}
+                          />
+                      </LocalizationProvider>
+                  </Box>
+
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClickOpenWFH}>Tutup</Button>
+                <Button onClick={loadAttendanceWFH}>{loadingBut && loadingBut}</Button>
               </DialogActions>
             </Dialog>
 
