@@ -9,6 +9,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import Swal from 'sweetalert2';
+import { isLockedOrNot } from './utlis/utlis'
 
 function DetailPresence() {
   const navigate = useNavigate()
@@ -25,6 +26,7 @@ function DetailPresence() {
   const [lembur_end, setLemburEnd] = useState('')
   const [keterangan, setKeterangan] = useState('')
   const [working_date, setWorkingDate] = useState(new Date())
+  const [isLocked, setIsLocked] = useState(false)
 
     // snackbar
     const [snack, setSnack] = React.useState(false);
@@ -52,12 +54,15 @@ function DetailPresence() {
       setTotalJam(res.working_hour)
       setWorkingDate(res.working_date)
       setKeterangan(res.ket)
+      setIsLocked(res.is_lock)
       console.log(res)
       window.scrollTo({ top: 0, behavior: 'smooth' });
     })
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => getAttendanceEmp(), [id_att])
+
+  let presenceLock = isLockedOrNot(isLocked)
   
   const saveAttendance = async e => {
     try{
@@ -75,7 +80,7 @@ function DetailPresence() {
         if(keterangan != null){
           formData.append("ket", keterangan)
         }
-       await axios({
+       const res = await axios({
             method: 'put',
             url:`${BASE_URL}/api/presence/employees/${id_att}/`,
             data: formData,
@@ -85,7 +90,7 @@ function DetailPresence() {
         })
         setSnack(true)
         setStatus('success')
-        setMessage('data berhasil di perbaharui')
+        setMessage(`${res.data.message}`)  
         getAttendanceEmp()
         }catch(error){
             if( error.response &&
@@ -94,7 +99,7 @@ function DetailPresence() {
                 ){
                 setSnack(true)
                 setStatus('error')
-                setMessage('data gagal di perbaharui')
+                setMessage(`${error.response.data.message}`)
                 console.log(error)
             }
         }
@@ -111,7 +116,13 @@ function DetailPresence() {
           confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
           if (result.isConfirmed) {
-            deletePresences()
+            if (presenceLock === 0){
+              setSnack(true)
+              setStatus('error')
+              setMessage('Data absensi tidak dapat di hapus karena sudah di kunci')
+            }else{
+              deletePresences()
+            }
           }
         })
       }
@@ -127,7 +138,7 @@ function DetailPresence() {
             })
             setSnack(true)
             setStatus('info')
-            setMessage('Absensi berhasil dihapus')
+            setMessage(`Data Berhasil dihapus`)  
             console.log(res)
             navigate(-1)
             }catch(error){
@@ -137,7 +148,7 @@ function DetailPresence() {
                     ){
                     setSnack(true)
                     setStatus('error')
-                    setMessage('Absensi gagal di perbaharui')
+                    setMessage(`${error.response.data.message}`)
                     console.log(error)
                 }
             }

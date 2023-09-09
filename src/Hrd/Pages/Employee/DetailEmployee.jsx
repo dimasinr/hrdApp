@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react'
 import SideBar from '../../Components/SideBar';
 import { Col } from 'react-bootstrap'
@@ -51,6 +52,8 @@ function DetailEmployee() {
     const [status, setStatus] = React.useState(false);
     const [message, setMessage] = React.useState(false);
 
+    const [notes, setNotes] = React.useState('')
+
     const getEmployee = () => {
         axios.get(`${BASE_URL}/users/employees/${ids}/`,{
           headers: {
@@ -78,9 +81,9 @@ function DetailEmployee() {
           setContractTime(res.contract_time)
           setActiveUser(res.is_active)
           console.log(res)
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         })
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       React.useEffect(() => getEmployee(), [ids])
 
       const getRolesEmployee = () => {
@@ -95,7 +98,6 @@ function DetailEmployee() {
           console.log(res)
         })
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       React.useEffect(() => getRolesEmployee(), [])
 
       const getUserDataCuti = () => {
@@ -111,7 +113,6 @@ function DetailEmployee() {
           console.log(res)
         })
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       React.useEffect(() => getUserDataCuti(), [user_id, yearToday])
 
       const getDivisionUser = () => {
@@ -126,8 +127,21 @@ function DetailEmployee() {
           console.log(res)
         })
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       React.useEffect(() => getDivisionUser(), [])
+
+      const getEmployeeNotes = () => {
+        axios.get(`${BASE_URL}/users/notes?employee=${ids}`,{
+          headers: {
+            "Authorization" : 'Token ' + USER_TOKEN
+          }
+        })
+        .then((response) => {
+          const res = response.data
+          setNotes(res[0]?.notes)
+          console.log(res)
+        })
+      }
+      React.useEffect(() => getEmployeeNotes(), [ids])
 
       const handleChange = (event) => {
         setRoles(event.target.value);
@@ -144,8 +158,37 @@ function DetailEmployee() {
       const handleGend = (event) => {
         setGender(event.target.value);
       };
-          
-      const editEmployee = async e => {
+
+      const editNotesEmployee = async e => {
+        try{
+            const formData = new FormData();
+            formData.append("employee", ids);
+            formData.append("notes_employee", notes);
+           const res = await axios({
+                method: 'post',
+                url:`${BASE_URL}/users/notes/`,
+                data: formData,
+                headers: {
+                    "Authorization" : `Token ${USER_TOKEN}`
+                  }
+            })
+            setStatus("info")
+            setMessage(`${res.data.message}`)
+            setSnack(true)
+            getEmployee()
+        }catch(error){
+            if( error.response &&
+                error.response.status >= 400 &&
+                error.response.status <= 500
+                ){
+                setStatus("error")
+                setMessage( `${error.response.data.detail}`)
+                setSnack(true)
+            }
+        }
+    };
+    
+    const editEmployee = async e => {
         try{
             const formData = new FormData();
             formData.append("employee_code", employee_code);
@@ -360,18 +403,20 @@ const postNewPassword = async e => {
                                       </button>
 
                                       <Col md={12} className='mb-2 text-secondary d-flex'>
-                                        <Col md={12}>
+                                        <Col md={8}>
                                           <div className="row">
                                             <Box sx={{ mr:2 }}>
                                                 {/* <TextField value={name ? name : names} disabled id='name' label='Nama karyawan' sx={{ mt:3, mr:1 }}  /> */}
                                                 <TextField value={employee_code} onChange={e => setEmployeeCode(e.target.value)} label='Employee Code' sx={{ mt:3, mr:1 }} variant='outlined' />
                                                 <TextField value={nama_depan} onChange={e => setNamaDepan(e.target.value)} label='Nama Depan' sx={{ mt:3, mr:1 }} variant='outlined' />
                                                 <TextField value={nama_belakang} onChange={e => setNamaBelakang(e.target.value)} label='Nama Belakang' sx={{ mt:3, mr:1 }} variant='outlined' />
-                                                <TextField value={username} onChange={e => setUsername(e.target.value)} id='username' label='Username' sx={{ mt:3, mr:1 }} variant='outlined' />
                                             </Box>
                                             <Box sx={{ mr:2 }}>
+                                                <TextField value={username} onChange={e => setUsername(e.target.value)} id='username' label='Username' sx={{ mt:3, mr:1 }} variant='outlined' />
                                                 <TextField value={email} onChange={e => setEmail(e.target.value)} id='email' label='Email' sx={{ mt:3, mr:1 }} variant='outlined' />
                                                 <TextField value={sisa_cuti} onChange={e => setSisaCuti(e.target.value)} type='number' label='Sisa Cuti' sx={{ mt:3, mr:1 }} variant='outlined' />
+                                            </Box>
+                                            <Box sx={{ mr:2 }}>
                                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                     <MobileDatePicker
                                                     label="Tanggal Masuk"
@@ -394,7 +439,7 @@ const postNewPassword = async e => {
                                                     /> : null
                                                     }
                                                 </LocalizationProvider>
-                                                <FormControl sx={{ mt: 3, ml:1, minWidth: 220 }}>
+                                                <FormControl sx={{ mt: 3, ml:1, mr:1, minWidth: 210 }}>
                                                     <InputLabel id="role-label" variant='outlined'>Roles</InputLabel>
                                                     <Select
                                                     variant='outlined'
@@ -412,10 +457,10 @@ const postNewPassword = async e => {
                                                    
                                                     </Select>
                                                 </FormControl>
+                                                <TextField value={religion} onChange={e => setReligion(e.target.value)} variant='outlined' label='Agama' sx={{ mt:3, mr:1 }}  />
                                             </Box>
                                             <Box sx={{ mr:2 }}>
-                                                <TextField value={religion} onChange={e => setReligion(e.target.value)} variant='outlined' label='Agama' sx={{ mt:3, mr:1 }}  />
-                                                <FormControl sx={{ mt: 3, mr:1, minWidth: 220 }}>
+                                                <FormControl sx={{ mt: 3, mr:1, minWidth: 210 }}>
                                                     <InputLabel id="jenkel-label">Jenis Kelamin</InputLabel>
                                                     <Select
                                                     variant='outlined'
@@ -447,7 +492,7 @@ const postNewPassword = async e => {
                                                     />
                                                 </LocalizationProvider>
 
-                                                <FormControl sx={{ mt: 3, mr:1, minWidth: 220 }}>
+                                                <FormControl sx={{ mt: 3, mr:1, minWidth: 210 }}>
                                                     <InputLabel id="division-label">Divisi</InputLabel>
                                                     <Select
                                                     variant='outlined'
@@ -495,8 +540,8 @@ const postNewPassword = async e => {
                                                 </LocalizationProvider>
 
                                                 <TextField value={contract_time} variant='outlined' label='Lama Kontrak' sx={{ mt:3, mr:1 }}  />
-                                                <FormControlLabel sx={{ mt:4, ml:1 }} onChange={handleChangeActive} control={active_user ? <Checkbox checked /> : <Checkbox />} label={active_user ? "Karyawan aktif" : "Karyawan aktif"} />
                                             </Box>
+                                              <FormControlLabel sx={{ mt:2, ml:1 }} onChange={handleChangeActive} control={active_user ? <Checkbox checked /> : <Checkbox />} label={active_user ? "Karyawan aktif" : "Karyawan aktif"} />
 
                                             <Box sx={{ mt:2}}>
                                               <button className='btn text-primary' onClick={resetPasswordEmployee}>Reset Password User</button>
@@ -523,6 +568,23 @@ const postNewPassword = async e => {
                                             <Box sx={{ mt:3, display:'flex', justifyContent: 'end' }}>
                                               <button onClick={editEmployee} className='btn text-primary'>Simpan</button>
                                               <button onClick={delEmployee} className='btn text-danger'><Delete /></button>
+                                            </Box>
+                                        </Col>
+                                        <Col md={2}>
+                                            <Box sx={{minWidth:260}}>
+                                              <TextField
+                                                sx={{ mt:3}}
+                                                onChange={e => setNotes(e.target.value)}
+                                                value={notes}
+                                                id="outlined-multiline-flexible"
+                                                label="Notes Karyawan"
+                                                multiline
+                                                fullWidth
+                                                rows={12}
+                                              />
+                                              <div className="d-flex justify-content-end">
+                                                <button onClick={editNotesEmployee} className='btn text-primary mt-2'>Simpan</button>
+                                              </div>
                                             </Box>
                                         </Col>
 

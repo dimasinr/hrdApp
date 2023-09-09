@@ -400,6 +400,13 @@ export function countDataKeterangan(data, ketValue) {
   return count;
 }
 
+export function isLockedOrNot(lock){
+  if(lock === true){
+    return 0
+  }else{
+    return 1
+  }
+}
 
 
 export function kurlebs(jamFaktual, jamAktual){
