@@ -298,16 +298,16 @@ function DetailPresence() {
                   </div>
                 </div>
                 <Snackbar
-              anchorOrigin={{ vertical : 'top', horizontal: 'right' }}
-              open={snack}
-              onClose={handleClose}
-              autoHideDuration={6000}
-              // key={vertical + horizontal}
-            >
-              <Alert onClose={handleClose} severity={status} sx={{ width: '100%' }}>
-              {message && message}
-            </Alert>
-            </Snackbar>
+                  anchorOrigin={{ vertical : 'top', horizontal: 'right' }}
+                  open={snack}
+                  onClose={handleClose}
+                  autoHideDuration={6000}
+                  // key={vertical + horizontal}
+                >
+                  <Alert onClose={handleClose} severity={status} sx={{ width: '100%' }}>
+                    {message && message}
+                  </Alert>
+              </Snackbar>
             </main>
         </div>
     </div>

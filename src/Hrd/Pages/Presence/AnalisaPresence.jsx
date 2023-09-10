@@ -5,12 +5,11 @@ import { ArrowBackIos, GetApp, LockPerson, LockOpen } from '@mui/icons-material'
 import { BASE_URL, USER_TOKEN, ROLES } from '../../../fetch/fetch'
 import axios from 'axios'
 import Table from 'react-bootstrap/Table';
-import { CircularProgress, Tooltip } from '@mui/material'
+import { CircularProgress, Tooltip, Snackbar, Alert } from '@mui/material'
 import { useDownloadExcel } from 'react-export-table-to-excel'
 import { bulan } from '../../../Components/utilsFunction/arrayFunction'
 import { sumTotal, sumHE, totalAtt, formulaSumActual, asce, ascr, dividDed, getWeekendDates, validateMonthToday, mergedDataPresence, countDataKeterangan, getEndDate, isLockedOrNot } from './utlis/utlis'
 import { changeDayName, datesUpt, workHour, totalWorkHour, totalWorking } from '../../../Components/utilsFunction/functionUtils'
-import Swal from 'sweetalert2'
 
 function AnalisaPresence() {
   const tableRef = React.useRef("");
@@ -35,6 +34,11 @@ function AnalisaPresence() {
   const [minutes_lembur, setMinutesLembur] = useState([])
 
   const [isLocked, setIsLocked] = useState(1)
+
+   // snackbar
+   const [snack, setSnack] = React.useState(false);
+   const [status, setStatus] = React.useState('info');
+   const [message, setMessage] = React.useState('');
 
   const getListPresence = () => {
     axios.get(`${BASE_URL}/api/presence/employee/analysis/?employee=${user_id}&months=${month_id}&years=${year_id}`,{
@@ -106,11 +110,9 @@ function AnalisaPresence() {
                 "Authorization" : `Token ${USER_TOKEN}`
               }
         })
-        Swal.fire(
-          'Berhasil!',
-          `${res.data.message}`,
-          'success'
-        )
+        setSnack(true)
+        setStatus('info')
+        setMessage(`${res.data.message}`)  
         getListPresence()
         console.log(res)
         }catch(error){
@@ -118,11 +120,9 @@ function AnalisaPresence() {
                 error.response.status >= 400 &&
                 error.response.status <= 500
                 ){
-                  Swal.fire(
-                    'Gagal!',
-                    `${error.response.data.message}`,
-                    'error'
-                  )
+                  setSnack(true)
+                  setStatus('error')
+                  setMessage(`${error.response.data.message}`)  
             }
         }
       };
@@ -334,6 +334,17 @@ function AnalisaPresence() {
 
                   </div>
                 </div>
+                <Snackbar
+                  anchorOrigin={{ vertical : 'top', horizontal: 'right' }}
+                  open={snack}
+                  onClose={handleClose}
+                  autoHideDuration={6000}
+                  // key={vertical + horizontal}
+                >
+                  <Alert onClose={handleClose} severity={status} sx={{ width: '100%' }}>
+                    {message && message}
+                  </Alert>
+              </Snackbar>
             </main>
         </div>
     </div>
