@@ -170,6 +170,10 @@ function AnalisaPresence() {
       return 8
     }
   }
+
+  const handleClose = () => {
+    setSnack(false)
+  };
     
   return (
     <div className='d-flex'>
