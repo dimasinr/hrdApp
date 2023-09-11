@@ -94,7 +94,6 @@ function AnalisaPresence() {
   useEffect(() => getTotalDay(), [user_id, month_id])
 
   let isLock = isLockedOrNot(isLocked)
-  console.log('isssssss ' + isLock)
 
   const lockedPresence = async e => {
     try{
@@ -193,7 +192,7 @@ function AnalisaPresence() {
                       </div>
                       <div>
                           <Tooltip title={isLock === 0 ? 'Unlock Absensi' : 'Lock Absensi'}>
-                            <button onClick={lockedPresence} className='btn'> {isLock === 0 ? <LockOpen /> :  <LockPerson /> } </button>
+                            <button onClick={lockedPresence} className='btn'> {isLock === 0 ? <LockPerson /> : <LockOpen /> } </button>
                           </Tooltip>
 
                           <Tooltip title='Export to excel'>
