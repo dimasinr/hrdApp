@@ -68,9 +68,17 @@ export default function ListPresence() {
 
     })
   }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => getListPresence(), [search_name, offSet, search_month])
-
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      getListPresence();
+    }, 1000);
+  
+    return () => {
+      clearTimeout(timer);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search_name, offSet, search_month]);
+  
   const itemsPerPage = 15;
   const pageCount = Math.ceil(presence_paginate.count / itemsPerPage);
 
@@ -273,6 +281,12 @@ export default function ListPresence() {
                   <CircularProgress color="inherit" /></Backdrop> : 
                         <HRTableComponents tableData={list_presence} link={`/employee/absensi`} />
                   }
+                  <div className="d-flex align-items-center justify-content-between">
+                  <div>
+                    <small className="text-secondary">
+                    {(currentPage + 1) * list_presence.length} of {presence_paginate.count}
+                    </small>
+                  </div>
                   <StyledPagination
                         count={pageCount}
                         page={currentPage + 1}
@@ -284,6 +298,7 @@ export default function ListPresence() {
                         shape="rounded"
                         // size="large"
                       />
+                  </div>
                       <hr />
 
                 </div>

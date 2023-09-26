@@ -71,8 +71,17 @@ function Note() {
         console.log(res)
       })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    React.useEffect(() => getListPengajuan(), [offSet, employees_name, note_dates, year, month])
+
+    React.useEffect(() => {
+      const timer = setTimeout(() => {
+        getListPengajuan();
+      }, 1000);
+    
+      return () => {
+        clearTimeout(timer);
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [offSet, employees_name, note_dates, year, month]);
 
   const convDate = (newdate) => {
     let event = new Date(newdate);
@@ -239,19 +248,26 @@ function Note() {
                                       :
                                       <NoDataTableNotesComponents />
                                     }
-                                    <StyledPagination
-                                        count={pageCount}
-                                        page={currentPage + 1}
-                                        onChange={(event, page) => {
-                                        setCurrentPage(page - 1)
+                                    <div className="d-flex align-items-center justify-content-between">
+                                      <div>
+                                        <small className="text-secondary">
+                                        {(currentPage + 1) * list_notes.length} of {notes_paginate}
+                                        </small>
+                                      </div>
+                                      <StyledPagination
+                                          count={pageCount}
+                                          page={currentPage + 1}
+                                          onChange={(event, page) => {
+                                          setCurrentPage(page - 1)
 
-                                        setOffSet(page*itemsPerPage-15)
-                                        }}
-                                        variant="outlined"
-                                        shape="rounded"
-                                        // size="large"
-                                    />
-                                    
+                                          setOffSet(page*itemsPerPage-15)
+                                          }}
+                                          variant="outlined"
+                                          shape="rounded"
+                                          // size="large"
+                                      />
+                                      
+                                    </div>
                                     <hr />
                                     </Col>
                                     }

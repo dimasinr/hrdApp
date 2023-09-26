@@ -71,10 +71,16 @@ function NotesHrd() {
         console.log(res)
       })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     React.useEffect(() => {
-      getListEmployee();
-    }, [searchEmployee]);  
+      const timer = setTimeout(() => {
+        getListEmployee();
+      }, 1000);
+    
+      return () => {
+        clearTimeout(timer);
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchEmployee]);
 
     const handleRowClick = (params) => {
       navigate(`/list-karyawan/detail/${params.row.pk}`)
