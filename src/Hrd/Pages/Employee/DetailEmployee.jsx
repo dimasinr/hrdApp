@@ -401,8 +401,12 @@ const postNewPassword = async e => {
                                           <ArrowBackIos />
                                           <h5 style={{ marginTop:'7px'}}>Detail Karyawan</h5>
                                       </button>
+                                      <div className="row">
+                                        
+                                      </div>
 
                                       <Col md={12} className='mb-2 text-secondary d-flex'>
+
                                         <Col md={8}>
                                           <div className="row">
                                             <Box sx={{ mr:2 }}>
@@ -570,6 +574,7 @@ const postNewPassword = async e => {
                                               <button onClick={delEmployee} className='btn text-danger'><Delete /></button>
                                             </Box>
                                         </Col>
+
                                         <Col md={2}>
                                             <Box sx={{minWidth:260}}>
                                               <TextField
@@ -582,6 +587,7 @@ const postNewPassword = async e => {
                                                 fullWidth
                                                 rows={12}
                                               />
+                                              {/* <img src="https://athemes.com/wp-content/uploads/Reactify-React-Redux-Admin-Template-768x576.jpg" style={{width:250, height:250, objectFit:'cover'}} alt="" srcset="" /> */}
                                               <div className="d-flex justify-content-end">
                                                 <button onClick={editNotesEmployee} className='btn text-primary mt-2'>Simpan</button>
                                               </div>

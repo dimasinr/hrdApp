@@ -50,6 +50,7 @@ function NotesHrd() {
     const [firstName, setFirstName] = React.useState('')
     const [lastName, setLastName] = React.useState('')
     const [email, setEmail] = React.useState('')
+    const [username, setUsername] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [password2, setPassword2] = React.useState('')
 
@@ -93,11 +94,12 @@ function NotesHrd() {
         formData.append("first_name", firstName);
         formData.append("last_name", lastName);
         formData.append("email", email);
-        formData.append("password1", password);
-        formData.append("password2", password2);
+        formData.append("username", username);
+        formData.append("password", password);
+        formData.append("confirm_password", password2);
        await axios({
             method: 'post',
-            url:`${BASE_URL}/rest-auth/registration/`,
+            url:`${BASE_URL}/users/users/`,
             data: formData,
             headers: {
                 "Authorization" : `Token ${USER_TOKEN}`
@@ -113,14 +115,15 @@ function NotesHrd() {
           setLoadingBut('simpan')
           getListEmployee()
     }catch(error){
+      console.log(error)
         if( error.response &&
             error.response.status >= 400 &&
             error.response.status <= 500
             ){
                 Swal.fire({
-                    icon: 'success',
-              title: 'Berhasil',
-              // text: `${error.response.data.detail}`
+                    icon: 'error',
+              title: 'Gagal',
+              text: `${error.response.data.message}`
             })
             setLoadingBut('simpan')
             setOpen(false)
@@ -201,6 +204,7 @@ const handlePas = () => {
                         </Box>
                         <Box sx={{ mt:2, display:'flex' }}>
                            <TextField value={email} type='email' fullWidth onChange={e => setEmail(e.target.value)} sx={{ mr:1 }} label='Email' />
+                           <TextField value={username} type='username' fullWidth onChange={e => setUsername(e.target.value)} sx={{ mr:1 }} label='Username' />
                         </Box>
                         <Box sx={{ mt:2, display:'flex' }}>
                            <TextField value={password} fullWidth type={showPas === false ? 'password' : 'text'} onChange={e => setPassword(e.target.value)} sx={{ mr:1 }} label='Password' />
