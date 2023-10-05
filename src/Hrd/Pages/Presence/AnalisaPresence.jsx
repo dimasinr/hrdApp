@@ -215,7 +215,7 @@ function AnalisaPresence() {
                           </Tooltip>
 
                           <Tooltip title='Download Pdf'>
-                            <button onClick={window.print()} className='btn'> <GetApp /> </button>
+                            <button onClick={downloadPDF} className='btn'> <GetApp /> </button>
                           </Tooltip>
 
                           <Tooltip title='Export to excel'>
