@@ -8,6 +8,7 @@ import Table from 'react-bootstrap/Table';
 import { CircularProgress, Tooltip } from '@mui/material'
 import { useDownloadExcel } from 'react-export-table-to-excel';
 import { datesUpt, workHour, totalWorkHour, totalWorking, changeDayName } from '../../../Components/utilsFunction/functionUtils'
+import {EmployeeTableAnalisis, EmployeeTableSummary} from '../../Components/Table/TableComponents'
 
 function PresencePeriode() {
   const navigate = useNavigate();
@@ -21,6 +22,9 @@ function PresencePeriode() {
   console.log(name_id)
   console.log(start_date)
   console.log(end_date)
+
+  const [presence, setPresence] = useState([])
+  const [summary, setSummary] = useState([])
 
   const [loading, setLoading] = useState(true)
   const [attendance, setAttendance] = useState([])
@@ -40,6 +44,22 @@ function PresencePeriode() {
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => getListPengajuan(), [name_id, start_date, end_date, loading])
+
+  const getDetailAnalysis = () => {
+    axios.get(`${BASE_URL}/api/presence/analysis-employee/?employee=${name_id}&from_date=${start_date}&end_date=${end_date}`,{
+      headers: {
+        "Authorization" : 'Token ' + USER_TOKEN
+      }
+    })
+    .then((response) => {
+      const res = response.data
+      setPresence(res.data)
+      setSummary(res.summary)
+      console.log(res)
+    })
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => getDetailAnalysis(), [name_id, start_date, end_date, loading])
 
   const { onDownload } = useDownloadExcel({
     currentTableRef: tableRef.current,
@@ -112,6 +132,17 @@ return (
                       </div>
 
                   </div>
+                </div>
+                <div className="card shadow-card mt-2" style={{ border:'none', borderRadius:'10px' }}>
+                    <div className="card-body">
+                      <h2>Analisa Absensi</h2>
+                      <EmployeeTableAnalisis tableData={presence} />
+                      <hr />
+                      <EmployeeTableSummary data={summary && summary[0] ? summary[0] : summary} />
+                      {/* {presence.map((pres, index) => {
+                        return pres.bulan
+                      })} */}
+                    </div>
                 </div>
             </main>
         </div>

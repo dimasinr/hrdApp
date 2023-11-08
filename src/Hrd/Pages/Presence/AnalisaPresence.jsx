@@ -10,7 +10,6 @@ import { useDownloadExcel } from 'react-export-table-to-excel'
 import { bulan } from '../../../Components/utilsFunction/arrayFunction'
 import { sumTotal, sumHE, totalAtt, formulaSumActual, asce, ascr, dividDed, getWeekendDates, validateMonthToday, mergedDataPresence, countDataKeterangan, getEndDate, isLockedOrNot } from './utlis/utlis'
 import { changeDayName, datesUpt, workHour, totalWorkHour, totalWorking } from '../../../Components/utilsFunction/functionUtils'
-import html2pdf from 'html2pdf.js';
 
 function AnalisaPresence() {
   const tableRef = React.useRef("");
@@ -37,22 +36,6 @@ function AnalisaPresence() {
   const [isLocked, setIsLocked] = useState(1)
 
   const contentRef = React.useRef(null);
-
-  const downloadPDF = () => {
-    const content = contentRef.current;
-
-    if (content) {
-      const pdfOptions = {
-        margin: 10,
-        filename: 'file.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      };
-
-      html2pdf().from(content).set(pdfOptions).save();
-    }
-  };
 
    // snackbar
    const [snack, setSnack] = React.useState(false);
@@ -212,10 +195,6 @@ function AnalisaPresence() {
                       <div>
                           <Tooltip title={isLock === 0 ? 'Unlock Absensi' : 'Lock Absensi'}>
                             <button onClick={lockedPresence} className='btn'> {isLock === 0 ? <LockPerson /> : <LockOpen /> } </button>
-                          </Tooltip>
-
-                          <Tooltip title='Download Pdf'>
-                            <button onClick={downloadPDF} className='btn'> <GetApp /> </button>
                           </Tooltip>
 
                           <Tooltip title='Export to excel'>

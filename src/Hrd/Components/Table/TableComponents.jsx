@@ -52,3 +52,77 @@ export const EmployeeTableAnalisisComponents = ({ tableData }) => {
       </React.Fragment>
     );
   };
+
+  export const EmployeeTableAnalisis = ({ tableData }) => {
+    return (
+      <React.Fragment>
+          <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+              <TableRow>
+                  <TableCell>No</TableCell>
+                  <TableCell>Bulan</TableCell>
+                  <TableCell align="center">Hari Kerja</TableCell>
+                  <TableCell align="center">Jam Aktual</TableCell>
+                  <TableCell align="center">Jam Efektif</TableCell>
+                  <TableCell align="center">Kurang Lebih</TableCell>
+              </TableRow>
+              </TableHead>
+              <TableBody>
+              {tableData.map((row, index) => (
+                  <TableRow
+                  key={index}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                  <TableCell component="th" scope="row" >{index+1}</TableCell>
+                  <TableCell align="center">{row.bulan ? row.bulan : "Tanggal tidak tertera"}</TableCell>
+                  <TableCell align="center">{row.hari_kerja ? row.hari_kerja + ' Hari' : "0 Hari"}</TableCell>
+                  <TableCell align="center">{row.jk_aktual ? totalWorkHour(row.jk_aktual) : "0"}</TableCell>
+                  <TableCell align="center">{row.jk_efektif ? totalWorkHour(row.jk_efektif) : "0"}</TableCell>
+                  {row.kurleb < 0 ?
+                      <TableCell align="center" style={{ backgroundColor:'red', color:'white' }} >{row.kurleb ? totalWorkHour(row.kurleb) : "0"}</TableCell>
+                        :
+                      <TableCell align="center">{row.kurleb ? totalWorkHour(row.kurleb) : "0"}</TableCell>
+                    }
+                  </TableRow>
+              ))}
+              </TableBody>
+          </Table>
+          </TableContainer>
+      </React.Fragment>
+    );
+  };
+
+  export const EmployeeTableSummary = ({ data }) => {
+    return (
+      <React.Fragment>
+          <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+              <TableRow>
+                  <TableCell>Sakit</TableCell>
+                  <TableCell align="center">Cuti</TableCell>
+                  <TableCell align="center">Izin</TableCell>
+                  <TableCell align="center">Average Presence Masuk</TableCell>
+                  <TableCell align="center">Average Presence Keluar</TableCell>
+                  <TableCell align="center">Average Lembur</TableCell>
+              </TableRow>
+              </TableHead>
+              <TableBody>
+                  <TableRow
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                  <TableCell align="center">{data.sakit}</TableCell>
+                  <TableCell align="center">{data.cuti}</TableCell>
+                  <TableCell align="center">{data.izin}</TableCell>
+                  <TableCell align="center">{totalWorking(data.average_pre_in)}</TableCell>
+                  <TableCell align="center">{totalWorking(data.average_pre_out)}</TableCell>
+                  <TableCell align="center">{totalWorking(data.average_lembur)}</TableCell>
+                  </TableRow>
+              </TableBody>
+          </Table>
+          </TableContainer>
+      </React.Fragment>
+    );
+  };
+  

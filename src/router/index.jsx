@@ -1,7 +1,7 @@
 import React,{useContext} from "react";
 import {
     Routes,
-    Route
+    Route,
   } from "react-router-dom";
 import { ROLES } from "../fetch/fetch";
 import AuthenticationPages from "../Components/AuthenticationPages";
@@ -57,14 +57,15 @@ export const AppRouter = () => {
 
     return(
         <Routes>
-            <Route path='/' element={<LoginHrd />} />
-            {user ? 
-           <React.Fragment>
-             <Route path='/authentication-user' element={<AuthenticationPages />} />
-             <Route path='/settings' element={<AccountSettings />} />
-           </React.Fragment>
-            :
-            null}
+            <Route path='/' element={user? <AuthenticationPages/> :  <LoginHrd/> } />
+            {user ? (
+                <React.Fragment>    
+                    <Route path='/authentication-user' element={<AuthenticationPages />} />
+                    <Route path='/settings' element={<AccountSettings />} />
+                </React.Fragment>
+            ) : (
+                null
+            )}
         {
            ROLES === 'hrd' ?
             <React.Fragment>
