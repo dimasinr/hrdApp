@@ -57,7 +57,7 @@ export const AppRouter = () => {
 
     return(
         <Routes>
-            <Route path='/' element={user? <AuthenticationPages/> :  <LoginHrd/> } />
+            <Route path='/' element={user != null ? <AuthenticationPages/> :  <LoginHrd/> } />
             {user ? (
                 <React.Fragment>    
                     <Route path='/authentication-user' element={<AuthenticationPages />} />
