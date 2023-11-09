@@ -94,7 +94,7 @@ return (
                         <Table ref={tableRef} bordered hover>
                         <thead>
                             <tr>
-                            <th>id</th>
+                            <th>No</th>
                             <th>Nama Karyawan</th>
                             <th>Tanggal</th>
                             <th>Hari</th>
@@ -102,15 +102,16 @@ return (
                             <th>Pulang</th>
                             <th>LemburS</th>
                             <th>LemburE</th>
-                            <th>Total Jam Kerja</th>
-                            <th>Total Jam Lembur</th>
+                            <th>Total JK</th>
+                            <th>Total JL</th>
+                            <th>Keterangan</th>
                             </tr>
                         </thead>
                         <tbody>
                             {attendance.map((att, index) => {
                                 return(
-                                    <tr key={index}>
-                                    <td>{att.id}</td>
+                                    <tr key={att.id}>
+                                    <td>{index+1}</td>
                                     <td>{att.employee && att.employee.name}</td>
                                     <td>{att.working_date ? datesUpt(att.working_date) : '-'}</td>
                                     <td>{att.days ? changeDayName(att.days) : '-'}</td>
@@ -120,6 +121,7 @@ return (
                                     <td>{att.lembur_start ? workHour(att.lembur_start) : "-"}</td>
                                     <td>{att.lembur_end ? workHour(att.lembur_end) : "-"}</td>
                                     <td>{att.lembur_hour === 0 || att.lembur_hour > 0 ? totalWorkHour(att.lembur_hour) : "-"}</td>
+                                    <td>{att.ket ? att.ket : "-"}</td>
                                   </tr>   
                                 )
                             })}

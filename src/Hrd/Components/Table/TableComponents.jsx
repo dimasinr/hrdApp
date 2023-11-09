@@ -60,8 +60,8 @@ export const EmployeeTableAnalisisComponents = ({ tableData }) => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
               <TableRow>
-                  <TableCell>No</TableCell>
-                  <TableCell>Bulan</TableCell>
+                  <TableCell align="center">No</TableCell>
+                  <TableCell align="center">Bulan</TableCell>
                   <TableCell align="center">Hari Kerja</TableCell>
                   <TableCell align="center">Jam Aktual</TableCell>
                   <TableCell align="center">Jam Efektif</TableCell>
@@ -100,7 +100,7 @@ export const EmployeeTableAnalisisComponents = ({ tableData }) => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
               <TableRow>
-                  <TableCell>Sakit</TableCell>
+                  <TableCell align="center">Sakit</TableCell>
                   <TableCell align="center">Cuti</TableCell>
                   <TableCell align="center">Izin</TableCell>
                   <TableCell align="center">Average Presence Masuk</TableCell>
@@ -115,8 +115,8 @@ export const EmployeeTableAnalisisComponents = ({ tableData }) => {
                   <TableCell align="center">{data.sakit}</TableCell>
                   <TableCell align="center">{data.cuti}</TableCell>
                   <TableCell align="center">{data.izin}</TableCell>
-                  <TableCell align="center">{totalWorking(data.average_pre_in)}</TableCell>
-                  <TableCell align="center">{totalWorking(data.average_pre_out)}</TableCell>
+                  <TableCell align="center">{workHour(data.average_pre_in)}</TableCell>
+                  <TableCell align="center">{workHour(data.average_pre_out)}</TableCell>
                   <TableCell align="center">{totalWorking(data.average_lembur)}</TableCell>
                   </TableRow>
               </TableBody>
