@@ -117,9 +117,9 @@ return (
                                     <td>{att.days ? changeDayName(att.days) : '-'}</td>
                                     <td>{att.start_from ? workHour(att.start_from) : "-"}</td>
                                     <td>{att.end_from ? workHour(att.end_from) : "-"}</td>
-                                    <td>{att.working_hour === 0 || att.working_hour > 0 ? totalWorking(att.working_hour) : "-"}</td>
                                     <td>{att.lembur_start ? workHour(att.lembur_start) : "-"}</td>
                                     <td>{att.lembur_end ? workHour(att.lembur_end) : "-"}</td>
+                                    <td>{att.working_hour === 0 || att.working_hour > 0 ? totalWorking(att.working_hour) : "-"}</td>
                                     <td>{att.lembur_hour === 0 || att.lembur_hour > 0 ? totalWorkHour(att.lembur_hour) : "-"}</td>
                                     <td>{att.ket ? att.ket : "-"}</td>
                                   </tr>   
