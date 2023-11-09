@@ -74,7 +74,7 @@ export const EmployeeTableAnalisisComponents = ({ tableData }) => {
                   key={index}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
-                  <TableCell component="th" scope="row" >{index+1}</TableCell>
+                  <TableCell align="center" component="th" scope="row" >{index+1}</TableCell>
                   <TableCell align="center">{row.bulan ? row.bulan : "Tanggal tidak tertera"}</TableCell>
                   <TableCell align="center">{row.hari_kerja ? row.hari_kerja + ' Hari' : "0 Hari"}</TableCell>
                   <TableCell align="center">{row.jk_aktual ? totalWorkHour(row.jk_aktual) : "0"}</TableCell>
@@ -115,9 +115,9 @@ export const EmployeeTableAnalisisComponents = ({ tableData }) => {
                   <TableCell align="center">{data.sakit}</TableCell>
                   <TableCell align="center">{data.cuti}</TableCell>
                   <TableCell align="center">{data.izin}</TableCell>
-                  <TableCell align="center">{workHour(data.average_pre_in)}</TableCell>
-                  <TableCell align="center">{workHour(data.average_pre_out)}</TableCell>
-                  <TableCell align="center">{totalWorking(data.average_lembur)}</TableCell>
+                  <TableCell align="center">{workHour(data.average_pre_in ? data.average_pre_in : 0)}</TableCell>
+                  <TableCell align="center">{workHour(data.average_pre_out ? data.average_pre_out : 0)}</TableCell>
+                  <TableCell align="center">{totalWorking(data.average_lembur && data.average_lembur !== 1 ? data.average_lembur : 0)}</TableCell>
                   </TableRow>
               </TableBody>
           </Table>
