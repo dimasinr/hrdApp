@@ -1,6 +1,6 @@
 import React,{useState, useEffect} from 'react'
 import SideBar from '../../Components/SideBar'
-import { useNavigate, useLocation, Link } from 'react-router-dom'
+import { useNavigate, Link, useParams } from 'react-router-dom'
 import { ArrowBackIos, GetApp, LockPerson, LockOpen } from '@mui/icons-material'
 import { BASE_URL, USER_TOKEN, ROLES } from '../../../fetch/fetch'
 import axios from 'axios'
@@ -14,13 +14,7 @@ import { changeDayName, datesUpt, workHour, totalWorkHour, totalWorking } from '
 function AnalisaPresence() {
   const tableRef = React.useRef("");
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const name_id = location.pathname.split('/')[2]
-  const user_id = location.pathname.split('/')[3]
-  const month_id = location.pathname.split('/')[4]
-  const year_id = location.pathname.split('/')[5]
-  console.log(name_id)
+  const {year, name, user_id, month_id} = useParams()
   const month_a = month_id-1
 
   const [loading, setLoading] = useState(true)
@@ -43,7 +37,7 @@ function AnalisaPresence() {
    const [message, setMessage] = React.useState('');
 
   const getListPresence = () => {
-    axios.get(`${BASE_URL}/api/presence/employee/analysis/?employee=${user_id}&months=${month_id}&years=${year_id}`,{
+    axios.get(`${BASE_URL}/api/presence/employee/analysis/?employee=${user_id}&months=${month_id}&years=${year}`,{
       headers: {
         "Authorization" : 'Token ' + USER_TOKEN
       }
@@ -141,7 +135,7 @@ function AnalisaPresence() {
     const lemburTotal = dividDed(sumDataLembur, sumHourLembur)
     const jamKerjaA = dividDed(sumData, sumDataWork)
     
-    const jamKerjaS = sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur), countDataKeterangan(attendance, 'tidak masuk') )
+    const jamKerjaS = sumHE(name, totalAtt(attendance.length, TotalAttendance.employee_lembur), countDataKeterangan(attendance, 'tidak masuk') )
     
     const kurangLeb = formulaSumActual(jamKerjaA, jamKerjaS)
     console.log("jam kerja : ", jamKerjaS)
@@ -151,15 +145,15 @@ function AnalisaPresence() {
 
     const { onDownload } = useDownloadExcel({
       currentTableRef: tableRef.current,
-      filename: `Analisa Absensi ${name_id && name_id.replace(/%20/g, " ")} Bulan ${bulan[month_a].month}`,
-      sheet: `Analisa Absensi ${name_id && name_id.replace(/%20/g, " ")} Bulan ${bulan[month_a].month}`,
+      filename: `Analisa Absensi ${name && name.replace(/%20/g, " ")} Bulan ${bulan[month_a].month}`,
+      sheet: `Analisa Absensi ${name && name.replace(/%20/g, " ")} Bulan ${bulan[month_a].month}`,
   })
 
-  const startDate = new Date(`${year_id}-${month_id}-01`);
-  const endDate = new Date(`${year_id}-${month_id}-${getEndDate(year_id, month_id)}`);
+  const startDate = new Date(`${year}-${month_id}-01`);
+  const endDate = new Date(`${year}-${month_id}-${getEndDate(year, month_id)}`);
   const weekendDates = getWeekendDates(startDate, endDate);
   
-  console.log(startDate, endDate, getEndDate(year_id, month_id))
+  console.log(startDate, endDate, getEndDate(year, month_id))
   console.log(weekendDates)
   
   const actualDate = mergedDataPresence(attendance, weekendDates)
@@ -188,7 +182,7 @@ function AnalisaPresence() {
                       <button className='btn' onClick={() => navigate(-1)}>
                           <span className="d-flex align-items-center mb-2">
                             <ArrowBackIos />
-                            <h4 style={{ marginTop:'8px' }}>Analisa Absensi {name_id && name_id.replace(/%20/g, " ")} Bulan {bulan[month_a].month} </h4>
+                            <h4 style={{ marginTop:'8px' }}>Analisa Absensi {name && name.replace(/%20/g, " ")} Bulan {bulan[month_a].month} {year && year}</h4>
                           </span>
                         </button>
                       </div>
@@ -228,7 +222,7 @@ function AnalisaPresence() {
                                           <tr key={index}>
                                           <th style={{ color: '#4932A7' }} sx={{ border: '1px solid #ddd' }}>
                                             {ROLES === 'hrd' ?
-                                            <Link to={att.id ? `/employee/absensi/${att.id}` : `/absensi/${name_id}/${user_id}/${month_id}/${year_id}`} className='unlink'>
+                                            <Link to={att.id ? `/employee/absensi/${att.id}` : `/absensi/${name}/${user_id}/${month_id}/${year}`} className='unlink'>
                                               {index + 1}
                                             </Link>:
                                             index+1
@@ -271,7 +265,7 @@ function AnalisaPresence() {
                                   <tr>
                                       <td colSpan={11}><h5>Analisa Absensi</h5></td>
                                   </tr>
-                                 {validateMonthToday(year_id, month_id) === false ? 
+                                 {validateMonthToday(year, month_id) === false ? 
                                      <React.Fragment>
                                      <tr>
                                          <td colSpan={8}>Hari Kerja Efektif</td>
@@ -296,12 +290,12 @@ function AnalisaPresence() {
                                            </td>
                                      </tr> 
                                      <tr>
-                                       <Tooltip title={`${namesE(name_id)} Jam kerja anda di kali dengan Hari kerja anda yang seharusnya dalam 1 bulan`} arrow>
+                                       <Tooltip title={`${namesE(name)} Jam kerja anda di kali dengan Hari kerja anda yang seharusnya dalam 1 bulan`} arrow>
                                          <td colSpan={8}>Jumlah Jam Kerja Efektif</td>
                                        </Tooltip>
                                          <td colSpan={3}>
                                          {totalWorkHour(
-                                           sumHE(name_id, totalAtt(attendance.length, TotalAttendance.employee_lembur), countDataKeterangan(attendance, 'tidak masuk'))
+                                           sumHE(name, totalAtt(attendance.length, TotalAttendance.employee_lembur), countDataKeterangan(attendance, 'tidak masuk'))
                                          )}
                                          </td>
                                      </tr> 

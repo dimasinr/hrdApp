@@ -29,6 +29,7 @@ import EmployeePresence from "../Hrd/Pages/Presence/EmployeePresence";
 import ListEmployeePresence from "../Hrd/Pages/Presence/ListEmployeePresence";
 import AnalisaPresence from "../Hrd/Pages/Presence/AnalisaPresence";
 import PresencePeriode from "../Hrd/Pages/Presence/PresencePeriode";
+import IndexYearPresence from "../Hrd/Pages/Presence/IndexYearPresence";
 
 import DayOff from "../Hrd/Pages/DayOff/DayOff";
 import DayOffDetail from "../Hrd/Pages/DayOff/DayOffDetail";
@@ -48,6 +49,7 @@ import SelfEmployeePresence from "../Karyawan/Presence/EmployeePresenceAnalysis"
 import SelfEmployeeAnalisisPresence from "../Karyawan/Presence/AnalisaPresence";
 import NotesKaryawan from "../Karyawan/NotesKaryawan";
 import ChangePassword from "../Karyawan/ChangePassword";
+import Profile from "../Karyawan/Profile";
 
 import { AuthContext } from "../Context/AuthContext";
 
@@ -89,9 +91,10 @@ export const AppRouter = () => {
                 {/* Presensi */}
                 <Route path='/employee/absensi' element={<ListPresence />} />
                 <Route path='/employee/absensi/:id' element={<DetailPresence />} />
-                <Route path='/absensi/' element={<ListEmployeePresence />} />
-                <Route path='/absensi/:name_id/:id' element={<EmployeePresence />} />
-                <Route path='/absensi/:name_id/:id/:month_id/:year_id' element={<AnalisaPresence />} />
+                <Route path='/absensi/' element={<IndexYearPresence />} />
+                <Route path='/absensi/:year/' element={<ListEmployeePresence />} />
+                <Route path='/absensi/:year/:name/:user_id' element={<EmployeePresence />} />
+                <Route path='/absensi/:year/:name/:user_id/:month_id/' element={<AnalisaPresence />} />
                 <Route path='/absensi/periode/:name_id/:emp_id/:start_date/:end_date' element={<PresencePeriode />} />
                 {/* Dashboard */}
                 <Route path='/dashboard/day-off/' element={<DayOff />} />
@@ -124,6 +127,7 @@ export const AppRouter = () => {
                 <Route path='/employee/presence/:month_id/:year_id' element={<SelfEmployeeAnalisisPresence />} />
                 <Route path='/notes/employee/' element={<NotesKaryawan />} />
                 <Route path='/change-password/employee/' element={<ChangePassword />} />
+                <Route path='/profile/employee/' element={<Profile />} />
             </React.Fragment>
             : null
        } 

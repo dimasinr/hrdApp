@@ -1,12 +1,12 @@
-import React, {useState} from 'react'
+import React from 'react'
 import SideBar from '../../Components/SideBar'
-import { useNavigate, useLocation, Link } from 'react-router-dom'
+import { useNavigate, Link, useParams } from 'react-router-dom'
 import { ArrowBackIos } from '@mui/icons-material'
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material'
+// import { FormControl, InputLabel, Select, MenuItem } from '@mui/material'
 import { Slide, Dialog, DialogTitle, DialogContent, DialogContentText, Box, TextField, DialogActions, Button } from '@mui/material'
 import { MobileDatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { tahun, bulan } from '../../../Components/utilsFunction/arrayFunction'
+import { bulan } from '../../../Components/utilsFunction/arrayFunction'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -14,16 +14,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function EmployeePresence() {
   const navigate = useNavigate()
-  const location = useLocation()
-
-  const user_id = location.pathname.split('/')[3]
-  const name_id = location.pathname.split('/')[2]
-
-  const [year, setYear] = useState(new Date().getFullYear())
-
-  const handleGend = (event) => {
-    setYear(event.target.value);
-  };
+  const { year, name, user_id } = useParams();
 
   const [open, setOpen] = React.useState(false);
   const [start_date, setStartDate] = React.useState(new Date().toISOString().slice(0,10))
@@ -46,7 +37,7 @@ function EmployeePresence() {
   }
   
   const PeriodeAbsensi = () => {
-    navigate(`/absensi/periode/${name_id}/${user_id}/${start_date}/${end_date}`)
+    navigate(`/absensi/periode/${name}/${user_id}/${start_date}/${end_date}`)
   }
 
   return (
@@ -62,8 +53,8 @@ function EmployeePresence() {
                           </span>
                         </button>
                         <div className="d-flex justify-content-between align-items-center">
-                          <h4>Rekap Karyawan {name_id && name_id.replace(/%20/g, " ")} {year && year}</h4>
-                          <FormControl sx={{ mt: 1, mr:1, minWidth: 220 }}>
+                          <h4>Rekap Karyawan {name && name.replace(/%20/g, " ")} {year && year}</h4>
+                          {/* <FormControl sx={{ mt: 1, mr:1, minWidth: 220 }}>
                               <InputLabel id="tahun-label">Tahun Absensi</InputLabel>
                               <Select
                               // variant='standard'
@@ -80,13 +71,13 @@ function EmployeePresence() {
                                   })}
                               
                               </Select>
-                          </FormControl>
+                          </FormControl> */}
                         </div>
                       <div className="d-flex flex-wrap">
                         {bulan.map((bul, index) => {
                           return(
                             <div className="col-md-3 m-2" key={index}>
-                              <Link to={`/absensi/${name_id}/${user_id}/${bul.value}/${year}`} style={{ textDecoration:'none', color:'#0B305A' }}>
+                              <Link to={`/absensi/${year}/${name}/${user_id}/${bul.value}/`} style={{ textDecoration:'none', color:'#0B305A' }}>
                                   <div className="card shadow-card" style={{ border:'none', borderRadius:'10px' }} key={index}>
                                     <div className="card-body text-center">
                                         <h5>{bul.month}</h5>

@@ -1,6 +1,6 @@
 import React from 'react'
 import {FactCheck, AutoStories, Logout, DateRange, Analytics, Person, 
-  Dashboard, Badge, Settings, Feed, Gavel} from '@mui/icons-material';
+  Dashboard, Badge, Settings, Feed, Gavel, AccountBox} from '@mui/icons-material';
 import {List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, Tooltip} from '@mui/material';
 import { ROLES } from '../../fetch/fetch';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -208,19 +208,19 @@ return (
         </ListItem>
       </Link>
       <Divider />
-        <small className='text-secondary container'>Pengaturan</small>
-        {/* <Link to="/settings/employee/" style={{ textDecoration:'none', color:'black' }}>
-        <ListItem disablePadding className={side_name === 'settings' ? "side_col" : "side_no_col" }>
-          <Tooltip title='Pengaturan Akun'>
+        <small className='text-secondary container'>Data</small>
+        <Link to="/profile/employee/" style={{ textDecoration:'none', color:'black' }}>
+        <ListItem disablePadding className={side_name === 'profile' ? "side_col" : "side_no_col" }>
+          <Tooltip title='Data Diri'>
             <ListItemButton>
               <ListItemIcon>
-                <Settings sx={{ color:'#A8A8A8' }} />
+                <AccountBox sx={side_name === 'profile' ? {color: '#ffffff'} : { color:'#0B305A' }} />
               </ListItemIcon>
-              <ListItemText primary='Pengaturan Akun' />
+              <ListItemText primary='Data Diri' />
             </ListItemButton>
           </Tooltip>
           </ListItem>
-        </Link> */}
+        </Link>
         <ListItem disablePadding>
           <ListItemButton onClick={logout}>
             <ListItemIcon>

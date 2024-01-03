@@ -5,7 +5,7 @@ import { BASE_URL, USER_TOKEN } from '../../../fetch/fetch'
 import { DataGrid } from '@mui/x-data-grid';
 import { Box, Skeleton, TextField } from '@mui/material';
 import SideBar from '../../Components/SideBar'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const columns = [
       { field: 'pk', headerName: 'User Id', width: 70 },
@@ -32,6 +32,7 @@ const columns = [
 function ListEmployeePresence() {
 
     const navigate = useNavigate()
+    const { year } = useParams();
     const [list_users, setListUsers] = React.useState([])
     const [loading, setLoading] = React.useState(true)
 
@@ -57,7 +58,7 @@ function ListEmployeePresence() {
   
 
     const handleRowClick = (params) => {
-      navigate(`/absensi/${params.row.name}/${params.row.pk}`)
+      navigate(`/absensi/${year}/${params.row.name}/${params.row.pk}`)
     };
 
   return (
