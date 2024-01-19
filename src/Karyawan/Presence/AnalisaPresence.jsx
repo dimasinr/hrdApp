@@ -224,7 +224,8 @@ function SelfEmployeeAnalisisPresence() {
                                 <React.Fragment>
                                   <TableRow>
                                     <TableCell colSpan={8}>Hari Kerja Efektif</TableCell>
-                                    <TableCell colSpan={3}>{
+                                    <TableCell colSpan={3}>
+                                      {
                                       totalAtt(attendance.length, TotalAttendance.employee_lembur) >= 0 ?
                                       totalAtt(attendance.length, TotalAttendance.employee_lembur) : '0'
                                     } Hari</TableCell>

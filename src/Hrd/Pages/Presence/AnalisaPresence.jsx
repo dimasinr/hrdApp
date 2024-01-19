@@ -75,7 +75,7 @@ function AnalisaPresence() {
   console.log(`is lock ${isLocked}`)
 
   const getTotalDay = () => {
-    axios.get(`${BASE_URL}/api/presence/total-day/?employee=${user_id}&months=${month_id}`,{
+    axios.get(`${BASE_URL}/api/presence/total-day/?employee=${user_id}&months=${month_id}&year=${year}`,{
       headers: {
         "Authorization" : 'Token ' + USER_TOKEN
       }
@@ -272,8 +272,7 @@ function AnalisaPresence() {
                                          <td colSpan={3}>
                                            {countDataKeterangan(attendance, 'tidak masuk') === 0 ?
                                            totalAtt(attendance.length, TotalAttendance.employee_lembur) :
-                                           totalAtt(attendance.length, TotalAttendance.employee_lembur)
-                                         }
+                                           totalAtt(attendance.length, TotalAttendance.employee_lembur)}
                                          Hari
                                          </td>
                                      </tr> 
