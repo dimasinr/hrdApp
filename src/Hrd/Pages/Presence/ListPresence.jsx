@@ -32,7 +32,7 @@ export default function ListPresence() {
   const [working_hour, setWorkingHour] = React.useState('')
   const [lembur_hour, setLemburHour] = React.useState('')
   const [dates, setDates] = React.useState(new Date().toISOString().slice(0,10))
-  const keterangan = ""
+  const [keterangan, setKeterangan] = React.useState("")
 
   const [start_date, setStartDate] = useState(new Date().toISOString().slice(0,10))
   const [end_date, setEndDate] = useState(new Date().toISOString().slice(0,10))
@@ -351,9 +351,12 @@ export default function ListPresence() {
                   <Box sx={{ mt:2, mb:2, display:'flex' }}>
                     <TextField value={working_hour} fullWidth onChange={e => setWorkingHour(e.target.value)} sx={{ mr:1 }} label='Jam Kerja' />
                   </Box>
-                  <small className='text-secondary mt-2'>(opsional jika ingin input lembur manual)</small>
+                  <small className='text-secondary mt-2'>(opsional)</small>
                   <Box sx={{ display:'flex' }}>
                     <TextField value={lembur_hour} fullWidth onChange={e => setLemburHour(e.target.value)} sx={{ mr:1 }} label='Jam Lembur' />
+                  </Box>
+                  <Box sx={{ display:'flex', mt:2 }}>
+                    <TextField value={keterangan} fullWidth onChange={e => setKeterangan(e.target.value)} sx={{ mr:1 }} label='Keterangan' />
                   </Box>
                 
                   

@@ -8,7 +8,7 @@ import axios from 'axios'
 import { CircularProgress, Tooltip, Table, TableHead, TableBody, TableCell, TableRow, TableContainer, Paper  } from '@mui/material'
 import { useDownloadExcel } from 'react-export-table-to-excel'
 import { bulan } from '../../Components/utilsFunction/arrayFunction'
-import { sumTotal, sumHE, totalAtt, formulaSumActual, asce, ascr, dividDed } from './utlis/utlis'
+import { sumTotal, asce, ascr, dividDed } from './utlis/utlis'
 import { NAMES, USER_ID } from '../../fetch/fetch'
 import { changeDayName, datesUpt, workHour, totalWorkHour } from '../../Components/utilsFunction/functionUtils'
 import { getWeekendDates, mergedDataPresence, countDataKeterangan, getEndDate, validateMonthToday } from '../../Hrd/Pages/Presence/utlis/utlis'
@@ -26,13 +26,14 @@ function SelfEmployeeAnalisisPresence() {
 
   const [loading, setLoading] = useState(true)
   const [attendance, setAttendance] = useState([])
-  const [TotalAttendance, setTotalAttendance] = useState([])
+  // const [TotalAttendance, setTotalAttendance] = useState([])
+  const [analisa, setAnalisa] = useState([])
 
   const [hour_working, setHourWorking] = useState([])
   const [minutes_working, setMinutesWorking] = useState([])
 
-  const [hour_lembur, setHourLembur] = useState([])
-  const [minutes_lembur, setMinutesLembur] = useState([])
+  // const [hour_lembur, setHourLembur] = useState([])
+  // const [minutes_lembur, setMinutesLembur] = useState([])
 
   const getListPengajuan = () => {
     axios.get(`${BASE_URL}/api/presence/employee/analysis/?months=${month_id}&years=${year_id}`,{
@@ -53,13 +54,13 @@ function SelfEmployeeAnalisisPresence() {
         return(asce(ab.working_hour))
         }))
 
-      setHourLembur(res.map((ab) => {
-          return(ascr(ab.lembur_hour))
-        }))
+      // setHourLembur(res.map((ab) => {
+      //     return(ascr(ab.lembur_hour))
+      //   }))
       
-      setMinutesLembur(res.map((ab) => {
-        return(asce(ab.lembur_hour))
-        }))
+      // setMinutesLembur(res.map((ab) => {
+      //   return(asce(ab.lembur_hour))
+      //   }))
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -69,39 +70,39 @@ function SelfEmployeeAnalisisPresence() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => getListPengajuan(), [USER_ID, month_id, loading])
 
-  const getTotalDay = () => {
-    axios.get(`${BASE_URL}/api/presence/total-day/?employee=${USER_ID}&months=${month_id}`,{
+  const getAnalisa = () => {
+    axios.get(`${BASE_URL}/api/presence/analysis/${month_id}/${year_id}/`,{
       headers: {
         "Authorization" : 'Token ' + USER_TOKEN
       }
     })
     .then((response) => {
       const res = response.data
-      setTotalAttendance(res.data)
-      console.log(res)
+      setAnalisa(res)
+      console.log("res", res)
     })
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => getTotalDay(), [USER_ID, month_id])
+  useEffect(() => getAnalisa(), [year_id, month_id])
   
     const sumData = sumTotal(minutes_working)/60
-    const sumDataLembur = sumTotal(minutes_lembur)/60
+    // const sumDataLembur = sumTotal(minutes_lembur)/60
     
     const sumDataWork = sumTotal(hour_working)
-    const sumHourLembur = sumTotal(hour_lembur)
+    // const sumHourLembur = sumTotal(hour_lembur)
     
     console.log(sumTotal(hour_working))
     console.log("func baru : ",dividDed(sumData, sumDataWork))
     console.log(sumTotal(minutes_working))
 
-    const lemburTotal = dividDed(sumDataLembur, sumHourLembur)
-    const jamKerjaA = dividDed(sumData, sumDataWork)
+    // const lemburTotal = dividDed(sumDataLembur, sumHourLembur)
+    // const jamKerjaA = dividDed(sumData, sumDataWork)
 
-    const jamKerjaS = sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur))
+    // const jamKerjaS = sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur))
 
     // const aktualLem = aktualLembur(jamKerjaA, lemburTotal)
     
-    const kurangLeb = formulaSumActual(jamKerjaA, jamKerjaS)
+    // const kurangLeb = formulaSumActual(jamKerjaA, jamKerjaS)
 
     const { onDownload } = useDownloadExcel({
       currentTableRef: tableRef.current,
@@ -200,19 +201,13 @@ function SelfEmployeeAnalisisPresence() {
                                     
                                     <TableCell align="center" colSpan={1}>
                                       <h6>
-                                        {dividDed(sumData, sumDataWork).toString().length !== 0 ?
-                                            totalWorkHour(dividDed(sumData, sumDataWork))
-                                          : ''
-                                        }
+                                        {totalWorkHour(analisa.total_hour && analisa.total_hour)}
+
                                       </h6>
                                     </TableCell>
                                     <TableCell align='center' colSpan={1}>
                                       <h6>
-                                        {lemburTotal.toString().length === 2 ?
-                                            totalWorkHour(lemburTotal)
-                                            : ''
-                                        }
-
+                                      {totalWorkHour(analisa.total_hour_lembur && analisa.total_hour_lembur)}
                                       </h6>
                                     </TableCell>
                                                                     
@@ -224,11 +219,7 @@ function SelfEmployeeAnalisisPresence() {
                                 <React.Fragment>
                                   <TableRow>
                                     <TableCell colSpan={8}>Hari Kerja Efektif</TableCell>
-                                    <TableCell colSpan={3}>
-                                      {
-                                      totalAtt(attendance.length, TotalAttendance.employee_lembur) >= 0 ?
-                                      totalAtt(attendance.length, TotalAttendance.employee_lembur) : '0'
-                                    } Hari</TableCell>
+                                    <TableCell colSpan={3}>{analisa.working_day && analisa.working_day} Hari</TableCell>
                                 </TableRow> 
                                 <TableRow>
                                     <TableCell colSpan={8}>Tidak masuk/Sakit/Izin/Cuti</TableCell>
@@ -238,38 +229,19 @@ function SelfEmployeeAnalisisPresence() {
                                   </TableRow> 
                                 <TableRow>
                                     <TableCell colSpan={8}>Jumlah Jam Kerja Efektif</TableCell>
-                                      <TableCell colSpan={3}>
-                                      {sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)) >= 0 ?
-                                        totalWorkHour(sumHE(NAMES, totalAtt(attendance.length, TotalAttendance.employee_lembur)))
-                                        : '0 Hari'
-                                      }
-                                      </TableCell> 
+                                      <TableCell colSpan={3}>{totalWorkHour(analisa.efektif_hour && analisa.efektif_hour)}</TableCell> 
                                 </TableRow> 
                                 <TableRow>
                                     <TableCell colSpan={8}>Jumlah Jam Kerja Aktual</TableCell>
-                                    <TableCell colSpan={3}>
-                                      {dividDed(sumData, sumDataWork).toString().length !== 0 ?
-                                          totalWorkHour(dividDed(sumData, sumDataWork))
-                                          : '0 Menit'
-                                        }
-                                        </TableCell>
+                                    <TableCell colSpan={3}>{totalWorkHour(analisa.total_hour && analisa.total_hour)}</TableCell> 
                                 </TableRow> 
                                 <TableRow>
                                     <TableCell colSpan={8}>Jumlah Jam Lembur</TableCell>
-                                    <TableCell colSpan={3}>
-                                      {lemburTotal.toString().length !== 0 ?
-                                          totalWorkHour(lemburTotal)
-                                          : '0 Menit'
-                                        }
-                                    </TableCell>
+                                    <TableCell colSpan={3}>{totalWorkHour(analisa.total_hour_lembur && analisa.total_hour_lembur)}</TableCell>
                                 </TableRow> 
                                 <TableRow>
                                     <TableCell colSpan={8}>(Kurang/Lebih) Jam Kerja</TableCell>
-                                    <TableCell colSpan={3}>
-                                        {kurangLeb.toString().length !== 0 ?
-                                         totalWorkHour(kurangLeb)   : '0 Menit'
-                                          } 
-                                      </TableCell>
+                                    <TableCell colSpan={3}>{totalWorkHour(analisa.summary_hour && analisa.summary_hour)}</TableCell>
                                 </TableRow> 
                                 </React.Fragment>
                                 :

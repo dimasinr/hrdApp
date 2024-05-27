@@ -8,7 +8,7 @@ import Table from 'react-bootstrap/Table';
 import { CircularProgress, Tooltip, Snackbar, Alert } from '@mui/material'
 import { useDownloadExcel } from 'react-export-table-to-excel'
 import { bulan } from '../../../Components/utilsFunction/arrayFunction'
-import { sumTotal, sumHE, totalAtt, formulaSumActual, asce, ascr, dividDed, getWeekendDates, validateMonthToday, mergedDataPresence, countDataKeterangan, getEndDate, isLockedOrNot } from './utlis/utlis'
+import { sumTotal, sumHE, totalAtt, asce, ascr, dividDed, getWeekendDates, validateMonthToday, mergedDataPresence, countDataKeterangan, getEndDate, isLockedOrNot } from './utlis/utlis'
 import { changeDayName, datesUpt, workHour, totalWorkHour, totalWorking } from '../../../Components/utilsFunction/functionUtils'
 
 function AnalisaPresence() {
@@ -20,12 +20,13 @@ function AnalisaPresence() {
   const [loading, setLoading] = useState(true)
   const [attendance, setAttendance] = useState([])
   const [TotalAttendance, setTotalAttendance] = useState([])
+  const [analisa, setAnalisa] = useState([])
 
   const [hour_working, setHourWorking] = useState([])
   const [minutes_working, setMinutesWorking] = useState([])
 
-  const [hour_lembur, setHourLembur] = useState([])
-  const [minutes_lembur, setMinutesLembur] = useState([])
+  // const [hour_lembur, setHourLembur] = useState([])
+  // const [minutes_lembur, setMinutesLembur] = useState([])
 
   const [isLocked, setIsLocked] = useState(1)
 
@@ -56,13 +57,13 @@ function AnalisaPresence() {
         return(asce(ab.working_hour))
         }))
 
-      setHourLembur(res.map((ab) => {
-          return(ascr(ab.lembur_hour))
-        }))
+      // setHourLembur(res.map((ab) => {
+      //     return(ascr(ab.lembur_hour))
+      //   }))
       
-      setMinutesLembur(res.map((ab) => {
-        return(asce(ab.lembur_hour))
-        }))
+      // setMinutesLembur(res.map((ab) => {
+      //   return(asce(ab.lembur_hour))
+      //   }))
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -73,6 +74,21 @@ function AnalisaPresence() {
   useEffect(() => getListPresence(), [user_id, month_id, loading])
 
   console.log(`is lock ${isLocked}`)
+
+  const getAnalisa = () => {
+    axios.get(`${BASE_URL}/api/presence/analysis/${month_id}/${year}/?employee=${user_id}`,{
+      headers: {
+        "Authorization" : 'Token ' + USER_TOKEN
+      }
+    })
+    .then((response) => {
+      const res = response.data
+      setAnalisa(res)
+      console.log("res", res)
+    })
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => getAnalisa(), [year, month_id, user_id])
 
   const getTotalDay = () => {
     axios.get(`${BASE_URL}/api/presence/total-day/?employee=${user_id}&months=${month_id}&year=${year}`,{
@@ -123,21 +139,21 @@ function AnalisaPresence() {
       };
   
     const sumData = sumTotal(minutes_working)/60
-    const sumDataLembur = sumTotal(minutes_lembur)/60
+    // const sumDataLembur = sumTotal(minutes_lembur)/60
     
     const sumDataWork = sumTotal(hour_working)
-    const sumHourLembur = sumTotal(hour_lembur)
+    // const sumHourLembur = sumTotal(hour_lembur)
     
     console.log(sumTotal(hour_working))
     console.log("func baru : ",dividDed(sumData, sumDataWork))
     console.log(sumTotal(minutes_working))
 
-    const lemburTotal = dividDed(sumDataLembur, sumHourLembur)
+    // const lemburTotal = dividDed(sumDataLembur, sumHourLembur)
     const jamKerjaA = dividDed(sumData, sumDataWork)
     
     const jamKerjaS = sumHE(name, totalAtt(attendance.length, TotalAttendance.employee_lembur), countDataKeterangan(attendance, 'tidak masuk') )
     
-    const kurangLeb = formulaSumActual(jamKerjaA, jamKerjaS)
+    // const kurangLeb = formulaSumActual(jamKerjaA, jamKerjaS)
     console.log("jam kerja : ", jamKerjaS)
 
     console.log("sum data: ", sumData, "sum data work", sumDataWork )
@@ -251,15 +267,11 @@ function AnalisaPresence() {
                                   <tr>
                                       <td colSpan={9}><h6>Total</h6></td>
                                       <td colSpan={1}>
-                                        <h6>
-                                          {dividDed(sumData, sumDataWork) === 0 || dividDed(sumData, sumDataWork) > 0 ? totalWorking(dividDed(sumData, sumDataWork)) : " "}
-                                        </h6>
+                                        <h6>{totalWorkHour(analisa.total_hour && analisa.total_hour)}</h6>
                                       </td>
                                       {/* Total Lembur */}
                                       <td colSpan={1}>
-                                        <h6>
-                                          {lemburTotal === 0 || lemburTotal > 0 ? totalWorkHour(lemburTotal) : null}
-                                        </h6>
+                                        <h6>{totalWorkHour(analisa.total_hour_lembur && analisa.total_hour_lembur)}</h6>
                                       </td>
                                   </tr> 
                                   <tr>
@@ -269,12 +281,7 @@ function AnalisaPresence() {
                                      <React.Fragment>
                                      <tr>
                                          <td colSpan={8}>Hari Kerja Efektif</td>
-                                         <td colSpan={3}>
-                                           {countDataKeterangan(attendance, 'tidak masuk') === 0 ?
-                                           totalAtt(attendance.length, TotalAttendance.employee_lembur) :
-                                           totalAtt(attendance.length, TotalAttendance.employee_lembur)}
-                                         Hari
-                                         </td>
+                                         <td colSpan={3}>{analisa.working_day && analisa.working_day} Hari</td>
                                      </tr> 
                                      <tr>
                                          <td colSpan={8}>Tidak masuk/Sakit/Izin/Cuti</td>
@@ -292,32 +299,19 @@ function AnalisaPresence() {
                                        <Tooltip title={`${namesE(name)} Jam kerja anda di kali dengan Hari kerja anda yang seharusnya dalam 1 bulan`} arrow>
                                          <td colSpan={8}>Jumlah Jam Kerja Efektif</td>
                                        </Tooltip>
-                                         <td colSpan={3}>
-                                         {totalWorkHour(
-                                           sumHE(name, totalAtt(attendance.length, TotalAttendance.employee_lembur), countDataKeterangan(attendance, 'tidak masuk'))
-                                         )}
-                                         </td>
+                                        <td colSpan={3}>{totalWorkHour(analisa.efektif_hour && analisa.efektif_hour)}</td>
                                      </tr> 
                                      <tr>
                                          <td colSpan={8}>Jumlah Jam Kerja Aktual</td>
-                                         <td colSpan={3}>
-                                           {totalWorkHour(
-                                           dividDed(sumData, sumDataWork) 
-                                           )}
-                                         </td>
+                                         <td colSpan={3}>{totalWorkHour(analisa.total_hour && analisa.total_hour)}</td>
                                      </tr> 
                                      <tr>
                                          <td colSpan={8}>Jumlah Jam Lembur</td>
-                                         <td colSpan={3}>{totalWorkHour(lemburTotal)}</td>
+                                         <td colSpan={3}>{totalWorkHour(analisa.total_hour_lembur && analisa.total_hour_lembur)}</td>
                                      </tr> 
                                      <tr>
                                          <td colSpan={8}>(Kurang/Lebih) Jam Kerja</td>
-                                         {kurangLeb.toString().length !== 0 ?
-                                             <td colSpan={3}>
-                                               {totalWorkHour(kurangLeb)} 
-                                             </td>
-                                             : null
-                                           } 
+                                         <td colSpan={3}>{totalWorkHour(analisa.summary_hour && analisa.summary_hour)}</td>
                                      </tr> 
                                      </React.Fragment>
                                      : <React.Fragment>
