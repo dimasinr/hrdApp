@@ -229,19 +229,19 @@ function SelfEmployeeAnalisisPresence() {
                                   </TableRow> 
                                 <TableRow>
                                     <TableCell colSpan={8}>Jumlah Jam Kerja Efektif</TableCell>
-                                      <TableCell colSpan={3}>{totalWorkHour(analisa.efektif_hour && analisa.efektif_hour)}</TableCell> 
+                                      <TableCell colSpan={3}>{totalWorkHour(analisa.efektif_hour ? analisa.efektif_hour : 0)}</TableCell> 
                                 </TableRow> 
                                 <TableRow>
                                     <TableCell colSpan={8}>Jumlah Jam Kerja Aktual</TableCell>
-                                    <TableCell colSpan={3}>{totalWorkHour(analisa.total_hour && analisa.total_hour)}</TableCell> 
+                                    <TableCell colSpan={3}>{totalWorkHour(analisa.total_hour ? analisa.total_hour : 0)}</TableCell> 
                                 </TableRow> 
                                 <TableRow>
                                     <TableCell colSpan={8}>Jumlah Jam Lembur</TableCell>
-                                    <TableCell colSpan={3}>{totalWorkHour(analisa.total_hour_lembur && analisa.total_hour_lembur)}</TableCell>
+                                    <TableCell colSpan={3}>{totalWorkHour(analisa.total_hour_lembur ? analisa.total_hour_lembur : 0)}</TableCell>
                                 </TableRow> 
                                 <TableRow>
                                     <TableCell colSpan={8}>(Kurang/Lebih) Jam Kerja</TableCell>
-                                    <TableCell colSpan={3}>{totalWorkHour(analisa.summary_hour && analisa.summary_hour)}</TableCell>
+                                    <TableCell colSpan={3}>{totalWorkHour(analisa.summary_hour ? analisa.summary_hour : 0)}</TableCell>
                                 </TableRow> 
                                 </React.Fragment>
                                 :

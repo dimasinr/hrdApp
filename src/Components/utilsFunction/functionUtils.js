@@ -44,7 +44,12 @@ export function workHour(hour){
     return formattedTime;
   }
 
-export function totalWorkHour(totalwork){
+export function totalWorkHour(value){
+    let totalwork = 0
+    
+    if(value !== 0){
+      totalwork = value
+    }
     let timeString = totalwork.toString();
 
     if (timeString.length === 3) {
