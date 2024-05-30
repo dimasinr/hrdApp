@@ -47,8 +47,8 @@ export function workHour(hour){
 export function totalWorkHour(value){
     let totalwork = 0
     
-    if(value !== 0){
-      totalwork = value
+    if (value != null && value !== 0) {
+        totalwork = value;
     }
     let timeString = totalwork.toString();
 
