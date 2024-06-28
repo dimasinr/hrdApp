@@ -35,7 +35,7 @@ export default function StatistikUser() {
     })
     .then((response) => {
       const res = response.data
-      setPresenceSubmission(res)
+      setPresenceSubmission(res.data)
       console.log(res)
     })
   }

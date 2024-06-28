@@ -38,9 +38,9 @@ export default function MainDashboard() {
         })
         .then((response) => {
           const res = response.data
-          setPresenceSubmission(res)
+          setPresenceSubmission(res.data)
           setLoading(false)
-          console.log(res)
+          console.log(res.data)
         })
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
